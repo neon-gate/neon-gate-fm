@@ -1,0 +1,39 @@
+{
+  "name": "synthfy",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "prepare": "husky",
+    "postinstall": "husky",
+    "docker:down": "bash bin/docker/docker-down.sh",
+    "docker:up": "bash bin/docker/docker-up.sh",
+    "docker:ps": "bash bin/docker/docker-ps.sh",
+    "dx:infra": "pnpm docker:down && pnpm docker:up && pnpm docker:ps",
+    "dx:cleanup": "bash bin/dx/tooling/cleanup.sh",
+    "dx:reset": "pnpm dx:cleanup && pnpm install && pnpm build",
+    "dx:env:template": "bash bin/dx/tooling/env-template.sh",
+    "dx:smoke": "bash bin/dx/test/smoke.sh",
+    "dx:smoke:auth": "bash bin/dx/test/smoke-auth.sh"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,cjs,mjs,json,jsonc,css}": [
+      "biome lint --write --files-ignore-unknown=true",
+      "biome format --write --files-ignore-unknown=true"
+    ]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.15",
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "turbo": "^2.6.3"
+  },
+  "packageManager": "pnpm@8.15.6",
+  "dependencies": {
+    "ai": "^6.0.104"
+  }
+}

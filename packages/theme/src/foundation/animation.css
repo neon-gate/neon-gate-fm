@@ -1,0 +1,173 @@
+:root {
+  --syn-anim-fast: 300ms;
+  --syn-anim-medium: 800ms;
+  --syn-anim-slow: 2.5s;
+  --syn-anim-infinite-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Animation shorthand tokens */
+  --syn-anim-spin: spin 1s linear infinite;
+  --syn-anim-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --syn-anim-pulse: pulse 2s var(--syn-anim-infinite-ease) infinite;
+  --syn-anim-bounce: bounce 1s var(--syn-anim-infinite-ease) infinite;
+  --syn-anim-neon: syn-neon-glow var(--syn-anim-slow) ease-in-out infinite;
+  --syn-anim-scan: syn-scanline 6s linear infinite;
+  --syn-anim-flicker: syn-flicker 3.2s steps(8, end) infinite;
+  --syn-anim-chromatic: syn-chromatic 1.8s var(--syn-anim-infinite-ease) infinite;
+}
+
+@layer utilities {
+  .animate-spin {
+    animation: var(--syn-anim-spin);
+  }
+  .animate-ping {
+    animation: var(--syn-anim-ping);
+  }
+  .animate-pulse {
+    animation: var(--syn-anim-pulse);
+  }
+  .animate-bounce {
+    animation: var(--syn-anim-bounce);
+  }
+  .animate-neon {
+    animation: var(--syn-anim-neon);
+  }
+  .animate-scan {
+    animation: var(--syn-anim-scan);
+  }
+  .animate-flicker {
+    animation: var(--syn-anim-flicker);
+  }
+  .animate-chromatic {
+    animation: var(--syn-anim-chromatic);
+  } 
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Synthwave / Retrowave specific animations */
+@keyframes syn-neon-glow {
+  0% {
+    filter: drop-shadow(0 0 0 var(--syn-color-neon-pink));
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 18px var(--syn-color-neon-pink));
+    transform: translateY(-2px) scale(1.02);
+    opacity: 0.98;
+  }
+  100% {
+    filter: drop-shadow(0 0 0 var(--syn-color-neon-pink));
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* subtle vertical scanline movement used as an overlay */
+@keyframes syn-scanline {
+  0% {
+    background-position: 0 -20%;
+    opacity: 0.06;
+  }
+  50% {
+    background-position: 0 50%;
+    opacity: 0.12;
+  }
+  100% {
+    background-position: 0 120%;
+    opacity: 0.06;
+  }
+}
+
+/* old-school CRT / neon flicker to add analog imperfection */
+@keyframes syn-flicker {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: hue-rotate(0deg);
+  }
+  5% {
+    opacity: 0.88;
+    transform: translateX(-0.6px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(0.4px);
+  }
+  30% {
+    opacity: 0.95;
+  }
+  60% {
+    opacity: 0.9;
+    filter: hue-rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: hue-rotate(0deg);
+  }
+}
+
+
+/* chromatic / RGB split shimmer */
+@keyframes syn-chromatic {
+  0% {
+    transform: translateZ(0);
+    filter: drop-shadow(0 0 0 var(--syn-color-neon-cyan));
+  }
+  40% {
+    transform: translateX(-3px) translateY(0);
+    filter: drop-shadow(0 0 6px var(--syn-color-neon-cyan));
+  }
+  70% {
+    transform: translateX(3px) translateY(-1px);
+    filter: drop-shadow(0 0 10px var(--syn-color-neon-purple));
+  }
+  100% {
+    transform: translateZ(0);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+}
+
+/* helper: a slow horizon shimmer for background gradients */
+@keyframes syn-horizon {
+  0% {
+    background-position: 0% 20%;
+  }
+  50% {
+    background-position: 50% 80%;
+  }
+  100% {
+    background-position: 0% 20%;
+  }
+}
