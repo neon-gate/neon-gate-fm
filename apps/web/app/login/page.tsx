@@ -1,6 +1,6 @@
-import { Metadata } from 'next'
-
+import { Header, Logo } from '@lib/ui/server'
 import { LoginForm } from '@login/ui/client/form'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Neon Gate FM - Login',
@@ -13,14 +13,13 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main
-      id="main-login"
-      className="flex min-h-svh w-full items-center justify-center p-6 md:p-10"
-    >
-      <h1 className="sr-only">Login</h1>
-      <div className="w-full max-w-sm">
+    <div id="login-page" className="flex flex-col screen-side-padding">
+      <Header>
+        <Logo />
+      </Header>
+      <main className="flex items-center justify-center">
         <LoginForm />
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }

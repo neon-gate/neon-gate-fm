@@ -1,4 +1,13 @@
 {
+  "files": {
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/.turbo",
+      "!**/dist",
+      "!**/node_modules"
+    ]
+  },
   "linter": {
     "enabled": true,
     "rules": {

@@ -1,10 +1,10 @@
+import { Header, Logo } from '@lib/ui/server'
+import { UserDropdown } from '@player/ui/client'
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
-import { Header } from '@lib/ui/server'
-
 export const metadata: Metadata = {
-  title: 'Neon Gate FM - Signup',
+  title: 'NeonGate AI FM',
   description: 'The app that hates your > 2000s songs. 😤',
   robots: {
     index: false,
@@ -13,21 +13,20 @@ export const metadata: Metadata = {
 }
 
 export default async function PlayerPage() {
-  const isAuthenticated = false // TODO: replace with actual authentication check
+  const isAuthenticated = true // TODO: replace with actual authentication check
 
   if (!isAuthenticated) {
     redirect('/login')
   }
 
+  // TODO: create container tailwind utility duplicated
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main
-        id="main-home"
-        className="flex flex-1 justify-center items-center screen-padding"
-      >
-        <div className="max-w-md w-full">Player</div>
-      </main>
+    <div id="player-page" className="flex flex-col screen-side-padding">
+      <Header className="flex flex-row justify-between items-center">
+        <Logo />
+        <UserDropdown />
+      </Header>
+      <main>player page</main>
     </div>
   )
 }

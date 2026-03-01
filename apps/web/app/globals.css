@@ -2,18 +2,24 @@
 @import "tw-animate-css";
 @import "@repo/theme/foundation";
 
+:root {
+  .base-ui-root {
+    isolation: isolate;
+  }
+}
+
+@layer utilities {
+  .screen-side-padding {
+    @apply px-4;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@layer components {
-  .play-button {
-    @apply bg-primary text-primary-foreground px-4 py-2 rounded-md;
+    @apply relative bg-background text-foreground;  
   }
 }
 

@@ -1,13 +1,18 @@
-import Link from 'next/link'
+import { cn } from '@lib/ui/helpers'
 
-import { Logo } from '@lib/ui/server'
+interface HeaderProps {
+  children?: React.ReactNode
+  className?: string
+}
 
-export function Header() {
-  return (
-    <header className="flex w-full h-14 items-center justify-between screen-padding border-b border-border sticky top-0 bg-card z-10">
-      <Link href="/" aria-label="Go to home page">
-        <Logo />
-      </Link>
-    </header>
-  )
+export function Header(props: HeaderProps) {
+  const { children, className = '' } = props
+
+  const tw = cn('sticky top-0 items-center py-3', className)
+
+  if (!children) {
+    return <header className={tw} />
+  }
+
+  return <header className={tw}>{children}</header>
 }

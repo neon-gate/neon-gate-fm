@@ -4,8 +4,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "web": "pnpm --filter ./apps/web dev",
     "lint": "biome check .",
-    "format": "biome format --write .",
+    "format": "biome format --write --vcs-use-ignore-file=true .",
     "prepare": "husky",
     "postinstall": "husky",
     "docker:down": "bash bin/docker/docker-down.sh",
