@@ -17,8 +17,9 @@
       "@api/*": ["./app/api/*"],
       "@infra/*": ["./infra/*"],
       "@lib/*": ["./lib/*"],
-      "@login/*": ["./app/login/_feature/*"],
-      "@player/*": ["./app/_feature/*"]
+      "@login/*": ["./app/(public)/login/_feature/*"],
+      "@signup/*": ["./app/(public)/signup/_feature/*"],
+      "@player/*": ["./app/(player)/_feature/*"]
     },
     "plugins": [{ "name": "next" }]
   },

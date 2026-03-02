@@ -95,7 +95,7 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  apps/micro-player:
+  apps/micro-now-playing:
     dependencies:
       '@nestjs/common':
         specifier: ^11.1.13

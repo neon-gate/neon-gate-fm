@@ -12,7 +12,13 @@ export const metadata: Metadata = {
   }
 }
 
-export default async function PlayerPage() {
+interface PlayerProps {
+  children: React.ReactNode
+}
+
+export default async function Player(props: PlayerProps) {
+  const { children } = props
+
   const isAuthenticated = true // TODO: replace with actual authentication check
 
   if (!isAuthenticated) {
@@ -21,12 +27,12 @@ export default async function PlayerPage() {
 
   // TODO: create container tailwind utility duplicated
   return (
-    <div id="player-page" className="flex flex-col screen-side-padding">
+    <div id="player" className="flex flex-col screen-side-padding">
       <Header className="flex flex-row justify-between items-center">
         <Logo />
         <UserDropdown />
       </Header>
-      <main>player page</main>
+      <main>{children}</main>
     </div>
   )
 }

@@ -7,13 +7,13 @@ import {
   StreamPort
 } from '@domain/ports'
 
-export type StartPlaybackInput = {
+export interface PausePlaybackInput {
   sessionId: string
-  trackId: string
+  positionMs: number
 }
 
 @Injectable()
-export class StartPlaybackUseCase {
+export class PausePlaybackUseCase {
   constructor(
     @Inject(STREAM_PORT)
     private readonly stream: StreamPort,
@@ -21,8 +21,8 @@ export class StartPlaybackUseCase {
     private readonly state: PlayerStatePort
   ) {}
 
-  async execute(input: StartPlaybackInput): Promise<void> {
-    // TODO: orchestrate stream start and persist initial player state.
+  async execute(input: PausePlaybackInput): Promise<void> {
+    // TODO: pause stream and persist latest playback position.
     void input
     void this.stream
     void this.state

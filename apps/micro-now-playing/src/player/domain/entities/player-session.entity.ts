@@ -1,6 +1,6 @@
 import { Entity, UniqueEntityId } from '@repo/kernel'
 
-export type PlayerSessionProps = {
+export interface PlayerSessionProps {
   trackId: string
   positionMs: number
   status: 'playing' | 'paused'
