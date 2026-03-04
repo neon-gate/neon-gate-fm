@@ -8,9 +8,5 @@ interface MainProps {
 export function Main(props: MainProps) {
   const { children, className = '' } = props
 
-  return (
-    <main className={cn('screen-side-padding flex-1', className)}>
-      {children}
-    </main>
-  )
+  return <main className={cn('flex-1', className)}>{children}</main>
 }

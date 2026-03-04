@@ -7,17 +7,19 @@
   ],
   "exports": {
     "./foundation": {
-      "style": "./dist/foundation/index.css"
+      "default": "./src/foundation/index.css",
+      "style": "./src/foundation/index.css"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "npm run css:build && npm run css:foundation",
     "dev": "npm run build",
     "clean": "rm -rf .turbo node_modules dist",
-    "css:foundation": "cpx src/foundations/*.css dist/foundation || true",
+    "css:foundation": "cpx src/foundation/*.css dist/foundation || true",
     "css:build": "postcss src/foundation/index.css -o dist/foundation/index.css"
   },
   "devDependencies": {

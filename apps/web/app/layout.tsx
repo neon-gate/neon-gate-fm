@@ -1,4 +1,3 @@
-import { DirectionProvider } from '@base-ui/react/direction-provider'
 import { Geo, Iceland } from 'next/font/google'
 
 import './globals.css'
@@ -23,7 +22,7 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={`${geo.className} ${iceland.className} bg-neon`}>
-        <DirectionProvider>{children}</DirectionProvider>
+        {children}
       </body>
     </html>
   )

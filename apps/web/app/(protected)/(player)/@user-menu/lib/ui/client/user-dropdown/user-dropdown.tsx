@@ -1,34 +1,44 @@
 'use client'
 
-import { Menu as MenuPrimitive } from '@base-ui/react/menu'
 import { Avatar } from '@lib/ui/server'
-import { ChevronUp } from './chevron-up'
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
+import { ChevronUpIcon } from '@radix-ui/react-icons'
 
 export function UserDropdown() {
   return (
-    <MenuPrimitive.Root>
-      <MenuPrimitive.Trigger>
-        <Avatar />
-      </MenuPrimitive.Trigger>
-      <MenuPrimitive.Portal>
-        <MenuPrimitive.Positioner className="outline-none" sideOffset={18}>
-          <MenuPrimitive.Popup className="origin-[var(--transform-origin)] rounded-md bg-[canvas] py-1 text-gray-900 shadow-lg shadow-gray-200 outline outline-1 outline-gray-200 transition-[transform,scale,opacity] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 dark:shadow-none dark:-outline-offset-1 dark:outline-gray-300">
-            <MenuPrimitive.Arrow className="top-[-14px] right-[13px]">
-              <ChevronUp />
-            </MenuPrimitive.Arrow>
-            <MenuPrimitive.Item className="flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:relative data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
-              Add a song to your library
-            </MenuPrimitive.Item>
-            <MenuPrimitive.Item className="flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:relative data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
-              Check out your songs
-            </MenuPrimitive.Item>
-            <MenuPrimitive.Separator className="mx-4 my-1.5 h-px bg-gray-200" />
-            <MenuPrimitive.Item className="flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:relative data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
-              Log out
-            </MenuPrimitive.Item>
-          </MenuPrimitive.Popup>
-        </MenuPrimitive.Positioner>
-      </MenuPrimitive.Portal>
-    </MenuPrimitive.Root>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          aria-label="Open user menu"
+          className="rounded-full outline-none ring-ring/50 focus-visible:ring-2"
+          type="button"
+        >
+          <Avatar />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="end"
+          className="min-w-56 origin-[var(--radix-dropdown-menu-content-transform-origin)] rounded-md bg-[canvas] py-1 text-gray-900 shadow-lg shadow-gray-200 outline outline-1 outline-gray-200 data-[side=bottom]:animate-in data-[side=bottom]:fade-in-0 data-[side=bottom]:zoom-in-95 dark:shadow-none dark:-outline-offset-1 dark:outline-gray-300"
+          sideOffset={18}
+        >
+          <DropdownMenu.Arrow asChild>
+            <div className="translate-x-[83px] translate-y-0.5">
+              <ChevronUpIcon />
+            </div>
+          </DropdownMenu.Arrow>
+          <DropdownMenu.Item className="relative flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
+            Add a song to your library
+          </DropdownMenu.Item>
+          <DropdownMenu.Item className="relative flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
+            Check out your songs
+          </DropdownMenu.Item>
+          <DropdownMenu.Separator className="mx-4 my-1.5 h-px bg-gray-200" />
+          <DropdownMenu.Item className="relative flex cursor-default py-2 pr-8 pl-4 text-sm leading-4 outline-none select-none data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-1 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900">
+            Log out
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   )
 }

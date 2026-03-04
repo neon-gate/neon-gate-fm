@@ -12,4 +12,8 @@
   .now-playing-bar {
     @apply p-2 sticky bottom-0 h-[88px] border-none text-background font-bold;
   }
+
+  .now-playing-layout {
+    @apply grid items-center grid-cols-[auto_1fr_auto] h-full;
+  }
 }

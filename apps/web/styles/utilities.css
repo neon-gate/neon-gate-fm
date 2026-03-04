@@ -1,8 +1,4 @@
 @layer utilities {
-  .screen-side-padding {
-    @apply px-2;
-  }
-
   .bg-neon {
     background: linear-gradient(
       to bottom right,
@@ -27,7 +23,7 @@
 
   .glassy-surface {
     background: var(--ng-color-foreground);
-    opacity: 0.75;
+    opacity: 0.6;
 
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);

@@ -1,3 +1,5 @@
+import { Reproduction } from './lib/client'
+
 export default function StreamingSlot() {
-  return <div>StreamingSlot</div>
+  return <Reproduction />
 }
