@@ -1,0 +1,37 @@
+@layer utilities {
+  .screen-side-padding {
+    @apply px-2;
+  }
+
+  .bg-neon {
+    background: linear-gradient(
+      to bottom right,
+  
+      var(--ng-neon-01) 0%,
+      var(--ng-neon-03) 14%,
+      var(--ng-neon-05) 26%,
+  
+      var(--ng-neon-07) 38%,
+      var(--ng-neon-09) 48%,
+  
+      var(--ng-neon-11) 58%,
+      var(--ng-neon-13) 66%,
+  
+      var(--ng-neon-16) 76%,
+      var(--ng-neon-18) 86%,
+  
+      var(--ng-neon-22) 94%,
+      var(--ng-neon-24) 100%
+    );
+  }
+
+  .glassy-surface {
+    background: var(--ng-color-foreground);
+    opacity: 0.75;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+}

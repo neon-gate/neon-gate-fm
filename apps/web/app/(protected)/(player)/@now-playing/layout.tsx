@@ -1,25 +1,17 @@
-export default function NowPlayingLayout(props: any) {
-  const songMetadata = props.songMetadata ?? props['song-metadata'] ?? null
-  const streaming = props.streaming ?? null
-  const controller = props.controller ?? null
+interface NowPlayingLayoutProps {
+  ['song-info']?: React.ReactNode
+  streaming?: React.ReactNode
+  controller?: React.ReactNode
+}
+
+export default function NowPlayingLayout(props: NowPlayingLayoutProps) {
+  const { ['song-info']: songInfo, streaming, controller } = props
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 124,
-        display: 'flex',
-        border: '2px solid red',
-        background: 'var(--ng-color-card)',
-        zIndex: 40
-      }}
-    >
-      <div style={{ width: 320, padding: 8 }}>{songMetadata}</div>
-      <div style={{ flex: 1, padding: 8 }}>{streaming}</div>
-      <div style={{ width: 320, padding: 8 }}>{controller}</div>
+    <div>
+      <div>{songInfo}</div>
+      <div>{streaming}</div>
+      <div>{controller}</div>
     </div>
   )
 }

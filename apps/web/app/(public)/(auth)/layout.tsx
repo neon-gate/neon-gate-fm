@@ -1,4 +1,5 @@
-import { Header, Logo } from '@lib/ui/server'
+import { Logo } from '@lib/ui/client'
+import { Header } from '@lib/ui/server'
 
 interface AuthLayoutProps {
   children: React.ReactNode

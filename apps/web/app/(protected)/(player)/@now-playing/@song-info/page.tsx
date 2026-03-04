@@ -1,3 +1,3 @@
-export default function SongInfoSlot() {
-  return <div>SongMetadataSlot</div>
+export default function SongInfoPage() {
+  return <div>SongInfoPage</div>
 }

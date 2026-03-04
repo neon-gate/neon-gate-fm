@@ -1,6 +1,3 @@
-export {
-  ErrorBoundary,
-  type ErrorBoundaryProps,
-  type ErrorBoundaryState
-} from './error-boundary/error-boundary'
-export type { NextPageErrorProps } from './error-boundary/error-boundary.types'
+export { Logo } from './logo/logo'
+export type { NextPageErrorProps } from './next-page-error-props'
+export { Search } from './search/search'

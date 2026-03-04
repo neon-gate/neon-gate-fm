@@ -1,6 +1,9 @@
-import { Header, Logo, Main } from '@lib/ui/server'
+import { Logo, Search } from '@lib/ui/client'
+import { Header, Main } from '@lib/ui/server'
+import LibraryLoading from '@library/loading'
+import UserMenuLoading from '@user-menu/loading'
+import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import LibraryLoading from './@library/loading'
 
 interface PlayerLayoutProps {
   children: React.ReactNode
@@ -11,22 +14,37 @@ interface PlayerLayoutProps {
 }
 
 export default function PlayerLayout(props: PlayerLayoutProps) {
-  const { children, library, uploader } = props
-  const nowPlaying = props['now-playing']
-  const userMenu = props['user-menu']
+  const {
+    children,
+    library,
+    uploader,
+    ['now-playing']: nowPlaying,
+    ['user-menu']: userMenu
+  } = props
+
+  const isAuthenticated = true // TODO: replace with actual authentication check
+
+  if (!isAuthenticated) {
+    redirect('/login')
+  }
 
   return (
-    <div>
-      <Header className="flex justify-between items-center mb-2">
+    <div className="player-grid">
+      <Header className="col-span-3">
         <Logo />
-        {userMenu}
+        <Search />
+        <Suspense fallback={<UserMenuLoading />}>{userMenu}</Suspense>
       </Header>
-      <Main className="flex gap-2">
+      <aside className="overflow-y-auto player-section glassy-surface">
         <Suspense fallback={<LibraryLoading />}>{library}</Suspense>
-        {children}
+      </aside>
+      <Main className="overflow-y-auto">{children}</Main>
+      <aside className="overflow-y-auto player-section glassy-surface">
         {uploader}
-      </Main>
-      {nowPlaying}
+      </aside>
+      <aside className="col-span-3 now-playing-bar glassy-surface">
+        {nowPlaying}
+      </aside>
     </div>
   )
 }

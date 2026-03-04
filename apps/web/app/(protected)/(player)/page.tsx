@@ -1,3 +1,3 @@
-export default async function PlayerPage() {
-  return <div>main</div>
+export default function PlayerPage() {
+  return <h1>Main View</h1>
 }
