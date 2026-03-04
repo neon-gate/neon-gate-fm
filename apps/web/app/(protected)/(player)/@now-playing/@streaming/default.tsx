@@ -1,3 +1,3 @@
-export default function NowPlayingStreamingDefault() {
+export default function StreamingDefault() {
   return null
 }

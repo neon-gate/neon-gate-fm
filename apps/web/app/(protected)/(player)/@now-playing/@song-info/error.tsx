@@ -3,7 +3,7 @@
 import { Button } from '@base-ui/react/button'
 import type { NextPageErrorProps } from '@lib/ui/client'
 
-export default function SignupError(props: NextPageErrorProps) {
+export default function SongInfoError(props: NextPageErrorProps) {
   const { error, reset } = props
 
   function handleReset() {
@@ -12,7 +12,7 @@ export default function SignupError(props: NextPageErrorProps) {
 
   return (
     <div>
-      <h2>Signup failed to load.</h2>
+      <h2>Now playing song metadata failed to load.</h2>
       <p>{error.message}</p>
       <Button type="button" onClick={handleReset}>
         Try again

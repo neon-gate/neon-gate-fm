@@ -1,3 +1,3 @@
-export default function NowPlayingLoading() {
+export default function UserMenuLoading() {
   return <div>User menu loading...</div>
 }

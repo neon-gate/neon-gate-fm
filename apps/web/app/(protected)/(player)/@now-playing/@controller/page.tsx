@@ -1,3 +1,3 @@
-export default function NowPlayingControllerSlot() {
-  return <section>NowPlayingControllerSlot</section>
+export default function ControllerSlot() {
+  return <div>ControllerSlot</div>
 }

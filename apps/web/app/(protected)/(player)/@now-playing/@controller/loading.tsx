@@ -1,3 +1,3 @@
-export default function NowPlayingControllerLoading() {
+export default function ControllerLoading() {
   return <div>Now Playing controller loading...</div>
 }

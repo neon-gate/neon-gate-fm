@@ -1,26 +1,32 @@
 import { Header, Logo, Main } from '@lib/ui/server'
 import { Suspense } from 'react'
 import LibraryLoading from './@library/loading'
-import LibrarySlot from './@library/page'
-import NowPlayingSlot from './@now-playing/page'
-import UploaderSlot from './@uploader/page'
-import UserMenuSlot from './@user-menu/page'
 
-export default async function PlayerLayout() {
+interface PlayerLayoutProps {
+  children: React.ReactNode
+  'user-menu'?: React.ReactNode
+  'now-playing'?: React.ReactNode
+  library?: React.ReactNode
+  uploader?: React.ReactNode
+}
+
+export default function PlayerLayout(props: PlayerLayoutProps) {
+  const { children, library, uploader } = props
+  const nowPlaying = props['now-playing']
+  const userMenu = props['user-menu']
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header className="flex flex-row justify-between items-center mb-2">
+    <div>
+      <Header className="flex justify-between items-center mb-2">
         <Logo />
-        <UserMenuSlot />
+        {userMenu}
       </Header>
-      <Main className="flex gap-2 justify-between">
-        <Suspense fallback={<LibraryLoading />}>
-          <LibrarySlot />
-        </Suspense>
-        <div>Inner Content</div>
-        <UploaderSlot />
+      <Main className="flex gap-2">
+        <Suspense fallback={<LibraryLoading />}>{library}</Suspense>
+        {children}
+        {uploader}
       </Main>
-      <NowPlayingSlot />
+      {nowPlaying}
     </div>
   )
 }

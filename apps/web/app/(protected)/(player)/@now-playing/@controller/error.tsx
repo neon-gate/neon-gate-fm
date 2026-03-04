@@ -3,7 +3,7 @@
 import { Button } from '@base-ui/react/button'
 import type { NextPageErrorProps } from '@lib/ui/client'
 
-export default function NowPlayingControllerError(props: NextPageErrorProps) {
+export default function ControllerError(props: NextPageErrorProps) {
   const { error, reset } = props
 
   function handleReset() {

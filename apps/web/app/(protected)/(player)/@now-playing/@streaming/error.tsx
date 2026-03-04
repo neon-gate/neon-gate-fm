@@ -3,7 +3,7 @@
 import { Button } from '@base-ui/react/button'
 import type { NextPageErrorProps } from '@lib/ui/client'
 
-export default function NowPlayingStreamingError(props: NextPageErrorProps) {
+export default function StreamingError(props: NextPageErrorProps) {
   const { error, reset } = props
 
   function handleReset() {

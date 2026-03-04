@@ -4,23 +4,19 @@
    Lighter base, fewer tokens, stronger hierarchy
    ========================================================= */
 
-  /* 🌑 Background Scale (slightly lifted overall) */
   --ng-color-bg: oklch(14% 0.03 286);
   --ng-color-bg-elevated: oklch(18% 0.04 289);
   --ng-color-bg-recessed: oklch(11% 0.025 286);
 
-  /* 🟣 Surface Scale (used for cards, popovers, panels, overlays) */
   --ng-color-surface: oklch(22% 0.05 291);
   --ng-color-surface-hover: oklch(26% 0.06 292);
   --ng-color-surface-active: oklch(30% 0.07 293);
 
-  /* ✨ Foreground Hierarchy */
   --ng-color-foreground: oklch(96% 0.01 240);
   --ng-color-foreground-secondary: oklch(82% 0.02 248);
   --ng-color-foreground-muted: oklch(64% 0.02 255);
   --ng-color-foreground-inverse: oklch(16% 0.03 286);
 
-  /* 🎨 Semantic */
   --ng-color-primary: var(--ng-neon-13);
   --ng-color-primary-hover: var(--ng-neon-14);
   --ng-color-primary-foreground: var(--ng-color-foreground-inverse);
@@ -34,14 +30,12 @@
   --ng-color-danger: oklch(66% 0.23 24);
   --ng-color-info: var(--ng-neon-26);
 
-  /* 🧩 Chrome / Inputs */
   --ng-color-border: oklch(48% 0.06 295 / 40%);
   --ng-color-border-hover: oklch(60% 0.08 300 / 50%);
   --ng-color-input: var(--ng-color-bg-elevated);
   --ng-color-ring: var(--ng-neon-12);
   --ng-color-placeholder: var(--ng-color-foreground-muted);
 
-  /* 🦴 Skeleton (lighter than before) */
   --ng-color-skeleton: oklch(32% 0.04 292);
   --ng-color-skeleton-highlight: oklch(42% 0.05 294);
 
@@ -52,15 +46,13 @@
   OKLCH for perceptual smoothness
   ========================================================= */
 
-  /* 🌑 Deep Night Foundations (Shadow Energy) */
-  --ng-neon-01: oklch(14% 0.10 270); /* ultra deep indigo */
-  --ng-neon-02: oklch(18% 0.14 280); /* night violet */
-  --ng-neon-03: oklch(22% 0.18 295); /* deep electric purple */
-  --ng-neon-04: oklch(26% 0.20 305); /* dark synth violet */
-  --ng-neon-05: oklch(30% 0.22 310); /* rising purple */
-  --ng-neon-06: oklch(34% 0.24 315); /* energized violet */
+  --ng-neon-01: oklch(14% 0.10 270);
+  --ng-neon-02: oklch(18% 0.14 280);
+  --ng-neon-03: oklch(22% 0.18 295);
+  --ng-neon-04: oklch(26% 0.20 305);
+  --ng-neon-05: oklch(30% 0.22 310);
+  --ng-neon-06: oklch(34% 0.24 315);
 
-  /* 💜 Violet → Magenta Atmosphere (Neon Build) */
   --ng-neon-07: oklch(40% 0.26 320);
   --ng-neon-08: oklch(46% 0.27 325);
   --ng-neon-09: oklch(52% 0.28 330);
@@ -68,25 +60,21 @@
   --ng-neon-11: oklch(64% 0.30 345);
   --ng-neon-12: oklch(70% 0.31 350);
 
-  /* 💖 Hot Pink → Warm Neon Rose (Core Glow) */
   --ng-neon-13: oklch(72% 0.30 355);
   --ng-neon-14: oklch(74% 0.29 5);
   --ng-neon-15: oklch(76% 0.28 15);
   --ng-neon-16: oklch(78% 0.26 25);
   --ng-neon-17: oklch(80% 0.24 35);
 
-  /* 🌅 Neon Sun Warmth (Energy Zone) */
   --ng-neon-18: oklch(82% 0.22 55);
   --ng-neon-19: oklch(84% 0.20 70);
   --ng-neon-20: oklch(86% 0.18 85);
   --ng-neon-21: oklch(88% 0.16 95);
 
-  /* ✨ Pearlescent Orb Glow (Soft Highlight Band) */
   --ng-neon-22: oklch(90% 0.14 300);
   --ng-neon-23: oklch(92% 0.12 280);
   --ng-neon-24: oklch(94% 0.10 260);
 
-  /* 🌿 Subtle Accent Variants (Controlled Contrast) */
-  --ng-neon-25: oklch(78% 0.20 150); /* restrained neon lime */
-  --ng-neon-26: oklch(72% 0.18 240); /* deep electric blue */
+  --ng-neon-25: oklch(78% 0.20 150);
+  --ng-neon-26: oklch(72% 0.18 240);
 }

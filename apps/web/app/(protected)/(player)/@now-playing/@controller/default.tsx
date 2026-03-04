@@ -1,3 +1,3 @@
-export default function NowPlayingControllerDefault() {
+export default function ControllerDefault() {
   return null
 }
