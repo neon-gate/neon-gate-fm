@@ -1,3 +1,5 @@
+import { MainCover } from './lib/ui'
+
 export default function PlayerPage() {
-  return <h1>Main View</h1>
+  return <MainCover />
 }
