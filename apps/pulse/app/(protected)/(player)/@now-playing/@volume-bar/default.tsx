@@ -1,3 +1,3 @@
 export default function VolumeDefault() {
-  return null
+  return <div>VolumeDefault</div>
 }

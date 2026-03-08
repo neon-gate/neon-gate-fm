@@ -1,3 +1,3 @@
 export default function LibraryLoading() {
-  return null
+  return <div>LibraryLoading</div>
 }

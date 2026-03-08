@@ -1,3 +1,3 @@
 export default function UploaderLoading() {
-  return null
+  return <div>UploaderLoading</div>
 }

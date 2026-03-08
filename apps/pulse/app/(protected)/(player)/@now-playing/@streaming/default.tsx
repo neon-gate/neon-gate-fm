@@ -1,3 +1,3 @@
 export default function StreamingDefault() {
-  return null
+  return <div>StreamingDefault</div>
 }

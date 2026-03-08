@@ -1,3 +1,3 @@
 export default function UploaderDefault() {
-  return null
+  return <div>UploaderDefault</div>
 }

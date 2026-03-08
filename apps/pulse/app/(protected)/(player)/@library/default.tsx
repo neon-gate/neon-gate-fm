@@ -1,3 +1,3 @@
 export default function LibraryDefault() {
-  return null
+  return <div>LibraryDefault</div>
 }

@@ -1,3 +1,3 @@
 export default function StreamingLoading() {
-  return null
+  return <div>StreamingLoading</div>
 }

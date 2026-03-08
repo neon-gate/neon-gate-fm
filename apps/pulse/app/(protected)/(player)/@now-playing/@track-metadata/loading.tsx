@@ -1,3 +1,3 @@
 export default function TrackMetadataLoading() {
-  return null
+  return <div>TrackMetadataLoading</div>
 }

@@ -1,3 +1,3 @@
 export default function UserMenuLoading() {
-  return null
+  return <div>UserMenuLoading</div>
 }
