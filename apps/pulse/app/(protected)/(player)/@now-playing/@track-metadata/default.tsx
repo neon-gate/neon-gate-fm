@@ -1,5 +1,5 @@
-import { TrackMetadataLoader } from './lib/ui'
+import { TrackMetadata } from './lib/ui'
 
 export default function TrackMetadataDefault() {
-  return <TrackMetadataLoader />
+  return <TrackMetadata />
 }

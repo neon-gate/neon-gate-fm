@@ -7,13 +7,17 @@ import {
 
 import { Volume } from '@domain'
 
-export function getIconByVolume(volume: Volume) {
+import { getClosestIconVolume } from './get-closest-icon-volume.compute'
+
+export function getIconByVolume(volume: number) {
+  const closestVolume = getClosestIconVolume(volume)
+
   const icon = {
     [Volume.Loud]: <Volume2Icon />,
     [Volume.Moderate]: <Volume1Icon />,
     [Volume.Quiet]: <VolumeIcon />,
     [Volume.Off]: <VolumeOffIcon />
-  }[volume]
+  }[closestVolume]
 
   return icon ?? <Volume1Icon />
 }

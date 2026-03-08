@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { Field, FieldLabel } from "@shadcn/components/ui/field"
 import { Progress } from '@shadcn/components/ui/progress'
 
 import { metadataAtom, progressAtom } from '@atoms'
@@ -29,19 +28,23 @@ export function ProgressBar() {
   if (!metadata) return null
 
   const percentage = (progress.milliseconds / duration) * 100
-  
 
   return (
     <div className="grid grid-cols-[48px_1fr_48px] items-center gap-3">
-      <span className="h-4 text-right text-sm leading-4 text-background-muted">
+      <span className="h-4 text-sm">
         {msToTime(progress.milliseconds)}
       </span>
-      <Progress value={progress.milliseconds} id="progress-upload" />
-        {/* <Progress.Indicator
-          className={cn('h-full bg-neon-warm transition-all ')}
+        <Progress 
+          value={progress.milliseconds} 
+          id="progress-upload" 
+          className={cn(
+            'h-1.5 bg-neon transition-all', 
+            percentage > 50 ? 'bg-neon-warm' : '', 
+            percentage > 80 ? 'bg-neon-cool' : ''
+          )} 
           style={{ width: `${percentage}%`, transition: "width 100ms linear" }}
-        /> */}
-      <span className="h-4 text-sm leading-4 text-background">
+        />
+      <span className="h-4 text-sm">
         {msToTime(duration)}
       </span>
     </div>

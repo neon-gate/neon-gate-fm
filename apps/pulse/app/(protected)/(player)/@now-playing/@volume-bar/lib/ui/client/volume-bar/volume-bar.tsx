@@ -1,6 +1,7 @@
 'use client'
 
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { Slider } from '@shadcn/components/ui/slider'
 
 import { volumeAtom } from '@atoms'
 import { Volume } from '@domain'
@@ -9,25 +10,23 @@ import { getIconByVolume } from './get-icon-by-volume.map'
 
 export function VolumeBar() {
   const volume = useAtomValue(volumeAtom)
+  const setVolume = useSetAtom(volumeAtom)
   const icon = getIconByVolume(volume)
 
+  function handleVolumeChange(value: number[]) {
+    setVolume(value[0])
+  }
+
   return (
-    <form className="flex items-center sm:gap-2 gap-1">
+    <label className="flex items-center sm:gap-2 gap-1">
       {icon}
-      {/* <Slider.Root
-        className="relative flex h-5 w-36 touch-none select-none items-center"
-        defaultValue={[Number(volume)]}
+      <Slider
+        aria-label="Sound volume"
+        defaultValue={[Number(Volume.Moderate)]}
         max={Number(Volume.Loud)}
-        step={1}
-      >
-        <Slider.Track className="relative h-[4px] grow rounded-full bg-background">
-          <Slider.Range className="absolute h-full rounded-full bg-neon" />
-        </Slider.Track>
-        <Slider.Thumb
-          className="block size-4 rounded-[10px] bg-foreground shadow-[0_2px_4px] shadow-neon hover:bg-neon focus:shadow-[0_0_0_1px] focus:outline-none"
-          aria-label="Volume"
-        />
-      </Slider.Root> */}
-    </form>
+        className="mx-auto w-36 bg-neon bg-neon-cool"
+        onValueChange={handleVolumeChange}
+      />
+    </label>
   )
 }

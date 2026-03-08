@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import { useAtomValue } from 'jotai'
 
@@ -12,7 +10,7 @@ export function TrackMetadata() {
   if (!metadata) return null
 
   return (
-    <div className="relative flex justify-start items-center min-w-44 z-50">
+    <div className="flex grow justify-start items-center min-w-44 z-50">
         <Image
           className="rounded-sm mr-2"
           src={metadata.album.cover}

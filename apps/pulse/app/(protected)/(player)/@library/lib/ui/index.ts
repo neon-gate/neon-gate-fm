@@ -1,1 +1,2 @@
-export { LibraryLoader } from './client/loader/loader'
+export { Library } from './client/library/library'
+export { TrackList } from './client/track-list/track-list'

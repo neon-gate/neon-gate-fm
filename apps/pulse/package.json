@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@ai-sdk/react": "^3.0.106",
-    "@repo/theme": "workspace:*",
+    "@repo/neon": "workspace:*",
+    "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "immer": "^11.1.4",

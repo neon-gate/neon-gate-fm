@@ -11,7 +11,7 @@ export default function NowPlayingLayout(props: NowPlayingLayoutProps) {
   return (
     <Layout>
       <div className="w-[15%] sm:w-[30%] mobile-hidden">{trackMetadata}</div>
-      <div className="w-[70%] sm:w-[40%] min-w-[330px] max-w-[700px]">
+      <div className="w-[70%] sm:w-[40%] min-w-[300px] max-w-[700px]">
         {streaming}
       </div>
       <div className="w-[15%] sm:w-[30%] mobile-hidden">{volumeBar}</div>

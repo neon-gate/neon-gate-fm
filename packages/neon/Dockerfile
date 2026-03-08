@@ -12,4 +12,4 @@ COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
 
-CMD ["pnpm", "--filter", "@repo/theme", "build"]
+CMD ["pnpm", "--filter", "@repo/neon", "build"]

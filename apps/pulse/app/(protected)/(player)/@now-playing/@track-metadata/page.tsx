@@ -1,5 +1,5 @@
 import { TrackMetadata } from './lib/ui'
 
-export default function TrackMetadataPage() {
+export default function TrackMetadataSlot() {
   return <TrackMetadata />
 }

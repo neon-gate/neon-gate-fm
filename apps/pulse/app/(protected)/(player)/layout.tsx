@@ -37,7 +37,7 @@ export default function PlayerLayout(props: PlayerLayoutProps) {
         {userMenu}
       </Header>
       {library}
-      <Main className="mobile-hidden overflow-y-auto">{children}</Main>
+      <Main className="mobile-hidden text-background">{children}</Main>
       {uploader}
       {nowPlaying}
     </PlayerGrid>
