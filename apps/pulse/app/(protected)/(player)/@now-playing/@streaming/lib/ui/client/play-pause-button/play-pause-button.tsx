@@ -1,7 +1,7 @@
 'use client'
 
 import { useAtomValue, useSetAtom } from 'jotai'
-import { PlayIcon, PauseIcon } from '@radix-ui/react-icons'
+import { PlayIcon, PauseIcon } from 'lucide-react'
 
 import { isPausedAtom } from '@atoms'
 

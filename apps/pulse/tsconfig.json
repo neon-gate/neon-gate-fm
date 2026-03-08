@@ -30,7 +30,12 @@
       ],
       "@track-metadata/*": [
         "./app/(protected)/(player)/@now-playing/@track-metadata/lib/*"
-      ]
+      ],
+      "@shadcn/components": ["./app/infra/shadcn/components"],
+      "@shadcn/lib/utils": ["./app/infra/shadcn/lib/utils"],
+      "@shadcn/components/ui": ["./app/infra/shadcn/components/ui"],
+      "@shadcn/lib": ["./app/infra/shadcn/lib"],
+      "@shadcn/hooks": ["./app/infra/shadcn/hooks"]
     },
     "plugins": [{ "name": "next" }]
   },

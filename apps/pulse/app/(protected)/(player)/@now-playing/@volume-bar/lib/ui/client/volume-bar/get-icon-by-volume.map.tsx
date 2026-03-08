@@ -1,19 +1,19 @@
 import {
-  SpeakerLoudIcon,
-  SpeakerModerateIcon,
-  SpeakerOffIcon,
-  SpeakerQuietIcon
-} from '@radix-ui/react-icons'
+  Volume1Icon,
+  Volume2Icon,
+  VolumeOffIcon,
+  VolumeIcon
+} from 'lucide-react'
 
 import { Volume } from '@domain'
 
 export function getIconByVolume(volume: Volume) {
   const icon = {
-    [Volume.Loud]: <SpeakerLoudIcon />,
-    [Volume.Moderate]: <SpeakerModerateIcon />,
-    [Volume.Quiet]: <SpeakerQuietIcon />,
-    [Volume.Off]: <SpeakerOffIcon />
+    [Volume.Loud]: <Volume2Icon />,
+    [Volume.Moderate]: <Volume1Icon />,
+    [Volume.Quiet]: <VolumeIcon />,
+    [Volume.Off]: <VolumeOffIcon />
   }[volume]
 
-  return icon ?? <SpeakerModerateIcon />
+  return icon ?? <Volume1Icon />
 }

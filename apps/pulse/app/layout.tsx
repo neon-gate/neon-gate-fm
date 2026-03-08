@@ -1,6 +1,8 @@
 import { Provider as JotaiProvider } from 'jotai'
 import { Geo, Iceland } from 'next/font/google'
 
+import { cn } from '@lib/template'
+
 import './globals.css'
 
 const geo = Geo({
@@ -22,7 +24,7 @@ export default function RootLayout(props: RootLayoutProps) {
 
   return (
     <html lang="en">
-      <body className={`${geo.className} ${iceland.className} bg-neon`}>
+      <body className={cn(geo.className, iceland.className, 'bg-neon')}>
         <JotaiProvider>
           {children}
         </JotaiProvider>

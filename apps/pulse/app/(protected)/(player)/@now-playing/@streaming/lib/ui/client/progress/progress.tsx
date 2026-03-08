@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import * as Progress from '@radix-ui/react-progress'
+import { Field, FieldLabel } from "@shadcn/components/ui/field"
+import { Progress } from '@shadcn/components/ui/progress'
 
 import { metadataAtom, progressAtom } from '@atoms'
 import { cn, msToTime } from '@lib/template'
@@ -35,17 +36,11 @@ export function ProgressBar() {
       <span className="h-4 text-right text-sm leading-4 text-background-muted">
         {msToTime(progress.milliseconds)}
       </span>
-      <Progress.Root
-        aria-label="Playback progress"
-        className="h-2 overflow-hidden rounded-full bg-background"
-        value={progress.milliseconds}
-        max={duration}
-      >
-        <Progress.Indicator
+      <Progress value={progress.milliseconds} id="progress-upload" />
+        {/* <Progress.Indicator
           className={cn('h-full bg-neon-warm transition-all ')}
           style={{ width: `${percentage}%`, transition: "width 100ms linear" }}
-        />
-      </Progress.Root>
+        /> */}
       <span className="h-4 text-sm leading-4 text-background">
         {msToTime(duration)}
       </span>

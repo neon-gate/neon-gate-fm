@@ -1,7 +1,6 @@
 'use client'
 
 import { useAtomValue } from 'jotai'
-import * as Slider from '@radix-ui/react-slider'
 
 import { volumeAtom } from '@atoms'
 import { Volume } from '@domain'
@@ -15,7 +14,7 @@ export function VolumeBar() {
   return (
     <form className="flex items-center sm:gap-2 gap-1">
       {icon}
-      <Slider.Root
+      {/* <Slider.Root
         className="relative flex h-5 w-36 touch-none select-none items-center"
         defaultValue={[Number(volume)]}
         max={Number(Volume.Loud)}
@@ -28,7 +27,7 @@ export function VolumeBar() {
           className="block size-4 rounded-[10px] bg-foreground shadow-[0_2px_4px] shadow-neon hover:bg-neon focus:shadow-[0_0_0_1px] focus:outline-none"
           aria-label="Volume"
         />
-      </Slider.Root>
+      </Slider.Root> */}
     </form>
   )
 }

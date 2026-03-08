@@ -1,6 +1,6 @@
 'use client'
 
-import { TrackNextIcon } from '@radix-ui/react-icons'
+import { SkipForwardIcon } from 'lucide-react'
 
 export function NextButton() {
   return (
@@ -9,7 +9,7 @@ export function NextButton() {
       className="rounded-md p-1 outline-none ring-ring/50 focus-visible:ring-2 cursor-pointer"
       type="button"
     >
-      <TrackNextIcon height={20} width={20} />
+      <SkipForwardIcon height={20} width={20} />
     </button>
   )
 }

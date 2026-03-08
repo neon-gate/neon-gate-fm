@@ -4,5 +4,5 @@ import { loginSchema } from '@login/ui'
 export function isLoginBodyValid(body: unknown): LoginState {
   const parsed = loginSchema.parse(body)
 
-  return parsed as LoginState
+  return parsed
 }
