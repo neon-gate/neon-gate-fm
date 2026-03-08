@@ -1,3 +1,5 @@
+'use client'
+
 import { useAtomValue } from 'jotai'
 import * as Slider from '@radix-ui/react-slider'
 

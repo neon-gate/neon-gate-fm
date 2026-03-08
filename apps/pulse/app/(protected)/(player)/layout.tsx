@@ -1,11 +1,10 @@
 import { redirect } from 'next/navigation'
-import { useAtomValue } from 'jotai'
+// import { useAtomValue } from 'jotai'
 
-import { isAuthAtom } from '@atoms'
+// import { isAuthAtom } from '@atoms'
 import { Header, Logo, Main } from '@lib/ui'
 
 import { SearchInput } from './lib/ui'
-import './lib/css/component.css'
 
 interface PlayerLayoutProps {
   children: React.ReactNode
@@ -24,14 +23,14 @@ export default function PlayerLayout(props: PlayerLayoutProps) {
     ['user-menu']: userMenu
   } = props
 
-  const isAuthenticated = useAtomValue(isAuthAtom)
+  const isAuthenticated = true
 
   if (!isAuthenticated) {
     redirect('/login')
   }
 
   return (
-    <div className="sm:player-grid player-grid-mobile">
+    <div>
       <Header className="col-span-3">
         <Logo />
         <SearchInput />
