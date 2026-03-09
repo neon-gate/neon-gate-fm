@@ -48,12 +48,18 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      hls.js:
+        specifier: ^1.6.15
+        version: 1.6.15
       immer:
         specifier: ^11.1.4
         version: 11.1.4
       jotai:
         specifier: ^2.18.0
         version: 2.18.0(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3)
+      jotai-immer:
+        specifier: ^0.4.1
+        version: 0.4.1(immer@11.1.4)(jotai@2.18.0)
       lucide-react:
         specifier: ^0.577.0
         version: 0.577.0(react@19.2.3)
@@ -5057,6 +5063,10 @@ packages:
     resolution: {integrity: sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==}
     dev: false
 
+  /hls.js@1.6.15:
+    resolution: {integrity: sha512-E3a5VwgXimGHwpRGV+WxRTKeSp2DW5DI5MWv34ulL3t5UNmyJWCQ1KmLEHbYzcfThfXG8amBL+fCYPneGHC4VA==}
+    dev: false
+
   /hono@4.12.5:
     resolution: {integrity: sha512-3qq+FUBtlTHhtYxbxheZgY8NIFnkkC/MR8u5TTsr7YZ3wixryQ3cCwn3iZbg8p8B88iDBBAYSfZDS75t8MN7Vg==}
     engines: {node: '>=16.9.0'}
@@ -5330,6 +5340,16 @@ packages:
 
   /jose@6.2.0:
     resolution: {integrity: sha512-xsfE1TcSCbUdo6U07tR0mvhg0flGxU8tPLbF03mirl2ukGQENhUg4ubGYQnhVH0b5stLlPM+WOqDkEl1R1y5sQ==}
+    dev: false
+
+  /jotai-immer@0.4.1(immer@11.1.4)(jotai@2.18.0):
+    resolution: {integrity: sha512-nQTt1HBKie/5OJDck1qLpV1PeBA6bjJLAczEYAx70PD8R4Mbu7gtexfBUCzJh6W6ecsOfwHksAYAesVth6SN9A==}
+    peerDependencies:
+      immer: '>=9.0.0'
+      jotai: '>=2.0.0'
+    dependencies:
+      immer: 11.1.4
+      jotai: 2.18.0(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3)
     dev: false
 
   /jotai@2.18.0(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.2.3):

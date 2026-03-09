@@ -1,3 +1,3 @@
 import { atom } from 'jotai'
 
-export const isAuthAtom = atom(false)
+export const isAuthAtom = atom<boolean>(false)

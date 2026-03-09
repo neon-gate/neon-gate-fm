@@ -1,18 +1,20 @@
 'use client'
 
+import { useImmerAtom } from "jotai-immer"
 import { ScrollArea } from "@shadcn/components/ui/scroll-area"
+import { galleryAtom } from "@atoms"
 
 import { TrackItem } from "./track-item"
 
-const tags = Array.from({ length: 50 }).map(
-  (_, i, a) => `v1.2.0-beta.${a.length - i}`
-)
+
 
 export function TrackList() {
+  const [tracks] = useImmerAtom(galleryAtom)
+
   return (
-    <ScrollArea className="h-full w-full rounded-sm">
+    <ScrollArea className="h-full w-full rounded-sm pb-12">
       <div className="pl-2">
-        {tags.map((tag) => <TrackItem key={tag} />)}
+        {tracks.map((track) => <TrackItem key={track.id} track={track} />)}
       </div>
     </ScrollArea>
   )

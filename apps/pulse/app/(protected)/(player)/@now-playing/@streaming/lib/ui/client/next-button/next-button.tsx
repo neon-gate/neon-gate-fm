@@ -2,14 +2,23 @@
 
 import { SkipForwardIcon } from 'lucide-react'
 
+import { Button } from '@shadcn/components/ui/button'
+
 export function NextButton() {
+
+  function handleNext() {
+    // TODO: Implement next track logic
+  }
+
   return (
-    <button
-      aria-label="Next track"
-      className="rounded-md p-1 outline-none ring-ring/50 focus-visible:ring-2 cursor-pointer"
-      type="button"
+    <Button
+      variant="ghost"
+      className="cursor-pointer"
+      aria-label="Previous track"
+      size="icon"
+      onClick={handleNext}
     >
       <SkipForwardIcon height={20} width={20} />
-    </button>
+    </Button>
   )
 }

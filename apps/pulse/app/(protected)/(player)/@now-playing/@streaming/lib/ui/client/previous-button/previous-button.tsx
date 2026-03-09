@@ -2,14 +2,23 @@
 
 import { SkipBackIcon } from 'lucide-react'
 
+import { Button } from '@shadcn/components/ui/button'
+
 export function PreviousButton() {
+
+  function handlePrevious() {
+    // TODO: Implement previous track logic
+  }
+
   return (
-    <button
+    <Button
+      variant="ghost"
+      className="cursor-pointer"
       aria-label="Previous track"
-      className="rounded-md p-1 outline-none ring-ring/50 focus-visible:ring-2 cursor-pointer"
-      type="button"
+      size="icon"
+      onClick={handlePrevious}
     >
       <SkipBackIcon height={20} width={20} />
-    </button>
+    </Button>
   )
 }

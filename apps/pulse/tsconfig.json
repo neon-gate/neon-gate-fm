@@ -19,6 +19,7 @@
       "@lib/*": ["./app/lib/*"],
       "@atoms": ["./app/lib/state/atoms/index.ts"],
       "@domain": ["./app/lib/state/domain/index.ts"],
+      "@mocks/*": ["./app/lib/state/mocks/*"],
       "@login/*": ["./app/(public)/(auth)/login/lib/*"],
       "@signup/*": ["./app/(public)/(auth)/signup/lib/*"],
       "@library/*": ["./app/(protected)/(player)/@library/lib/*"],

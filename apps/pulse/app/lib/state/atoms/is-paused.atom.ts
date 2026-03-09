@@ -1,3 +1,3 @@
 import { atom } from 'jotai'
 
-export const isPausedAtom = atom(true)
+export const isPausedAtom = atom<boolean>(true)

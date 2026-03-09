@@ -1,6 +1,6 @@
 'use client'
 
-import { useAtomValue } from "jotai"
+import { useImmerAtom } from "jotai-immer"
 import {
   AudioLinesIcon,
   UploadIcon,
@@ -22,18 +22,15 @@ import { userAtom } from "@atoms"
 import { TrackMetadata } from "@track-metadata/ui"
 
 export function UserDropdown() {
-  const user = useAtomValue(userAtom)
-
-  if (!user) return null
-
+  const [user] = useImmerAtom(userAtom)
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarImage src={user.avatar.url} alt={`${user.name} ${user.surname} avatar`} />
-            <AvatarFallback>{toInitials(`${user.name} ${user.surname}`)}</AvatarFallback>
+            <AvatarImage src={user?.avatar.imageUrl} alt={`${user?.name} ${user?.surname} avatar`} />
+            <AvatarFallback>{toInitials(`${user?.name} ${user?.surname}`)}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

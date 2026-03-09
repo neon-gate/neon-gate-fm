@@ -1,17 +1,21 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { Progress } from '@shadcn/components/ui/progress'
+import { useSetImmerAtom, useImmerAtom } from 'jotai-immer'
+import { useAtom } from 'jotai'
 
-import { metadataAtom, progressAtom } from '@atoms'
+import { Progress } from '@shadcn/components/ui/progress'
+import { trackMetadataAtom, progressAtom, isPausedAtom } from '@atoms'
 import { cn, msToTime } from '@lib/template'
+// import { HlsPlayer } from '@lib/hls'
 
 export function ProgressBar() {
-  const metadata = useAtomValue(metadataAtom)
-  const progress = useAtomValue(progressAtom)
-  const setProgress = useSetAtom(progressAtom)
-  const duration = metadata?.duration ?? 0
+  const [track] = useImmerAtom(trackMetadataAtom)
+  const [progress] = useImmerAtom(progressAtom)
+  const setProgress = useSetImmerAtom(progressAtom)
+  const [isPaused, setIsPaused] = useAtom(isPausedAtom)
+
+  const duration = track.durationMs
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +29,7 @@ export function ProgressBar() {
     return () => clearInterval(interval)
   }, [setProgress, duration, progress.milliseconds])
 
-  if (!metadata) return null
+  if (!track) return null
 
   const percentage = (progress.milliseconds / duration) * 100
 
@@ -47,6 +51,7 @@ export function ProgressBar() {
       <span className="h-4 text-sm">
         {msToTime(duration)}
       </span>
+      {/* <HlsPlayer src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" /> */}
     </div>
   )
 }
