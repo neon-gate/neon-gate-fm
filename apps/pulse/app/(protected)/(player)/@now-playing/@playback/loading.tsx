@@ -1,3 +1,3 @@
-export default function StreamingLoading() {
-  return <div>StreamingLoading</div>
+export default function PlaybackLoading() {
+  return <div>PlaybackLoading</div>
 }

@@ -1,4 +1,11 @@
 {
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
   "files": {
     "includes": [
       "**",
@@ -15,8 +22,6 @@
         "useLiteralKeys": "off"
       },
       "style": {
-        "sortImports": "off",
-        "noMixedImports": "off",
         "useImportType": "off",
         "useConsistentTypeDefinitions": {
           "level": "error",
@@ -30,6 +35,14 @@
             "filenameCases": ["kebab-case"]
           }
         }
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useExhaustiveDependencies": "warn"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "warn"
       }
     }
   },
@@ -46,6 +59,12 @@
     }
   },
   "json": {
+    "formatter": {
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineWidth": 80,
+      "trailingCommas": "none"
+    },
     "parser": {
       "allowComments": true
     }

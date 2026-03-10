@@ -5,7 +5,6 @@ import { SkipBackIcon } from 'lucide-react'
 import { Button } from '@shadcn/components/ui/button'
 
 export function PreviousButton() {
-
   function handlePrevious() {
     // TODO: Implement previous track logic
   }

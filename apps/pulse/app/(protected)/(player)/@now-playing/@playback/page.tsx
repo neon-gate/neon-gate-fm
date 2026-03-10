@@ -5,7 +5,7 @@ import {
   ProgressBar
 } from './lib/ui'
 
-export default function StreamingSlot() {
+export default function PlaybackSlot() {
   return (
     <div>
       <div className="flex items-center justify-center gap-4">

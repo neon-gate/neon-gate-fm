@@ -5,7 +5,6 @@ import { SkipForwardIcon } from 'lucide-react'
 import { Button } from '@shadcn/components/ui/button'
 
 export function NextButton() {
-
   function handleNext() {
     // TODO: Implement next track logic
   }
