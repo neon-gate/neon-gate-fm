@@ -1,9 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { compare, hash } from 'bcrypt'
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
+import { compare } from 'bcrypt'
 
-import { RefreshTokenPort, UserPort } from '@domain/ports'
-import { Email, Password } from '@domain/value-objects'
+import { AuthEventBusPort, type AuthEventBus, UserPort } from '@domain/ports'
+import { AuthProvider, Email, Password } from '@domain/value-objects'
 import {
   AuthFailureReason,
   AuthLogEvent,
@@ -11,25 +10,26 @@ import {
   logAxiomEvent,
   LogLevel
 } from '@infra/axiom/observability'
-import { requireStringEnv } from '@infra/env'
-import { DbConfigFlag } from '@infra/db'
+
+import {
+  AuthTokenService,
+  type SessionContext
+} from '@application/services/auth-token.service'
 
 @Injectable()
 export class LoginUseCase {
-  private readonly refreshSecret = requireStringEnv(
-    DbConfigFlag.JwtRefreshSecret
-  )
-  private readonly refreshExpiresIn = requireStringEnv(
-    DbConfigFlag.JwtRefreshExpiresIn
-  ) as never
-
   constructor(
     private readonly users: UserPort,
-    private readonly refreshTokens: RefreshTokenPort,
-    private readonly jwt: JwtService
+    private readonly tokens: AuthTokenService,
+    @Inject(AuthEventBusPort)
+    private readonly events: AuthEventBus
   ) {}
 
-  async execute(email: string, password: string) {
+  async execute(
+    email: string,
+    password: string,
+    context: SessionContext
+  ) {
     const emailVo = Email.create(email)
     const passwordVo = Password.create(password)
     const user = await this.users.findByEmail(emailVo)
@@ -41,6 +41,18 @@ export class LoginUseCase {
         context: {
           reason: AuthFailureReason.UserNotFound,
           emailHash: hashSensitiveValue(emailVo.toString())
+        }
+      })
+      throw new UnauthorizedException('Invalid credentials')
+    }
+
+    if (user.provider !== AuthProvider.Password || !user.hasPassword) {
+      void logAxiomEvent({
+        event: AuthLogEvent.AuthLoginFailed,
+        level: LogLevel.Warn,
+        context: {
+          reason: AuthFailureReason.ProviderMismatch,
+          userId: user.idString
         }
       })
       throw new UnauthorizedException('Invalid credentials')
@@ -61,25 +73,29 @@ export class LoginUseCase {
       throw new UnauthorizedException('Invalid credentials')
     }
 
-    const payload = { sub: user.idString, email: user.email }
+    const { accessToken, refreshToken, sessionId } =
+      await this.tokens.createSession(user, context)
 
-    const accessToken = await this.jwt.signAsync(payload)
-    const refreshToken = await this.jwt.signAsync(payload, {
-      secret: this.refreshSecret,
-      expiresIn: this.refreshExpiresIn
-    })
-    const refreshTokenHash = await hash(refreshToken, 10)
-    const decoded = this.jwt.decode(refreshToken) as { exp?: number } | null
-
-    if (!decoded?.exp) {
-      throw new UnauthorizedException('Invalid refresh token payload')
-    }
-
-    await this.refreshTokens.upsertForUser({
-      userId: user.idString,
-      tokenHash: refreshTokenHash,
-      expiresAt: new Date(decoded.exp * 1000)
-    })
+    void this.events
+      .emit('auth.user.logged_in', {
+        userId: user.idString,
+        email: user.email,
+        provider: user.provider,
+        sessionId,
+        ipAddress: context.ipAddress ?? null,
+        userAgent: context.userAgent ?? null,
+        occurredAt: new Date().toISOString()
+      })
+      .catch((error) => {
+        void logAxiomEvent({
+          event: AuthLogEvent.AuthEventPublishFailed,
+          level: LogLevel.Warn,
+          context: {
+            event: 'auth.user.logged_in',
+            errorName: error instanceof Error ? error.name : 'unknown'
+          }
+        })
+      })
 
     return { accessToken, refreshToken }
   }

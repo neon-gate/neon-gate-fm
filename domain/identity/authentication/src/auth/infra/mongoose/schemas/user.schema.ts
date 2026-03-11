@@ -13,11 +13,17 @@ export class User {
   @Prop({ required: true, unique: true })
   email!: string
 
-  @Prop({ required: true })
-  passwordHash!: string
+  @Prop({ type: String, default: null })
+  passwordHash!: string | null
+
+  @Prop({ type: String, required: true, index: true })
+  provider!: string
+
+  @Prop({ type: String, index: true, default: null })
+  providerUserId!: string | null
 
   @Prop({ type: String, default: null })
-  refreshTokenHash!: string | null
+  name!: string | null
 
   @Prop({ type: Date })
   createdAt!: Date
@@ -29,3 +35,8 @@ export class User {
 export type UserDocument = HydratedDocument<User>
 
 export const UserSchemaDefinition = SchemaFactory.createForClass(User)
+
+UserSchemaDefinition.index(
+  { provider: 1, providerUserId: 1 },
+  { unique: true, sparse: true }
+)

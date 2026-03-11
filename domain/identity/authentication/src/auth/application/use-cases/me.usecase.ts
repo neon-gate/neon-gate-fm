@@ -18,6 +18,8 @@ export class MeUseCase {
     return {
       id: user.idString,
       email: user.email,
+      name: user.name,
+      provider: user.provider,
       createdAt: user.createdAt
     }
   }

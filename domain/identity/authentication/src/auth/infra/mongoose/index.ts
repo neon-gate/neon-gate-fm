@@ -1,11 +1,12 @@
 // mongoose — Persistence adapters and schemas; implement domain ports with MongoDB.
-export { MongooseRefreshTokenAdapter } from './adapters/mongoose-refresh-token.adapter'
+export { MongooseSessionAdapter } from './adapters/mongoose-session.adapter'
 export { MongooseUserAdapter } from './adapters/mongoose-user.adapter'
+export { sessionMapper } from './mappers/session.mapper'
 export {
-  RefreshToken as RefreshTokenSchema,
-  RefreshTokenSchemaDefinition,
-  type RefreshTokenDocument
-} from './schemas/refresh-token.schema'
+  Session as SessionSchema,
+  SessionSchemaDefinition,
+  type SessionDocument
+} from './schemas/session.schema'
 export {
   User as UserSchema,
   UserSchemaDefinition,

@@ -1,5 +1,3 @@
-// GET /api/fort-minor/[trackId]/playlist
-
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { NextRequest, NextResponse } from 'next/server'

@@ -45,15 +45,19 @@ services:
   micro-auth:
     build:
       context: .
-      dockerfile: ./apps/bc-auth/micro-jwt-session/Dockerfile
+      dockerfile: ./domain/identity/authentication/Dockerfile
     container_name: micro-auth
     ports:
       - "7000:7000"
     env_file:
-      - ./apps/bc-auth/micro-jwt-session/.env
+      - ./domain/identity/authentication/.env
+    environment:
+      NATS_URL: nats://nats-bus:4222
     depends_on:
       mongo:
         condition: service_healthy
+      nats:
+        condition: service_started
     restart: unless-stopped
 
   micro-player:
@@ -74,6 +78,23 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  fort-minor:
+    build:
+      context: .
+      dockerfile: ./domain/streaming/fort-minor/Dockerfile
+    container_name: fort-minor
+    ports:
+      - "7002:7002"
+    env_file:
+      - ./domain/streaming/fort-minor/.env
+    environment:
+      NATS_URL: nats://nats-bus:4222
+      PORT: "7002"
+    depends_on:
+      nats:
+        condition: service_started
+    restart: unless-stopped
+
   pulse:
     build:
       context: .
@@ -83,8 +104,12 @@ services:
       - "3000:3000"
     env_file:
       - ./apps/pulse/.env.development
+    environment:
+      FORT_MINOR_BASE_URL: http://fort-minor:7002
     depends_on:
       micro-auth:
+        condition: service_started
+      fort-minor:
         condition: service_started
     restart: unless-stopped
 

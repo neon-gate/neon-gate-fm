@@ -5,5 +5,7 @@ export enum AuthFailureReason {
   TokenNotFound = 'TOKEN_NOT_FOUND',
   TokenHashMismatch = 'TOKEN_HASH_MISMATCH',
   TokenVerificationFailed = 'TOKEN_VERIFICATION_FAILED',
-  EmailAlreadyRegistered = 'EMAIL_ALREADY_REGISTERED'
+  EmailAlreadyRegistered = 'EMAIL_ALREADY_REGISTERED',
+  ProviderMismatch = 'PROVIDER_MISMATCH',
+  EmailNotVerified = 'EMAIL_NOT_VERIFIED'
 }

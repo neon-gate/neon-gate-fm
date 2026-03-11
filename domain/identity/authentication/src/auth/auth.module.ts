@@ -4,22 +4,31 @@ import { JwtModule } from '@nestjs/jwt'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import {
+  GoogleLoginUseCase,
+  GoogleSignupUseCase,
   LoginUseCase,
   LogoutUseCase,
   MeUseCase,
   RefreshTokenUseCase,
   SignupUseCase
 } from '@application/use-cases'
-import { RefreshTokenPort, UserPort } from '@domain/ports'
+import { GoogleOAuthPort, SessionPort, UserPort } from '@domain/ports'
 import { requireStringEnv } from '@infra/env'
 import { DbConfigFlag } from '@infra/db'
 import {
-  MongooseRefreshTokenAdapter,
+  MongooseSessionAdapter,
   MongooseUserAdapter,
-  RefreshTokenSchemaDefinition,
+  SessionSchemaDefinition,
   UserSchemaDefinition
 } from '@infra/mongoose'
 import { AccessTokenGuard, AuthController } from '@interface/http'
+import { AuthTokenService } from '@application/services/auth-token.service'
+import {
+  authEventBusProvider,
+  natsConnectionProvider,
+  NatsLifecycleService
+} from '@infra/event-bus'
+import { GoogleOAuthAdapter } from '@infra/oauth'
 
 @Module({
   imports: [
@@ -27,7 +36,7 @@ import { AccessTokenGuard, AuthController } from '@interface/http'
 
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchemaDefinition },
-      { name: 'RefreshToken', schema: RefreshTokenSchemaDefinition }
+      { name: 'Session', schema: SessionSchemaDefinition }
     ]),
 
     JwtModule.registerAsync({
@@ -45,18 +54,28 @@ import { AccessTokenGuard, AuthController } from '@interface/http'
   providers: [
     SignupUseCase,
     LoginUseCase,
+    GoogleSignupUseCase,
+    GoogleLoginUseCase,
     RefreshTokenUseCase,
     LogoutUseCase,
     MeUseCase,
     AccessTokenGuard,
+    AuthTokenService,
+    natsConnectionProvider,
+    authEventBusProvider,
+    NatsLifecycleService,
 
     {
       provide: UserPort,
       useClass: MongooseUserAdapter
     },
     {
-      provide: RefreshTokenPort,
-      useClass: MongooseRefreshTokenAdapter
+      provide: SessionPort,
+      useClass: MongooseSessionAdapter
+    },
+    {
+      provide: GoogleOAuthPort,
+      useClass: GoogleOAuthAdapter
     }
   ],
 

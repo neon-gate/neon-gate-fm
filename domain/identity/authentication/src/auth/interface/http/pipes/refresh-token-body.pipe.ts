@@ -1,11 +1,14 @@
-import { BadRequestException, PipeTransform } from '@nestjs/common'
+import { PipeTransform } from '@nestjs/common'
 import { z } from 'zod'
 
 import type { RefreshTokenRequestDto } from '@interface/dto'
+import { parseWithSchema } from '@interface/http/pipes/zod-validation'
 
 const refreshTokenSchema = z
   .object({
-    refreshToken: z.string().min(1)
+    refreshToken: z
+      .string({ required_error: 'Refresh token is required' })
+      .min(1, 'Refresh token is required')
   })
   .strict()
 
@@ -13,14 +16,6 @@ export class RefreshTokenBodyPipe
   implements PipeTransform<unknown, RefreshTokenRequestDto>
 {
   transform(value: unknown): RefreshTokenRequestDto {
-    const parsed = refreshTokenSchema.safeParse(value)
-
-    if (!parsed.success) {
-      throw new BadRequestException(
-        parsed.error.issues[0]?.message ?? 'Invalid body'
-      )
-    }
-
-    return parsed.data
+    return parseWithSchema(refreshTokenSchema, value)
   }
 }

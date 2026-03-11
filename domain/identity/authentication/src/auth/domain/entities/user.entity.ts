@@ -1,10 +1,14 @@
 import { AggregateRoot, UniqueEntityId } from '@repo/kernel'
 
+import { AuthProvider } from '@domain/value-objects'
+
 export interface UserProps {
   email: string
-  passwordHash: string
+  passwordHash?: string | null
+  provider: AuthProvider
+  providerUserId?: string | null
+  name?: string | null
   createdAt: Date
-  refreshTokenHash?: string | null
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -25,19 +29,27 @@ export class User extends AggregateRoot<UserProps> {
   }
 
   get passwordHash(): string {
-    return this.props.passwordHash
+    return this.props.passwordHash ?? ''
+  }
+
+  get provider(): AuthProvider {
+    return this.props.provider
+  }
+
+  get providerUserId(): string | null {
+    return this.props.providerUserId ?? null
+  }
+
+  get name(): string | null {
+    return this.props.name ?? null
   }
 
   get createdAt(): Date {
     return this.props.createdAt
   }
 
-  get refreshTokenHash(): string | null {
-    return this.props.refreshTokenHash ?? null
-  }
-
-  setRefreshTokenHash(hash: string | null): void {
-    this.props.refreshTokenHash = hash
+  get hasPassword(): boolean {
+    return Boolean(this.props.passwordHash)
   }
 
   toJSON(): UserProps & { id: string } {

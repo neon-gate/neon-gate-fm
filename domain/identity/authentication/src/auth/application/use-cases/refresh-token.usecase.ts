@@ -1,8 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { compare } from 'bcrypt'
+import { z } from 'zod'
 
-import { RefreshTokenPort } from '@domain/ports'
+import { AuthEventBusPort, type AuthEventBus, SessionPort } from '@domain/ports'
+import { AuthProvider } from '@domain/value-objects'
 import {
   AuthFailureReason,
   AuthLogEvent,
@@ -11,61 +13,102 @@ import {
 } from '@infra/axiom/observability'
 import { requireStringEnv } from '@infra/env'
 import { DbConfigFlag } from '@infra/db'
+import {
+  AuthTokenService,
+  type TokenPayload
+} from '@application/services/auth-token.service'
 
 @Injectable()
 export class RefreshTokenUseCase {
   private readonly refreshSecret = requireStringEnv(
     DbConfigFlag.JwtRefreshSecret
   )
+  private readonly payloadSchema = z
+    .object({
+      sub: z.string().min(1),
+      email: z.string().email(),
+      sid: z.string().min(1),
+      provider: z.nativeEnum(AuthProvider)
+    })
+    .strict()
 
   constructor(
-    private readonly refreshTokens: RefreshTokenPort,
-    private readonly jwt: JwtService
+    private readonly sessions: SessionPort,
+    private readonly jwt: JwtService,
+    private readonly tokens: AuthTokenService,
+    @Inject(AuthEventBusPort)
+    private readonly events: AuthEventBus
   ) {}
 
   async execute(refreshToken: string) {
     try {
-      const payload = await this.jwt.verifyAsync(refreshToken, {
+      const payload = await this.jwt.verifyAsync<TokenPayload>(refreshToken, {
         secret: this.refreshSecret
       })
-      const stored = await this.refreshTokens.findByUserId(payload.sub)
+      const parsedPayload = this.payloadSchema.safeParse(payload)
+      if (!parsedPayload.success) {
+        throw new UnauthorizedException('Refresh token is invalid')
+      }
+      const typedPayload = parsedPayload.data
+      const session = await this.sessions.findById(typedPayload.sid)
 
-      if (!stored) {
+      if (!session) {
         void logAxiomEvent({
           event: AuthLogEvent.AuthRefreshFailed,
           level: LogLevel.Warn,
           context: {
             reason: AuthFailureReason.TokenNotFound,
-            userId: payload.sub
+            userId: typedPayload.sub,
+            sessionId: typedPayload.sid
           }
         })
         throw new UnauthorizedException('Refresh token is invalid')
       }
 
-      if (stored.expiresAt.getTime() <= Date.now()) {
-        await this.refreshTokens.deleteByUserId(payload.sub)
+      if (session.userId !== typedPayload.sub) {
+        throw new UnauthorizedException('Refresh token is invalid')
+      }
+
+      if (session.expiresAt.getTime() <= Date.now()) {
+        await this.sessions.deleteById(session.idString)
         throw new UnauthorizedException('Refresh token expired')
       }
 
-      const validHash = await compare(refreshToken, stored.tokenHash)
+      const validHash = await compare(refreshToken, session.refreshTokenHash)
       if (!validHash) {
         void logAxiomEvent({
           event: AuthLogEvent.AuthRefreshFailed,
           level: LogLevel.Warn,
           context: {
             reason: AuthFailureReason.TokenHashMismatch,
-            userId: payload.sub
+            userId: typedPayload.sub,
+            sessionId: typedPayload.sid
           }
         })
         throw new UnauthorizedException('Refresh token is invalid')
       }
 
-      const newAccess = await this.jwt.signAsync({
-        sub: payload.sub,
-        email: payload.email
-      })
+      const { accessToken, refreshToken: rotatedRefreshToken } =
+        await this.tokens.rotateSession(typedPayload, session)
 
-      return { accessToken: newAccess }
+      void this.events
+        .emit('auth.token.refreshed', {
+          userId: typedPayload.sub,
+          sessionId: typedPayload.sid,
+          occurredAt: new Date().toISOString()
+        })
+        .catch((error) => {
+          void logAxiomEvent({
+            event: AuthLogEvent.AuthEventPublishFailed,
+            level: LogLevel.Warn,
+            context: {
+              event: 'auth.token.refreshed',
+              errorName: error instanceof Error ? error.name : 'unknown'
+            }
+          })
+        })
+
+      return { accessToken, refreshToken: rotatedRefreshToken }
     } catch (error) {
       if (!(error instanceof UnauthorizedException)) {
         void logAxiomEvent({
