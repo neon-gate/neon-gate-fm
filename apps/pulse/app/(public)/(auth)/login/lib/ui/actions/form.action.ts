@@ -1,6 +1,6 @@
 'use server'
 
-import { type LoginResponse, loginInstance } from '@api/auth'
+import { type LoginResponse, loginInstance } from '@api/authority'
 import { LoginState } from '@login/state'
 
 export type LoginAction = typeof loginAction

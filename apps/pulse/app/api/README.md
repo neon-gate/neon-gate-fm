@@ -34,7 +34,7 @@ Each route in this layer corresponds to a **bounded context in the domain layer*
 
 | API Route                   | Bounded Context | Microservice              |
 | --------------------------- | --------------- | ------------------------- |
-| `/api/auth`                 | Identity        | `identity/authentication` |
+| `/api/authority`            | Identity        | `identity/authority`      |
 | `/api/songs`                | Media           | `media/metadata`          |
 | `/api/tracks`               | Media           | `media/tracks`            |
 | `/api/streaming/mocking-bird` | Streaming       | `streaming/mocking-bird`    |
@@ -76,7 +76,7 @@ The auth module communicates with the **Identity bounded context**.
 Example endpoint:
 
 ```
-POST /api/auth/login
+POST /api/authority/login
 ```
 
 Typical flow:
@@ -231,7 +231,7 @@ This ensures the UI and services remain type-safe.
 Login example:
 
 ```
-POST /api/auth/login
+POST /api/authority/login
 ```
 
 Execution flow:

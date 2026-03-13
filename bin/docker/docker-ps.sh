@@ -6,8 +6,8 @@ COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
 
 TARGET="${1:-all}"
 
-INFRA_SERVICES=(mongo redis rabbitmq nats)
-APP_SERVICES=(micro-auth micro-player pulse)
+INFRA_SERVICES=(mongo)
+APP_SERVICES=(authority soundgarden pulse)
 
 case "$TARGET" in
   infra)

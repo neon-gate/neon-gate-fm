@@ -9,30 +9,23 @@ services:
     volumes:
       - mongo_data:/data/db
     healthcheck:
-      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand(\"ping\").ok']
+      test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping").ok']
       interval: 10s
       timeout: 5s
       retries: 10
 
-  micro-auth:
+  authority:
     build:
       context: .
-      dockerfile: ./domain/identity/auth/Dockerfile
-    container_name: micro-auth
+      dockerfile: ./domain/identity/authority/Dockerfile
+    container_name: authority
     ports:
       - '7000:7000'
     depends_on:
       mongo:
         condition: service_healthy
-    environment:
-      PORT: '7000'
-      MONGO_URI: 'mongodb://mongo:27017'
-      MONGO_DB_NAME: 'pulse-auth'
-      JWT_SECRET: 'pulse-auth-secret'
-      JWT_EXPIRES_IN: '15m'
-      JWT_REFRESH_SECRET: 'pulse-auth-refresh-secret'
-      JWT_REFRESH_EXPIRES_IN: '7d'
-      GOOGLE_CLIENT_ID: 'local.google.client'
+    env_file:
+      - domain/identity/authority/.env
     restart: unless-stopped
 
   soundgarden:
@@ -54,11 +47,11 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      micro-auth:
+      authority:
         condition: service_started
     environment:
       PORT: '3000'
-      BFF_BASE_URL: 'http://micro-auth:7000/auth'
+      BFF_BASE_URL: 'http://authority:7000/auth'
       BFF_API_TIMEOUT_MS: '10000'
     restart: unless-stopped
 

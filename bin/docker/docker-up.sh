@@ -3,36 +3,26 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
-API_AUTH_ENV_FILE="$ROOT_DIR/apps/bc-auth/micro-jwt-session/.env"
-WEB_ENV_FILE_PATH="$ROOT_DIR/apps/web/.env.development"
-
+AUTHORITY_ENV="$ROOT_DIR/domain/identity/authority/.env"
 TARGET="${1:-all}"
 
-INFRA_SERVICES=(mongo redis rabbitmq nats)
-APP_SERVICES=(micro-auth micro-player web)
+INFRA_SERVICES=(mongo)
+APP_SERVICES=(authority soundgarden pulse)
 
 case "$TARGET" in
   infra)
     docker compose -f "$COMPOSE_FILE" up -d --build "${INFRA_SERVICES[@]}"
     ;;
   apps)
-    if [[ ! -f "$WEB_ENV_FILE_PATH" ]]; then
-      echo "Missing apps/web/.env.development"
-      exit 1
-    fi
-    if [[ ! -f "$API_AUTH_ENV_FILE" ]]; then
-      echo "Missing apps/bc-auth/micro-jwt-session/.env"
+    if [[ ! -f "$AUTHORITY_ENV" ]]; then
+      echo "Missing domain/identity/authority/.env (copy from .env.template)"
       exit 1
     fi
     docker compose -f "$COMPOSE_FILE" up -d --build "${APP_SERVICES[@]}"
     ;;
   all)
-    if [[ ! -f "$WEB_ENV_FILE_PATH" ]]; then
-      echo "Missing apps/web/.env.development"
-      exit 1
-    fi
-    if [[ ! -f "$API_AUTH_ENV_FILE" ]]; then
-      echo "Missing apps/bc-auth/micro-jwt-session/.env"
+    if [[ ! -f "$AUTHORITY_ENV" ]]; then
+      echo "Missing domain/identity/authority/.env (copy from .env.template)"
       exit 1
     fi
     docker compose -f "$COMPOSE_FILE" up -d --build
