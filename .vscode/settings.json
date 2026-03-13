@@ -24,5 +24,6 @@
   "css.lint.emptyRules": "ignore",
 
   "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore"
+  "less.lint.unknownAtRules": "ignore",
+  "git.ignoreLimitWarning": true
 }

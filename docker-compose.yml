@@ -35,6 +35,17 @@ services:
       GOOGLE_CLIENT_ID: 'local.google.client'
     restart: unless-stopped
 
+  soundgarden:
+    build:
+      context: .
+      dockerfile: ./domain/ingestion/soundgarden/Dockerfile
+    container_name: soundgarden
+    ports:
+      - '7100:7100'
+    env_file:
+      - domain/ingestion/soundgarden/.env.template
+    restart: unless-stopped
+
   pulse:
     build:
       context: .

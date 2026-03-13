@@ -454,39 +454,72 @@ Event bus:
 
 NATS
 
-Primary event:
+## Event payload schemas
 
-track.uploaded
+### track.upload.received
 
-Payload example:
-
+```json
 {
-  "trackId": "uuid",
-  "filePath": "/tmp/uploads/uuid.mp3",
-  "uploadedAt": "timestamp"
+  "trackId": "018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0",
+  "fileName": "song.mp3",
+  "receivedAt": "2025-03-13T12:00:00.000Z"
 }
+```
 
-Subscribers (current known consumers):
+### track.upload.validated
 
-- AI Cognition Engine
-- Backstage
+```json
+{
+  "trackId": "018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0",
+  "fileName": "song.mp3",
+  "fileSize": 5242880,
+  "mimeType": "audio/mpeg",
+  "validatedAt": "2025-03-13T12:00:01.000Z"
+}
+```
 
-* Subscribers are informational only. Services must not rely on specific consumers.
+### track.upload.stored
 
-Subscribers (current known consumers):
+```json
+{
+  "trackId": "018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0",
+  "filePath": "/tmp/uploads/018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0/song.mp3",
+  "fileName": "song.mp3",
+  "fileSize": 5242880,
+  "storedAt": "2025-03-13T12:00:02.000Z"
+}
+```
 
-track.upload.received
-- Backstage
+### track.uploaded
 
-track.upload.validated
-- Backstage
+```json
+{
+  "trackId": "018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0",
+  "filePath": "/tmp/uploads/018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0/song.mp3",
+  "fileName": "song.mp3",
+  "fileSize": 5242880,
+  "uploadedAt": "2025-03-13T12:00:03.000Z"
+}
+```
 
-track.upload.stored
-- Backstage
+### track.upload.failed
 
-track.uploaded
-- AI Cognition Engine
-- Backstage
+```json
+{
+  "trackId": "018f4d9c-2a77-7c3b-bb92-91c9a6a0a2b0",
+  "errorCode": "FILE_TOO_LARGE",
+  "message": "File exceeds maximum allowed size"
+}
+```
 
-track.upload.failed
-- Backstage
+## Known consumers
+
+| Event | Consumers |
+|-------|-----------|
+| track.upload.received | Backstage |
+| track.upload.validated | Backstage |
+| track.upload.stored | Backstage |
+| track.uploaded | AI Cognition Engine, Backstage |
+| track.upload.failed | Backstage |
+
+Subscribers are informational only. Services must not rely on specific consumers.
