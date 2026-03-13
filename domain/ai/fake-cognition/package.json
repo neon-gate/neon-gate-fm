@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/main.ts",
-    "build": "nest build",
-    "test": "jest"
+    "build": "nest build"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.13",
