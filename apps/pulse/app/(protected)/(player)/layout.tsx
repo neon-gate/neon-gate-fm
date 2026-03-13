@@ -10,13 +10,13 @@ interface PlayerLayoutProps {
   children: React.ReactNode
   'user-menu'?: React.ReactNode
   'now-playing'?: React.ReactNode
-  library?: React.ReactNode
+  gallery?: React.ReactNode
   uploader?: React.ReactNode
 }
 
 export default function PlayerLayout(props: PlayerLayoutProps) {
   const {
-    library,
+    gallery,
     uploader,
     ['now-playing']: nowPlaying,
     ['user-menu']: userMenu
@@ -37,7 +37,7 @@ export default function PlayerLayout(props: PlayerLayoutProps) {
         </div>
         {userMenu}
       </Header>
-      {library}
+      {gallery}
       {uploader}
       {nowPlaying}
     </PlayerGrid>
