@@ -127,6 +127,9 @@ export class UploadTrackUseCase extends UseCase<
       // Non-fatal: object storage is optional for local bring-up.
     }
 
+    const petrifiedRef = storageRefs.petrified ?? storageRefs.fingerprint
+    const fortMinorRef = storageRefs.fortMinor ?? storageRefs.transcription
+
     void this.events
       .emit('track.uploaded', {
         trackId,
@@ -134,9 +137,13 @@ export class UploadTrackUseCase extends UseCase<
         fileName: stored.fileName,
         fileSize: stored.fileSize,
         mimeType: validation.mimeType,
-        ...(storageRefs.fingerprint && { storage: storageRefs.fingerprint }),
-        ...(storageRefs.transcription && {
-          transcriptionStorage: storageRefs.transcription
+        ...(petrifiedRef && {
+          petrifiedStorage: petrifiedRef,
+          storage: petrifiedRef
+        }),
+        ...(fortMinorRef && {
+          fortMinorStorage: fortMinorRef,
+          transcriptionStorage: fortMinorRef
         }),
         uploadedAt: new Date().toISOString()
       })

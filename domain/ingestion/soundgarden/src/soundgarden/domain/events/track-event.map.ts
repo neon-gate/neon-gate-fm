@@ -1,4 +1,4 @@
-import type { EventMap } from '@repo/event-bus'
+import type { EventMap } from '@repo/kernel'
 
 export interface TrackEventMap extends EventMap {
   'track.upload.received': {
@@ -26,10 +26,20 @@ export interface TrackEventMap extends EventMap {
     fileName: string
     fileSize: number
     mimeType: string
+    petrifiedStorage?: {
+      bucket: string
+      key: string
+    }
+    fortMinorStorage?: {
+      bucket: string
+      key: string
+    }
+    /** @deprecated Use petrifiedStorage */
     storage?: {
       bucket: string
       key: string
     }
+    /** @deprecated Use fortMinorStorage */
     transcriptionStorage?: {
       bucket: string
       key: string

@@ -1,4 +1,5 @@
 import { UniqueId } from './id.abstract'
+import type { EventPayload } from './event-payload.abstract'
 
 /**
  * Base domain event.
@@ -14,7 +15,7 @@ import { UniqueId } from './id.abstract'
  *   }
  * }
  */
-export abstract class Event<Payload = unknown> {
+export abstract class Event<Payload extends EventPayload = EventPayload> {
   public readonly id: UniqueId
   public readonly occurredOn: Date
   public readonly payload: Payload

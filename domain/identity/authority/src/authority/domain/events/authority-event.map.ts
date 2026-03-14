@@ -1,4 +1,4 @@
-import type { EventMap } from '@repo/event-bus'
+import type { EventMap } from '@repo/kernel'
 
 export interface AuthorityEventMap extends EventMap {
   'authority.user.signed_up': {

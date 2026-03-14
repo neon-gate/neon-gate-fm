@@ -118,7 +118,7 @@ AI Cognition Engine
 ↓
 Mockingbird (transcoding)
 ↓
-Fort-Minor (storage + delivery)
+storage
 
 ---
 
@@ -134,11 +134,11 @@ Examples used across the platform:
 
 ```
 track.uploaded
-track.fingerprint.generated
-track.song.detected
-track.transcription.started
-track.transcription.completed
-track.reasoning.started
+track.petrified.generated
+track.petrified.song.unknown
+track.fort-minor.started
+track.fort-minor.completed
+track.stereo.started
 track.approved
 track.rejected
 track.transcoding.started
@@ -275,7 +275,7 @@ Example:
 
 Files remain available until the processing pipeline finishes.
 
-Long-term storage is handled by **Fort-Minor**.
+Long-term storage is handled by **storage**.
 
 ---
 

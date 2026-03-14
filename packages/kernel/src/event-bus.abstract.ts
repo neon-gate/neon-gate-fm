@@ -1,10 +1,13 @@
+import type { EventMap } from './event-map.abstract'
+import type { EventPayload } from './event-payload.abstract'
+
 /**
  * Minimal event bus contract for domain ports.
  *
  * @example
  * class AuthEventBus extends EventBus<AuthEventMap> {}
  */
-export abstract class EventBus<Events extends Record<string, unknown>> {
+export abstract class EventBus<Events extends EventMap> {
   abstract emit<EventName extends keyof Events>(
     event: EventName,
     payload: Events[EventName]

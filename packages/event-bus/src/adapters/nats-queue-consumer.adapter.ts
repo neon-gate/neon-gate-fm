@@ -1,7 +1,8 @@
 import { type NatsConnection, StringCodec } from 'nats'
 
 import type { EventHandler } from '../event-handler'
-import type { EventMap } from '../event-map'
+import type { EventMap } from '@repo/kernel'
+import type { EventPayload } from '@repo/kernel'
 
 /// Subscribes to NATS subjects using a queue group for competing-consumer
 /// load balancing. Multiple instances sharing the same `queue` name each
@@ -18,7 +19,7 @@ export class NatsQueueConsumerAdapter<Events extends EventMap> {
   /// Subscribe to `event` with queue-group semantics.
   subscribe<EventName extends keyof Events>(
     event: EventName,
-    handler: EventHandler<Events[EventName]>
+    handler: EventHandler<Events[EventName] & EventPayload>
   ): () => void {
     const sub = this.nc.subscribe(String(event), { queue: this.queue })
 
@@ -27,7 +28,7 @@ export class NatsQueueConsumerAdapter<Events extends EventMap> {
         try {
           const decoded = JSON.parse(
             this.sc.decode(msg.data)
-          ) as Events[EventName]
+          ) as Events[EventName] & EventPayload
           await handler(decoded)
         } catch {
           // Message-level errors are handled by the caller's use case.

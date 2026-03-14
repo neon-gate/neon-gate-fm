@@ -66,7 +66,7 @@ Mockingbird **does NOT**:
 
 ```
 analyze audio
-perform AI reasoning
+run stereo (AI approval)
 serve playback
 store metadata
 ```
@@ -87,7 +87,7 @@ Soundgarden (upload)
 track.uploaded
   │
   ▼
-Sempiternal (AI cognition)
+Shinoda (AI cognition)
   │
   ▼
 track.approved
@@ -99,7 +99,7 @@ Mockingbird (transcoding)
 track.transcoding.completed
   │
   ▼
-Fort-Minor (delivery)
+storage (delivery)
 ```
 
 ---

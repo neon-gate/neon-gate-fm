@@ -5,37 +5,37 @@ services:
 
   mongo:
     image: mongo:7
-    container_name: mongo-auth
+    container_name: mongo-authority
     ports:
       - '27017:27017'
     volumes:
-      - mongo_auth_data:/data/db
+      - mongo_authority_data:/data/db
     healthcheck:
       test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping").ok']
       interval: 10s
       timeout: 5s
       retries: 10
 
-  mongo-sempiternal:
+  mongo-shinod-ai:
     image: mongo:7
-    container_name: mongo-sempiternal
+    container_name: mongo-shinod-ai
     ports:
       - '27018:27017'
     volumes:
-      - mongo_sempiternal_data:/data/db
+      - mongo_shinod_ai_data:/data/db
     healthcheck:
       test: ['CMD', 'mongosh', '--quiet', '--eval', 'db.adminCommand("ping").ok']
       interval: 10s
       timeout: 5s
       retries: 10
 
-  redis-cognition:
+  redis-shinoda:
     image: redis:7-alpine
-    container_name: redis-cognition
+    container_name: redis-shinoda
     ports:
       - '6379:6379'
     volumes:
-      - redis_cognition_data:/data
+      - redis_shinoda_data:/data
     command: redis-server --appendonly yes
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
@@ -88,6 +88,7 @@ services:
         mc mb --ignore-existing local/fingerprints;
         mc mb --ignore-existing local/transcripts;
         mc mb --ignore-existing local/artifacts;
+        mc mb --ignore-existing local/transcoded;
         echo 'MinIO buckets ready';
       "
 
@@ -139,24 +140,40 @@ services:
       - domain/realtime/backstage/.env
     restart: unless-stopped
 
-  sempiternal:
+  shinod-ai:
     build:
       context: .
-      dockerfile: ./apps/sempiternal/Dockerfile
-    container_name: sempiternal
+      dockerfile: ./domain/ai/shinod-ai/Dockerfile
+    container_name: shinod-ai
     ports:
       - '7200:7200'
     depends_on:
       nats:
         condition: service_healthy
-      redis-cognition:
+      redis-shinoda:
         condition: service_healthy
-      mongo-sempiternal:
+      mongo-shinod-ai:
         condition: service_healthy
       minio:
         condition: service_healthy
     env_file:
-      - apps/sempiternal/.env
+      - domain/ai/shinod-ai/.env
+    restart: unless-stopped
+
+  mockingbird:
+    build:
+      context: .
+      dockerfile: ./domain/streaming/mockingbird/Dockerfile
+    container_name: mockingbird
+    ports:
+      - '7201:7200'
+    depends_on:
+      nats:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    env_file:
+      - domain/streaming/mockingbird/.env
     restart: unless-stopped
 
   pulse:
@@ -174,8 +191,8 @@ services:
     restart: unless-stopped
 
 volumes:
-  mongo_auth_data:
-  mongo_sempiternal_data:
-  redis_cognition_data:
+  mongo_authority_data:
+  mongo_shinod_ai_data:
+  redis_shinoda_data:
   minio_data:
   uploads:

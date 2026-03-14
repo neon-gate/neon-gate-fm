@@ -1,5 +1,4 @@
-import type { EventBus } from '../event-bus'
-import type { EventMap } from '../event-map'
+import type { EventBus, EventMap } from '@repo/kernel'
 import { type NatsConnection, StringCodec } from 'nats'
 
 export class NatsEventBusAdapter<Events extends EventMap>

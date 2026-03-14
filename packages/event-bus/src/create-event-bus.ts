@@ -1,9 +1,10 @@
-import type { EventBus } from './event-bus'
-import type { EventMap } from './event-map'
-import type { EventHandler } from './event-handler'
+import type { EventBus, EventMap } from '@repo/kernel'
 
 export function createEventBus<Events extends EventMap>(): EventBus<Events> {
-  const listeners = new Map<keyof Events, Set<EventHandler<unknown>>>()
+  // Events extends EventMap implies Events[keyof Events] extends EventPayload;
+  // TS does not infer this from the class constraint.
+  type Payload = Events[keyof Events]
+  const listeners = new Map<keyof Events, Set<(p: Payload) => void | Promise<void>>>()
 
   return {
     async emit(event, payload) {
@@ -21,10 +22,10 @@ export function createEventBus<Events extends EventMap>(): EventBus<Events> {
         handlers = new Set()
         listeners.set(event, handlers)
       }
-      handlers.add(handler as EventHandler<unknown>)
+      handlers.add(handler as (p: Payload) => void | Promise<void>)
 
       return () => {
-        listeners.get(event)?.delete(handler as EventHandler<unknown>)
+        listeners.get(event)?.delete(handler as (p: Payload) => void | Promise<void>)
       }
     }
   }

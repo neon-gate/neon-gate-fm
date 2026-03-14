@@ -1,4 +1,4 @@
-import { DomainEvent } from '@repo/kernel'
+import { Event } from '@repo/kernel'
 import type { AuthorityProvider } from '@domain/value-objects'
 
 export interface UserLoggedInPayload {
@@ -10,7 +10,7 @@ export interface UserLoggedInPayload {
   userAgent?: string | null
 }
 
-export class UserLoggedInEvent extends DomainEvent<UserLoggedInPayload> {
+export class UserLoggedInEvent extends Event<UserLoggedInPayload> {
   get eventName() {
     return 'authority.user.logged_in'
   }

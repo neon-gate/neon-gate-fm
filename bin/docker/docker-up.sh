@@ -7,8 +7,8 @@ TARGET="${1:-all}"
 
 INFRA_SERVICES=(
   mongo
-  mongo-sempiternal
-  redis-cognition
+  mongo-shinod-ai
+  redis-shinoda
   nats
   minio
   minio-init
@@ -17,7 +17,8 @@ APP_SERVICES=(
   authority
   soundgarden
   backstage
-  sempiternal
+  shinod-ai
+  mockingbird
   pulse
 )
 INFRA_ENV_FILES=(
@@ -27,7 +28,8 @@ APP_ENV_FILES=(
   "$ROOT_DIR/domain/identity/authority/.env"
   "$ROOT_DIR/domain/ingestion/soundgarden/.env"
   "$ROOT_DIR/domain/realtime/backstage/.env"
-  "$ROOT_DIR/apps/sempiternal/.env"
+  "$ROOT_DIR/domain/ai/shinod-ai/.env"
+  "$ROOT_DIR/domain/streaming/mockingbird/.env"
   "$ROOT_DIR/apps/pulse/.env"
 )
 

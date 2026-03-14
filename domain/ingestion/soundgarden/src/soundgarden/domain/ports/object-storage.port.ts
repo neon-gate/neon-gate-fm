@@ -6,7 +6,11 @@ export interface StorageRef {
 
 export interface UploadedStorageRefs {
   soundgarden?: StorageRef
+  petrified?: StorageRef
+  fortMinor?: StorageRef
+  /** @deprecated Use petrified */
   fingerprint?: StorageRef
+  /** @deprecated Use fortMinor */
   transcription?: StorageRef
 }
 
