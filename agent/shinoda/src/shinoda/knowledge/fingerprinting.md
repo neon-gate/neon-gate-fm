@@ -1,0 +1,4 @@
+FFmpeg integration
+Chromaprint requirements
+fingerprint generation
+identification workflow

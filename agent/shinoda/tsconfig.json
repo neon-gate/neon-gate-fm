@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "target": "ES2022",
+    "module": "ES2022",
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@domain/*": ["src/domain/*"],
+      "@shinoda/*": ["src/shinoda/*"],
+      "@mastra/*": ["src/mastra/*"]
+    }
+  },
+  "include": ["src"]
+}
