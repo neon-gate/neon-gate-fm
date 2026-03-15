@@ -11,7 +11,7 @@ COPY apps ./apps
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter pulse build
+RUN pnpm turbo run build --filter=pulse
 
 WORKDIR /workspace/apps/pulse
 COPY apps/pulse/.env .env

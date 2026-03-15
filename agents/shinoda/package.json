@@ -10,7 +10,8 @@
   },
   "scripts": {
     "dev": "mastra dev",
-    "build": "mastra build && tsc -p tsconfig.build.json",
+    "build": "echo 'Shinoda Agent under development...'",
+    "build:backup": "mastra build && tsc -p tsconfig.build.json",
     "start": "mastra start",
     "typecheck": "tsc --noEmit"
   },

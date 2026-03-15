@@ -11,7 +11,7 @@ COPY domain ./domain
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @micro/jwt-session build
+RUN pnpm turbo run build --filter=@micro/authority
 
 WORKDIR /workspace/domain/identity/authority
 COPY domain/identity/authority/.env .env

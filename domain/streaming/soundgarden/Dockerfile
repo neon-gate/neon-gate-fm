@@ -11,10 +11,10 @@ COPY domain ./domain
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @micro/soundgarden build
+RUN pnpm turbo run build --filter=@micro/soundgarden
 
-WORKDIR /workspace/domain/ingestion/soundgarden
-COPY domain/ingestion/soundgarden/.env .env
+WORKDIR /workspace/domain/streaming/soundgarden
+COPY domain/streaming/soundgarden/.env .env
 EXPOSE 7100
 
 CMD ["node", "dist/main.js"]

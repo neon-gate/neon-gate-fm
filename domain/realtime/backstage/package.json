@@ -13,7 +13,10 @@
     "@nestjs/core": "^11.1.13",
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/platform-express": "^11.1.13",
+    "@nestjs/platform-socket.io": "^11.1.13",
+    "@nestjs/websockets": "^11.1.13",
     "mongoose": "^9.2.1",
+    "socket.io": "^4.8.0",
     "nats": "^2.17.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.2"

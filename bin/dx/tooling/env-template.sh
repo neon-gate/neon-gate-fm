@@ -3,17 +3,21 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 
-if [[ ! -d "$ROOT_DIR/apps" && ! -d "$ROOT_DIR/packages" ]]; then
-  echo "Refusing to run: expected apps/ or packages/ in repo root."
+if [[ ! -d "$ROOT_DIR/apps" && ! -d "$ROOT_DIR/packages" && ! -d "$ROOT_DIR/domain" && ! -d "$ROOT_DIR/infrastructure" ]]; then
+  echo "Refusing to run: expected apps/, packages/, domain/, or infrastructure/ in repo root."
   exit 1
 fi
 
+SEARCH_DIRS=()
+for d in apps packages domain infrastructure; do
+  [[ -d "$ROOT_DIR/$d" ]] && SEARCH_DIRS+=("$ROOT_DIR/$d")
+done
 mapfile -t TEMPLATE_FILES < <(
-  find "$ROOT_DIR/apps" "$ROOT_DIR/packages" -type f -name ".env.template" 2>/dev/null | sort
+  find "${SEARCH_DIRS[@]}" -type f -name ".env.template" 2>/dev/null | sort
 )
 
 if [[ "${#TEMPLATE_FILES[@]}" -eq 0 ]]; then
-  echo "No .env.template files found in apps/ or packages/."
+  echo "No .env.template files found in apps/, packages/, domain/, or infrastructure/."
   exit 0
 fi
 

@@ -3,7 +3,17 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
-TARGET="${1:-all}"
+
+BOOTSTRAP=0
+ARGS=()
+for arg in "$@"; do
+  if [[ "$arg" == "--bootstrap" || "$arg" == "-b" ]]; then
+    BOOTSTRAP=1
+  else
+    ARGS+=("$arg")
+  fi
+done
+TARGET="${ARGS[0]:-all}"
 
 INFRA_SERVICES=(
   mongo
@@ -26,7 +36,7 @@ INFRA_ENV_FILES=(
 )
 APP_ENV_FILES=(
   "$ROOT_DIR/domain/identity/authority/.env"
-  "$ROOT_DIR/domain/ingestion/soundgarden/.env"
+  "$ROOT_DIR/domain/streaming/soundgarden/.env"
   "$ROOT_DIR/domain/realtime/backstage/.env"
   "$ROOT_DIR/domain/ai/shinod-ai/.env"
   "$ROOT_DIR/domain/streaming/mockingbird/.env"
@@ -57,6 +67,11 @@ require_env_files() {
   fi
 }
 
+if [[ "$BOOTSTRAP" -eq 1 ]]; then
+  echo "Bootstrapping .env from templates..."
+  (cd "$ROOT_DIR" && pnpm dx:env:template)
+fi
+
 case "$TARGET" in
   infra)
     require_env_files "${INFRA_ENV_FILES[@]}"
@@ -71,7 +86,7 @@ case "$TARGET" in
     "${DOCKER_COMPOSE[@]}" -f "$COMPOSE_FILE" up -d --build --remove-orphans
     ;;
   *)
-    echo "Usage: bash bin/docker/docker-up.sh [infra|apps|all]"
+    echo "Usage: bash bin/docker/docker-up.sh [--bootstrap|-b] [infra|apps|all]"
     exit 1
     ;;
 esac

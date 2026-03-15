@@ -13,7 +13,7 @@ COPY domain ./domain
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @micro/mockingbird build
+RUN pnpm turbo run build --filter=@micro/mockingbird
 
 WORKDIR /workspace/domain/streaming/mockingbird
 COPY domain/streaming/mockingbird/.env .env

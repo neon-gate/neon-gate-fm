@@ -1,3 +1,4 @@
+export { BroadcastPipelineEventUseCase } from './broadcast-pipeline-event.use-case'
 export { GetTrackPipelineUseCase } from './get-track-pipeline.usecase'
 export { ListActivePipelinesUseCase } from './list-active-pipelines.usecase'
 export { ListAllPipelinesUseCase } from './list-all-pipelines.usecase'

@@ -1,7 +1,10 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import { StringCodec, type NatsConnection } from 'nats'
 
-import { RecordPipelineEventUseCase } from '@application/use-cases'
+import {
+  BroadcastPipelineEventUseCase,
+  RecordPipelineEventUseCase
+} from '@application/use-cases'
 import { NatsConnectionToken } from '@infra/event-bus/nats-connection.provider'
 
 const TRACK_SUBJECT_PREFIX = 'track.>'
@@ -13,7 +16,8 @@ export class PipelineEventConsumer implements OnModuleInit {
 
   constructor(
     @Inject(NatsConnectionToken) private readonly nc: NatsConnection | null,
-    private readonly recordPipelineEvent: RecordPipelineEventUseCase
+    private readonly recordPipelineEvent: RecordPipelineEventUseCase,
+    private readonly broadcastPipelineEvent: BroadcastPipelineEventUseCase
   ) {}
 
   onModuleInit(): void {
@@ -45,6 +49,12 @@ export class PipelineEventConsumer implements OnModuleInit {
           await this.recordPipelineEvent.execute({
             eventType: subject,
             trackId,
+            payload
+          })
+
+          await this.broadcastPipelineEvent.execute({
+            trackId,
+            eventType: subject,
             payload
           })
 

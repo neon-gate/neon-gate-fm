@@ -11,7 +11,7 @@ COPY domain ./domain
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @micro/backstage build
+RUN pnpm turbo run build --filter=@micro/backstage
 
 WORKDIR /workspace/domain/realtime/backstage
 COPY domain/realtime/backstage/.env .env

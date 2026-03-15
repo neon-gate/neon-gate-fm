@@ -14,7 +14,7 @@ COPY domain ./domain
 COPY packages ./packages
 
 RUN pnpm install --frozen-lockfile
-RUN pnpm --filter @micro/shinod-ai build
+RUN pnpm turbo run build --filter=@micro/shinod-ai
 
 WORKDIR /workspace/domain/ai/shinod-ai
 COPY domain/ai/shinod-ai/.env .env

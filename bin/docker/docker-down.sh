@@ -44,8 +44,13 @@ case "$TARGET" in
   all)
     "${DOCKER_COMPOSE[@]}" -f "$COMPOSE_FILE" down --remove-orphans --volumes
     ;;
+  prune)
+    "${DOCKER_COMPOSE[@]}" -f "$COMPOSE_FILE" down --remove-orphans --volumes
+    docker system prune -af
+    docker builder prune -af
+    ;;
   *)
-    echo "Usage: bash bin/docker/docker-down.sh [infra|apps|all]"
+    echo "Usage: bash bin/docker/docker-down.sh [infra|apps|all|prune]"
     exit 1
     ;;
 esac
