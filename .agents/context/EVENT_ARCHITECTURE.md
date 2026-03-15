@@ -1,3 +1,7 @@
+---
+alwaysApply: true
+---
+
 # Event Architecture Guidelines
 
 Events are the primary mechanism for cross-module communication. This document defines naming conventions, envelope structure, payload conventions, mapping patterns, and broker flow. It is service-agnostic so implementations can evolve without changing this spec.
