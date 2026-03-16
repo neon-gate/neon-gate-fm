@@ -8,10 +8,12 @@ interface HeaderProps {
 export function Header(props: HeaderProps) {
   const { children, className = '' } = props
 
-  const tw = cn(
-    'sticky top-0 items-center h-16 grid items-center grid-cols-[170px_auto_32px] px-2',
-    className
-  )
+  const layout = 'sm:justify-normal sm:grid sm:grid-cols-[170px_auto_32px]'
+  const mobile = 'h-16 flex justify-between items-center'
+  const position = 'sticky top-0'
+  const spacing = 'px-2'
+
+  const tw = cn(layout, position, spacing, mobile, className)
 
   if (!children) {
     return <header className={tw} />

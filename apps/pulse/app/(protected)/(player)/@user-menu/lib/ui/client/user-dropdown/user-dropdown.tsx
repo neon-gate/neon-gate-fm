@@ -34,7 +34,7 @@ export function UserDropdown() {
           <Avatar name={profile.name} src={profile.avatar.imageUrl} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-full sm:w-auto">
         <DropdownMenuGroup>
           <DropdownMenuItem inert className="text-md">
             {`Welcome, ${profile.name}`}
@@ -59,7 +59,7 @@ export function UserDropdown() {
           Sign Out
         </DropdownMenuItem>
         <DropdownMenuSeparator className="mobile-visible" />
-        <DropdownMenuItem className="mobile-visible hover:bg-transparent">
+        <DropdownMenuItem className="mobile-visible" asChild>
           <VolumeBar />
         </DropdownMenuItem>
         <DropdownMenuSeparator className="mobile-visible" />

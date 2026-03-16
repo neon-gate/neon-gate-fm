@@ -29,9 +29,7 @@ export default function PlayerLayout(props: PlayerLayoutProps) {
     <PlayerGrid className="bg-neon">
       <Header className="col-span-5">
         <Logo />
-        <div className="flex items-center">
-          <Search />
-        </div>
+        <Search />
         {userMenu}
       </Header>
       <main id="main-content" className="contents" tabIndex={-1}>
