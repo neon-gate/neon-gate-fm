@@ -1,6 +1,7 @@
 import { Avatar } from './avatar.domain'
 
 export interface Profile {
-  displayName: string
+  name: string
+  email: string
   avatar: Avatar
 }

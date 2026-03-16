@@ -1,3 +1,9 @@
+import { PlaybackLayout } from '@playback/ui'
+
 export default function PlaybackDefault() {
-  return <div>PlaybackDefault</div>
+  return (
+    <PlaybackLayout>
+      <div>skeleton</div>
+    </PlaybackLayout>
+  )
 }

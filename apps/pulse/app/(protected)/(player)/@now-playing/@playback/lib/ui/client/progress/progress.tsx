@@ -2,12 +2,10 @@
 
 import { useEffect } from 'react'
 import { useSetImmerAtom, useImmerAtom } from 'jotai-immer'
-// import { useAtom } from 'jotai'
-// import {Hls} from '@hls'
 
-import { Progress } from '@shadcn/components/ui/progress'
 import { currentTrackAtom, progressAtom } from '@atoms'
 import { cn, msToTime } from '@lib/template'
+import { Progress } from '@shadcn/components/ui/progress'
 
 export function ProgressBar() {
   const [track] = useImmerAtom(currentTrackAtom)

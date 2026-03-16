@@ -1,5 +1,9 @@
-import { TrackMetadata } from '@track-metadata/ui'
+import { TrackMetadata, MetadataLayout } from '@track-metadata/ui'
 
 export default function TrackMetadataSlot() {
-  return <TrackMetadata />
+  return (
+    <MetadataLayout>
+      <TrackMetadata />
+    </MetadataLayout>
+  )
 }

@@ -3,7 +3,7 @@ import { Progress, Volume } from './domain'
 /* =================
   System Data
 ================== */
-export const isAuthenticated = false
+export const isAuthenticated = true
 
 /* =================
   Player State Data
@@ -11,7 +11,7 @@ export const isAuthenticated = false
 export const progress = {
   milliseconds: 0
 } satisfies Progress
-export const volume = Volume.Quiet
+export const volume = Number(Volume.Quiet)
 export const theme = 'system'
 export const isPaused = true
 

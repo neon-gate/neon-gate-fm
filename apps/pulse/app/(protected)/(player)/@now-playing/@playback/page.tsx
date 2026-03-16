@@ -1,19 +1,20 @@
 import {
   NextButton,
+  PlaybackLayout,
   PlayPauseButton,
   PreviousButton,
   ProgressBar
-} from './lib/ui'
+} from '@playback/ui'
 
 export default function PlaybackSlot() {
   return (
-    <div>
+    <PlaybackLayout>
       <div className="flex items-center justify-center gap-4">
         <PreviousButton />
         <PlayPauseButton />
         <NextButton />
       </div>
       <ProgressBar />
-    </div>
+    </PlaybackLayout>
   )
 }

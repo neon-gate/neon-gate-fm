@@ -1,3 +1,9 @@
+import { MetadataLayout } from '@track-metadata/ui'
+
 export default function TrackMetadataLoading() {
-  return <div>TrackMetadataLoading</div>
+  return (
+    <MetadataLayout>
+      <div>skeleton</div>
+    </MetadataLayout>
+  )
 }

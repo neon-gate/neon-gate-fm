@@ -1,8 +1,8 @@
 'use client'
 
 import { useAtomValue, useSetAtom } from 'jotai'
-import { Slider } from '@shadcn/components/ui/slider'
 
+import { Slider } from '@shadcn/components/ui/slider'
 import { volumeAtom } from '@atoms'
 import { Volume } from '@domain'
 
@@ -18,9 +18,10 @@ export function VolumeBar() {
   }
 
   return (
-    <label className="flex items-center sm:gap-2 gap-1">
+    <label className="flex items-center sm:gap-2 gap-1" htmlFor="volume-bar">
       {icon}
       <Slider
+        id="volume-bar"
         aria-label="Sound volume"
         defaultValue={[Number(Volume.Moderate)]}
         max={Number(Volume.Loud)}

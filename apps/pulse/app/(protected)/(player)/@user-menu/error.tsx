@@ -1,6 +1,6 @@
 'use client'
 
-import type { PageErrorProps } from '@lib/template'
+import type { PageErrorProps } from '@infra/next'
 
 export default function UserMenuError(props: PageErrorProps) {
   const { error, reset } = props

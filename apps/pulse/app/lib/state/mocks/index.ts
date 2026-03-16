@@ -4,8 +4,7 @@
 
 export { sessionMock } from './session.mock'
 export { profileMock } from './profile.mock'
-export { userPreferencesMock } from './user-preferences.mock'
-export { userMock } from './user.mock'
+export { themeMock } from './theme.mock'
 export { artistMock } from './artist.mock'
 export { progressMock } from './progress.mock'
 export { currentTrackMock } from './current-track.mock'

@@ -1,3 +1,3 @@
-export default function LibraryLoading() {
-  return <div>LibraryLoading</div>
+export default function GallerySkeleton() {
+  return <div>GallerySkeleton</div>
 }

@@ -1,9 +1,11 @@
-import { VolumeBar } from '@volume-bar/ui'
+import { VolumeBar, BarLayout } from '@volume-bar/ui'
 
 export default function VolumeSlot() {
   return (
-    <div className="flex items-center justify-end">
-      <VolumeBar />
-    </div>
+    <BarLayout>
+      <div className="flex items-center justify-end">
+        <VolumeBar />
+      </div>
+    </BarLayout>
   )
 }

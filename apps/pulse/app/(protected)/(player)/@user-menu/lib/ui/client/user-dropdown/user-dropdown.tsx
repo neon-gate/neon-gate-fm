@@ -2,12 +2,12 @@
 
 import { useImmerAtom } from 'jotai-immer'
 import { AudioLinesIcon, UploadIcon, LogOutIcon } from 'lucide-react'
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage
-} from '@shadcn/components/ui/avatar'
-import { Button } from '@shadcn/components/ui/button'
+
+import { profileAtom } from '@atoms'
+import { TrackMetadata } from '@track-metadata/ui'
+import { VolumeBar } from '@volume-bar/ui'
+import { Avatar } from '@user-menu/ui'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,31 +16,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@shadcn/components/ui/dropdown-menu'
-import { toInitials } from '@lib/template'
-import { VolumeBar } from '@volume-bar/ui'
-import { userAtom } from '@atoms'
-import { TrackMetadata } from '@track-metadata/ui'
+import { Button } from '@shadcn/components/ui/button'
+import { Badge } from '@shadcn/components/ui/badge'
 
 export function UserDropdown() {
-  const [user] = useImmerAtom(userAtom)
+  const [profile] = useImmerAtom(profileAtom)
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full" aria-label="User menu">
-          <Avatar>
-            <AvatarImage
-              src={user?.profile.avatarUrl ?? user?.avatar.imageUrl}
-              alt={`${user?.profile.displayName} avatar`}
-            />
-            <AvatarFallback>
-              {toInitials(`${user?.profile.displayName}`)}
-            </AvatarFallback>
-          </Avatar>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          aria-label="User menu"
+        >
+          <Avatar name={profile.name} src={profile.avatar.imageUrl} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuGroup>
+          <DropdownMenuItem inert className="text-md">
+            {`Welcome, ${profile.name}`}
+          </DropdownMenuItem>
+          <DropdownMenuItem inert>
+            <Badge variant="secondary" className="text-sm">
+              {profile.email}
+            </Badge>
+          </DropdownMenuItem>
           <DropdownMenuItem>
             <AudioLinesIcon />
             Library

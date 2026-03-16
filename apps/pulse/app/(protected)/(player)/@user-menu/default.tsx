@@ -1,3 +1,12 @@
+import {
+  AvatarFallback,
+  Avatar as AvatarRoot
+} from '@infra/shadcn/components/ui/avatar'
+
 export default function UserMenuDefault() {
-  return <div>UserMenuDefault</div>
+  return (
+    <AvatarRoot>
+      <AvatarFallback className="grayscale">PS</AvatarFallback>
+    </AvatarRoot>
+  )
 }

@@ -1,5 +1,9 @@
 /* =================
-  User Menu UI
+  User Menu Client Components
 ================== */
-export { Avatar } from './client/avatar/avatar'
 export { UserDropdown } from './client/user-dropdown/user-dropdown'
+
+/* =================
+  User Menu Server Components
+================== */
+export { Avatar } from './server/avatar/avatar'

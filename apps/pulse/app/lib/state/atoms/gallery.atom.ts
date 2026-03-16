@@ -63,4 +63,4 @@ const mockGallery: GalleryTrack[] = [
   battleSymphonyGalleryTrackMock
 ]
 
-export const galleryAtom = atomWithImmer<GalleryTrack[]>(mockGallery)
+export const galleryAtom = atomWithImmer<GalleryTrack[]>(mockGallery.reverse())

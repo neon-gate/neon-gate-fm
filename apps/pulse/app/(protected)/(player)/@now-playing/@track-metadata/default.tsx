@@ -1,3 +1,9 @@
+import { MetadataLayout } from '@track-metadata/ui'
+
 export default function TrackMetadataDefault() {
-  return <div>TrackMetadataDefault</div>
+  return (
+    <MetadataLayout>
+      <div>skeleton</div>
+    </MetadataLayout>
+  )
 }

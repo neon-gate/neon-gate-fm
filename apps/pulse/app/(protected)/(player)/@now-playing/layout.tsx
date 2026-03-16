@@ -1,11 +1,12 @@
-import { NowPlayingLayout as Layout } from './lib/ui'
-interface NowPlayingLayoutProps {
+import { NowPlayingLayout } from './lib/ui'
+
+interface PlaybackSlotProps {
   ['track-metadata']?: React.ReactNode
   playback?: React.ReactNode
   ['volume-bar']?: React.ReactNode
 }
 
-export default function NowPlayingLayout(props: NowPlayingLayoutProps) {
+export default function PlaybackSlot(props: PlaybackSlotProps) {
   const {
     ['track-metadata']: trackMetadata,
     playback,
@@ -13,12 +14,10 @@ export default function NowPlayingLayout(props: NowPlayingLayoutProps) {
   } = props
 
   return (
-    <Layout>
-      <div className="w-[15%] sm:w-[30%] mobile-hidden">{trackMetadata}</div>
-      <div className="w-[70%] sm:w-[40%] min-w-[300px] max-w-[700px]">
-        {playback}
-      </div>
-      <div className="w-[15%] sm:w-[30%] mobile-hidden">{volumeBar}</div>
-    </Layout>
+    <NowPlayingLayout>
+      {trackMetadata}
+      {playback}
+      {volumeBar}
+    </NowPlayingLayout>
   )
 }
