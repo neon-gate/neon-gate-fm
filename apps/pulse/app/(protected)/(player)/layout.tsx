@@ -1,13 +1,16 @@
-import { redirect } from 'next/navigation'
-// import { useAtomValue } from 'jotai'
+import { Metadata } from 'next'
 
-// import { isAuthAtom } from '@atoms'
+import { description } from '@state'
 import { Header, Logo } from '@lib/ui'
 
 import { PlayerGrid, Search } from './lib/ui'
 
+export const metadata: Metadata = {
+  title: 'Pulse - (Dynamic by song playing metadata)',
+  description
+}
+
 interface PlayerLayoutProps {
-  children: React.ReactNode
   'user-menu'?: React.ReactNode
   'now-playing'?: React.ReactNode
   gallery?: React.ReactNode
@@ -21,12 +24,6 @@ export default function PlayerLayout(props: PlayerLayoutProps) {
     ['now-playing']: nowPlaying,
     ['user-menu']: userMenu
   } = props
-
-  const isAuthenticated = true
-
-  if (!isAuthenticated) {
-    redirect('/login')
-  }
 
   return (
     <PlayerGrid className="bg-neon">

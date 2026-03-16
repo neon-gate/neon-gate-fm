@@ -1,7 +1,6 @@
-import type { StateUpdater } from '@lib/state'
-import type { FieldErrors, SchemaState } from '@lib/ui'
+import type { StateUpdater } from '@infra/immer'
+import type { FieldErrors, SchemaState } from '@infra/zod'
 import type { SignupState } from '@signup/state'
-import type { SignupAction } from '@signup/ui'
 
 import type { SignupFormSchema } from './form.validation'
 
@@ -14,7 +13,6 @@ export interface SignupFormState
 }
 
 export interface SignupSubmitInput {
-  signupAction: SignupAction
   formState: SignupFormState
   updater: StateUpdater<SignupFormState>
 }

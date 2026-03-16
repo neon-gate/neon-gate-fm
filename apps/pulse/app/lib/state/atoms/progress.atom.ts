@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 
 import type { Progress } from '@domain'
-import { progressMock } from '@mocks'
+import { progress } from '@state'
 
-export const progressAtom = atom<Progress>(progressMock)
+export const progressAtom = atom<Progress>(progress)

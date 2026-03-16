@@ -1,11 +1,11 @@
-import type { FieldErrors } from '@lib/ui'
+import type { FieldErrors } from '@infra/zod'
 
 import type { LoginFormState, LoginSubmitMap } from './form.types'
 import { LoginFormSchema } from './form.validation'
 import { loginFormState } from './form-state.data'
 
 export function mapLoginSubmit(map: LoginSubmitMap) {
-  const { draft, fieldErrors, isPending } = map
+  const { draft, isPending, fieldErrors } = map
 
   draft.fieldErrors.email = fieldErrors?.email
   draft.fieldErrors.password = fieldErrors?.password

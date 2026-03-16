@@ -1,3 +1,5 @@
 import { atom } from 'jotai'
 
-export const isPausedAtom = atom<boolean>(true)
+import { isPaused } from '@state'
+
+export const isPausedAtom = atom<boolean>(isPaused)

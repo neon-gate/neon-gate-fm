@@ -1,3 +1,2 @@
-export { PlayerGrid } from './client/player-grid/player-grid'
-export { MainCover } from './client/main-cover/main-cover'
+export { PlayerGrid } from './server/player-grid/player-grid'
 export { Search } from './client/search/search'

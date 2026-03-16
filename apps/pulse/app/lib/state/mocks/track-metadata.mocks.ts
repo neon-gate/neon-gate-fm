@@ -1,6 +1,5 @@
 import { CurrentTrack as TrackMetadata } from '@domain'
-
-import { hybridTheoryAlbumMock, meteoraAlbumMock } from './album.mocks'
+import { hybridTheoryAlbumMock, meteoraAlbumMock } from '@mocks'
 
 export const papercutTrackMetadataMock = {
   id: 'a43b4495-bb42-4c86-991c-254da111c421',

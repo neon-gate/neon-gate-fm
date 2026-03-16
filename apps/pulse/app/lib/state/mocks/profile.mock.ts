@@ -1,5 +1,5 @@
 import { Profile } from '@domain'
-import { avatarMock } from './avatar.mock'
+import { avatarMock } from '@mocks'
 
 export const profileMock = {
   displayName: 'John Doe',

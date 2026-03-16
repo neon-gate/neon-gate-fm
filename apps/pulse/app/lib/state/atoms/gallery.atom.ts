@@ -30,7 +30,7 @@ import {
   wretchesAndKingsGalleryTrackMock,
   wastelandsGalleryTrackMock,
   battleSymphonyGalleryTrackMock
-} from '@mocks/gallery-track.mock'
+} from '@mocks'
 
 const mockGallery: GalleryTrack[] = [
   papercutGalleryTrackMock,

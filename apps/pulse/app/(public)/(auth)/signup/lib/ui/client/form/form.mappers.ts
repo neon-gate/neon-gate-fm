@@ -1,4 +1,4 @@
-import type { FieldErrors } from '@lib/ui'
+import type { FieldErrors } from '@infra/zod'
 
 import type { SignupFormSchema } from './form.validation'
 import { signupFormState } from './form-state.data'

@@ -1,5 +1,3 @@
-import { z } from 'zod'
-
 import type { FieldErrors, ZodObjectSchema } from './validation.types'
 
 export function getFieldErrors<Schema extends ZodObjectSchema>(

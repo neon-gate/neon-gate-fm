@@ -1,7 +1,6 @@
-import { StateUpdater } from '@lib/state'
-import { SchemaState, FieldErrors } from '@lib/ui'
+import { SchemaState, FieldErrors } from '@infra/zod'
 import { LoginState } from '@login/state'
-import { LoginAction } from '@login/ui'
+import type { StateUpdater } from '@infra/immer'
 
 import { LoginFormSchema } from './form.validation'
 
@@ -13,7 +12,6 @@ export interface LoginFormState
 }
 
 export interface LoginSubmitInput {
-  loginAction: LoginAction
   formState: LoginFormState
   updater: StateUpdater<LoginFormState>
 }

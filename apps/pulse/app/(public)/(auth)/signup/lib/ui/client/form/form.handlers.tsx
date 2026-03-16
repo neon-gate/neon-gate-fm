@@ -1,6 +1,8 @@
-import type { StateUpdater } from '@lib/state'
-import { getFieldErrors } from '@lib/ui'
+import type { StateUpdater } from '@infra/immer'
 import type { SignupState } from '@signup/state'
+import { getFieldErrors } from '@infra/zod'
+
+import { signupAction } from '@signup/ui'
 
 import {
   mapEmailBlur,
@@ -71,10 +73,10 @@ export function handlePasswordBlur(
 }
 
 export async function handleFormSubmit(input: SignupSubmitInput) {
-  const { formState, updater, signupAction } = input
+  const { formState, updater } = input
 
   const payload = {
-    name: formState.name || undefined,
+    name: formState.name,
     email: formState.email,
     password: formState.password
   }
@@ -88,7 +90,9 @@ export async function handleFormSubmit(input: SignupSubmitInput) {
     return
   }
 
-  updater((draft: SignupFormState) => mapSignupSubmit({ draft, isPending: true }))
+  updater((draft: SignupFormState) =>
+    mapSignupSubmit({ draft, isPending: true })
+  )
 
   try {
     await signupAction(payload)

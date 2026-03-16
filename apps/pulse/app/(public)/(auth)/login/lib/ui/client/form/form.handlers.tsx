@@ -1,6 +1,7 @@
-import { StateUpdater } from '@lib/state'
-import { getFieldErrors } from '@lib/ui'
-import { LoginState } from '@login/state'
+import { type StateUpdater } from '@infra/immer'
+import { getFieldErrors } from '@infra/zod'
+import { type LoginState } from '@login/state'
+import { loginAction } from '@login/ui'
 
 import {
   mapEmailBlur,
@@ -49,23 +50,22 @@ export function handlePasswordBlur(
   updater((draft: LoginFormState) => mapPasswordBlur(draft, fieldErrors))
 }
 
-export async function handleFormSubmit(
-  input: LoginSubmitInput
-): Promise<{ accessToken: string; refreshToken: string } | null> {
-  const { formState, updater, loginAction } = input
+export async function handleFormSubmit(input: LoginSubmitInput) {
+  const { formState, updater } = input
 
   const payload = { email: formState.email, password: formState.password }
 
   const fieldErrors = getFieldErrors(payload, loginSchema)
 
-  if (fieldErrors) {
-    updater((draft: LoginFormState) =>
-      mapLoginSubmit({ draft, fieldErrors, isPending: false })
-    )
-    return
-  }
+  if (fieldErrors === null) return
 
-  updater((draft: LoginFormState) => mapLoginSubmit({ draft, isPending: true }))
+  updater((draft: LoginFormState) =>
+    mapLoginSubmit({
+      draft,
+      isPending: true,
+      fieldErrors
+    })
+  )
 
   try {
     const response = await loginAction(payload)

@@ -1,7 +1,7 @@
 /* =================
   Atoms
 ================== */
-export { isAuthAtom } from './is-auth.atom'
+export { isAuthenticatedAtom } from './is-authenticated.atom'
 export { isPausedAtom } from './is-paused.atom'
 export { currentTrackAtom } from './current-track.atom'
 export { progressAtom } from './progress.atom'
