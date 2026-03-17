@@ -315,7 +315,7 @@ The result: the entire UI, including Shadcn primitives, renders in the neon them
 When a track is uploaded, the `@uploader` slot transitions from dropzone to a **live reasoning feed** — a real-time log of every event the upload pipeline emits, rendered using the Vercel AI Elements `Reasoning` component.
 
 <p align="center">
-  <img src="docs/images/Captura_de_tela_de_2026-03-17_15-05-48.png" width="620" alt="Pulse reasoning UI — live pipeline event stream" />
+  <img src="docs/images/mobile.png" width="620" alt="Pulse reasoning UI — live pipeline event stream" />
 </p>
 
 The data flow:
