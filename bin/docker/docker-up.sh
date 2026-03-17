@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-COMPOSE_FILE="$ROOT_DIR/repos/infrastructure/docker-compose.yml"
+COMPOSE_FILE="$ROOT_DIR/repos/infrastructure/docker/docker-compose.yml"
 
 BOOTSTRAP=0
 ARGS=()
@@ -70,6 +70,20 @@ if [[ "$BOOTSTRAP" -eq 1 ]]; then
   echo "Bootstrapping .env from templates..."
   (cd "$ROOT_DIR" && pnpm dx:env:template)
 fi
+
+# Remove orphaned containers that conflict with our container_name values.
+# Handles containers left from previous runs with different project context (e.g. before repos/ move).
+CONFLICT_NAMES=(minio minio-init mongo-authority mongo-shinod-ai redis-shinoda nats authority slim-shady soundgarden backstage shinod-ai mockingbird pulse hybrid-storage)
+for name in "${CONFLICT_NAMES[@]}"; do
+  if docker ps -a -q -f "name=^${name}$" 2>/dev/null | grep -q .; then
+    # Only remove if not part of our compose project (orphan)
+    project=$(docker inspect "$name" --format '{{index .Config.Labels "com.docker.compose.project"}}' 2>/dev/null || echo "")
+    if [[ -z "$project" || "$project" != "docker" ]]; then
+      echo "Removing orphaned container: $name"
+      docker rm -f "$name" 2>/dev/null || true
+    fi
+  fi
+done
 
 case "$TARGET" in
   infra)

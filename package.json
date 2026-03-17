@@ -14,7 +14,7 @@
     "docker:up": "bash bin/docker/docker-up.sh",
     "docker:ps": "bash bin/docker/docker-ps.sh",
     "dx:cleanup": "bash bin/dx/tooling/cleanup.sh",
-    "dx:reset": "pnpm dx:cleanup && pnpm install && pnpm build",
+    "dx:reset": "pnpm dx:cleanup && pnpm docker:down && pnpm install && pnpm dx:env:template && pnpm docker:up && pnpm build",
     "dx:env:template": "bash bin/dx/tooling/env-template.sh",
     "dx:contracts": "bash bin/dx/test/contracts.sh",
     "dx:smoke": "bash bin/dx/test/smoke.sh",
@@ -40,5 +40,12 @@
   "packageManager": "pnpm@8.15.6",
   "dependencies": {
     "ai": "^6.0.104"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "zod": "^4"
+      }
+    }
   }
 }

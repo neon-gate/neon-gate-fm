@@ -19,7 +19,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   devIndicators: false,
   turbopack: {
-    root: path.resolve(__dirname, '../..')
+    root: path.resolve(__dirname, '../../..')
   },
   images: {
     remotePatterns: [

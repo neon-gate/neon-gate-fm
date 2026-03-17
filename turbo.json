@@ -16,6 +16,11 @@
       "outputs": [],
       "dependsOn": ["^build"]
     },
+    "@agents/shinoda#build": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [],
+      "dependsOn": ["^build"]
+    },
     "start": { "dependsOn": ["build"], "cache": false, "persistent": true },
     "dev": { "cache": false, "persistent": true },
     "clean": { "cache": false }
