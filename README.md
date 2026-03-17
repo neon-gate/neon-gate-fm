@@ -12,21 +12,6 @@ If you try to hack it, you'll still run through validation, AI reasoning, and tr
 
  This repository combines a Next.js frontend, domain microservices, and internal platform packages to deliver resilient streaming, modular domain design, and a fast developer workflow.
 
-
-## Vision And Architectural Direction 🧭
-
-Pulse is intentionally built around architectural separation and explicit boundaries:
-
-- **Domain-Driven Design (DDD):** business capabilities are isolated in bounded contexts.
-- **Clean Architecture layers:** services follow layered structure (`interface`, `application`, `domain`, `infra`) where applicable.
-- **Ports and Adapters:** domain abstractions live in ports; infrastructure implementations are provided as adapters.
-- **Event-Driven Architecture:** domain collaboration uses asynchronous messaging patterns with NATS.
-- **Resilience by default:** shared circuit breaker and cache abstractions reduce failure blast radius.
-- **Streaming-first UI design:** frontend is optimized for segmented media playback and independent UI updates.
-
-This architecture aims to keep business logic independent from framework and infrastructure concerns, so services can evolve without becoming tightly coupled to Redis, NATS, MongoDB, or UI delivery choices.
-
-
 ---
 
 ## Monorepo Structure 🗂️
@@ -149,63 +134,260 @@ Pulse is deliberately **not** a purely async platform. Each transport layer has 
 
 ## Frontend Architecture 🖥️
 
-`apps/pulse` is a **Next.js 16 App Router** application. It acts simultaneously as the player UI and a lightweight **Backend for Frontend (BFF)** via `app/api` routes.
+`apps/pulse` is a **Next.js 16 App Router** application that acts simultaneously as the player UI and a lightweight **Backend for Frontend (BFF)**. The design reflects the platform's core rule — no post-2000 songs — through a SynthWave/Retrowave visual identity: deep purples, neon magentas, and glowing gradients that feel like a Linkin Park concert lit up in 1999.
 
-### Route Layout
+<p align="center">
+  <img src="docs/images/macbook.png" width="620" alt="Pulse on MacBook — Gallery and Uploader slots side by side" />
+</p>
+
+---
+
+### Route Groups and Parallel Slots 🗺️
+
+The entire routing model is built around **Next.js route groups** and **parallel slots**. Route groups establish top-level layout ownership without affecting URL structure; parallel slots let each UI region render and update independently.
 
 ```
 app/
-├── (public)/
+├── (public)/                    # 🔓 Unauthenticated layout root
 │   └── (auth)/
-│       ├── login/               # Public login page
-│       └── signup/              # Public signup page
+│       ├── login/
+│       └── signup/
 │
-├── (protected)/
-│   └── (player)/                # Authenticated player shell
-│       ├── @gallery/            # Parallel slot — track gallery
-│       ├── @uploader/           # Parallel slot — upload + reasoning UI
-│       ├── @user-menu/          # Parallel slot — user profile menu
-│       └── @now-playing/        # Parallel slot — active playback bar
+├── (protected)/                 # 🔒 Auth-guarded layout root
+│   └── (player)/                #    Player shell — the main UI
+│       ├── layout.tsx           #    Owns the top-level grid, injects all slots
+│       ├── @gallery/            #    ↳ Parallel slot — track gallery list
+│       ├── @uploader/           #    ↳ Parallel slot — upload dropzone OR reasoning UI
+│       ├── @user-menu/          #    ↳ Parallel slot — user avatar + dropdown
+│       └── @now-playing/        #    ↳ Parallel slot — active playback bar
+│           ├── @track-metadata/ #       ↳ Nested slot — song title + artist
+│           ├── @playback/       #       ↳ Nested slot — prev / play-pause / next + scrubber
+│           └── @volume-bar/     #       ↳ Nested slot — volume control
 │
-└── api/                         # BFF proxy routes
-    ├── authority/               # Login, signup forwarding
-    ├── slim-shady/profile/      # Profile read/update proxy
-    ├── soundgarden/tracks/      # Upload proxy
-    └── transport/hls/           # HLS segment delivery
+├── api/                         # 🔀 BFF proxy routes
+│   ├── authority/               #    Login + signup forwarding
+│   ├── slim-shady/profile/      #    Profile read/update proxy
+│   ├── soundgarden/tracks/      #    Upload proxy
+│   └── transport/hls/           #    HLS segment delivery
+│
+└── infra/                       # 🏗️  Frontend infrastructure (see below)
+    ├── shadcn/                  #    Shadcn component registry (relocated)
+    ├── immer/                   #    Immer state updater type helpers
+    ├── next/                    #    Next.js PageError + layout type helpers
+    └── zod/                     #    Zod schema primitives
 ```
 
-The parallel slot layout means each UI region is independently rendered and can update without re-mounting siblings — critical for maintaining smooth playback state while the uploader or gallery updates.
+Each parallel slot is a fully independent React subtree. The player layout receives `gallery`, `uploader`, `now-playing`, and `user-menu` as props and places them into the grid — no slot ever knows the others exist. This means `@gallery` can refetch its track list, `@uploader` can swap between dropzone and reasoning mode, and the playback bar keeps playing without any of them interfering with each other.
 
-### State Management
+The `@now-playing` slot is itself nested: it owns three inner parallel slots (`@track-metadata`, `@playback`, `@volume-bar`), each independently rendered. This is what makes the responsive collapse clean — on mobile, `@volume-bar` and `@track-metadata` are hidden via Tailwind breakpoints and surfaced inside the user-menu dropdown instead, without moving or duplicating state.
 
-- **Jotai** — atomic UI and application state, globally provided at the root layout
-- **Jotai + Immer** — complex state mutations (upload progress, pipeline stage tracking)
-- **Zod** — form validation on auth flows and upload inputs
-- **Local domain interfaces** under `app/lib/state/domain` — typed wrappers over backend shapes
+---
 
-### BFF Proxy Routes
+### `app/infra/` — Frontend Infrastructure Layer 🏗️
 
-BFF routes are thin and deliberate — they don't add business logic, just:
-
-- Create or forward `x-request-id` for tracing
-- Validate request bodies on auth flows
-- Proxy to the correct backend service URL
-- Normalize errors for the frontend
-
-### HLS Playback
-
-The frontend uses **hls.js** (`^1.6.15`) to consume HLS streams delivered through `app/api/transport/hls`. Playback integrates with the **Media Session API** so OS-level media controls (lock screen, headphone buttons, notification shade) reflect the active track — artist, title, artwork, and transport controls all wired through `navigator.mediaSession`.
-
-### Realtime Pipeline UI
-
-The uploader slot connects to **Backstage** via Socket.IO:
+The `infra/` folder inside `app/` mirrors the Clean Architecture convention used by backend services. It is the frontend's adapter layer — third-party tools that need to be isolated from product code live here, not at the root.
 
 ```
-NEXT_PUBLIC_BACKSTAGE_WS_URL      → ws://localhost:4001
-NEXT_PUBLIC_BACKSTAGE_WS_NAMESPACE → /pipeline
+app/infra/
+├── shadcn/                      # Shadcn UI component registry
+│   └── components/
+│       ├── ui/                  # Base components (Button, Input, Card, Slider…)
+│       └── ai-elements/         # AI SDK UI components
+│           ├── reasoning.tsx    # Reasoning collapsible (Vercel AI Elements port)
+│           └── shimmer.tsx      # Streaming shimmer animation
+├── immer/
+│   └── state-updater.type.ts    # Typed Immer producer helpers
+├── next/
+│   └── page-error.types.ts      # Next.js error boundary prop types
+└── zod/
+    └── schema primitives        # Reusable Zod schemas
 ```
 
-Every `pipeline.event` message emitted by Backstage over Socket.IO drives the live reasoning UI — users can watch their track move through fingerprinting, transcription, and AI approval in realtime.
+**Why `infra/` for Shadcn?** The default `shadcn init` places components at `components/ui/`. That works until you have a large codebase where `components/` becomes a bucket for everything. Moving Shadcn into `infra/shadcn/` makes the intent explicit: these are third-party primitives under an adapter boundary. Product components that compose them live in feature-local `lib/ui/` folders, not here. The path alias `@shadcn` points to `app/infra/shadcn/` across the whole app.
+
+The `ai-elements/` sub-folder hosts a port of the **Vercel AI Elements** `Reasoning` component — the same collapsible reasoning block used in Vercel's AI chat interfaces — adapted to consume the Backstage websocket stream instead of an AI SDK message stream.
+
+---
+
+### State Management with Jotai 🔬
+
+State is **fine-grained by design**. There are no large global stores, no reducers, no context blobs. Every atom holds exactly one thing.
+
+```
+app/lib/state/
+├── atoms/
+│   ├── is-authenticated.atom.ts   # atom<boolean>
+│   ├── is-reasoning.atom.ts       # atom<boolean>  ← gates uploader ↔ reasoning swap
+│   ├── is-paused.atom.ts          # atom<boolean>
+│   ├── current-track.atom.ts      # atomWithImmer<CurrentTrack>
+│   ├── gallery.atom.ts            # atomWithImmer<GalleryTrack[]>
+│   ├── profile.atom.ts            # atomWithImmer<Profile>
+│   ├── session.atom.ts            # atomWithImmer<Session>
+│   ├── progress.atom.ts           # atom<Progress>  { milliseconds: number }
+│   ├── volume.atom.ts             # atom<number>
+│   └── theme.atom.ts              # atom<Theme>
+├── domain/                        # Frontend domain types
+│   ├── current-track.domain.ts
+│   ├── gallery-track.domain.ts
+│   ├── progress.domain.ts
+│   ├── volume.enum.ts             # Volume.Loud | Moderate | Quiet | Off
+│   └── …
+├── mocks/                         # Dev/seed data for all atoms
+└── global.data.ts                 # Primitive initial values (isAuthenticated, isPaused…)
+```
+
+A few key decisions visible in the atom layer:
+
+**`atomWithImmer` for complex shapes.** `currentTrackAtom`, `galleryAtom`, and `profileAtom` use `atomWithImmer` from `jotai-immer` — mutations are written as Immer draft producers so deeply nested updates (e.g. patching a track's album cover) stay readable without spread chains.
+
+**Plain `atom` for scalars.** `isReasoningAtom`, `isPausedAtom`, `volumeAtom`, and `progressAtom` are plain Jotai atoms — no Immer overhead for simple boolean and number state.
+
+**`isReasoningAtom` as the uploader gate.** A single boolean atom controls whether `@uploader` renders the file dropzone or the live reasoning pipeline UI. The `PageContainer` component reads this atom and renders one or the other — no prop drilling, no context, no route change:
+
+```tsx
+// @uploader/lib/ui/client/page-container/page-container.tsx
+export function PageContainer() {
+  const isReasoning = useAtomValue(isReasoningAtom)
+  return isReasoning ? <ReasoningPipeline /> : <Uploader />
+}
+```
+
+**Global data as plain values.** `app/lib/state/global.data.ts` exports JavaScript primitives that seed atom initial values. This keeps atoms themselves free of side-effects and makes the initial state legible at a glance.
+
+---
+
+### `app/lib/` — Global Feature Library 📚
+
+The top-level `lib/` folder holds shared utilities and UI components that belong to the app but are not specific to any single route. It follows a layered structure:
+
+```
+app/lib/
+├── state/          # Atoms, domain types, mocks, global data (see above)
+├── hls/            # HLS player integration
+│   ├── hls.tsx                       # HLS provider component
+│   ├── hls-loader.hook.ts            # hls.js attach + lifecycle management
+│   ├── hls-media-session.hook.ts     # Media Session API wiring
+│   └── load-media.compute.ts         # URL resolution for HLS manifests
+├── template/       # Formatting, CSS class utilities, theming, i18n
+│   ├── formatters/
+│   │   ├── cn.fmt.ts                 # clsx + tailwind-merge utility
+│   │   ├── msToTime.fmt.ts           # milliseconds → MM:SS display
+│   │   ├── currency.fmt.ts
+│   │   └── to-initials.fmt.ts
+│   ├── classes/                      # CSS layers (imported in globals.css)
+│   │   ├── base.css     root.css     app.css
+│   │   ├── theme.css                 # Shadcn CSS variable overrides
+│   │   ├── dark.css                  # Dark mode token overrides
+│   │   └── neon.css                  # SynthWave gradient utilities (see below)
+│   └── i18n/
+├── ui/             # Shared server components (Header, Logo)
+└── report/         # Logging utilities
+```
+
+**Colocation pattern.** Feature-specific components, hooks, and state live *inside* their route folder under a local `lib/` — not in the global `lib/`. The global `lib/` only holds what is genuinely cross-cutting. This keeps feature boundaries visible: if you delete a route, you delete its `lib/` with it and nothing breaks.
+
+---
+
+### Theming: SynthWave Neon + Shadcn Overrides 🌈
+
+The visual identity combines three layers:
+
+**1. `@repo/neon` (workspace package)** defines the raw neon color scale — 28 tokens from `--ps-neon-01` (deep violet) through `--ps-neon-28` (warm amber), covering the full SynthWave spectrum. It also generates the gradient utilities:
+
+```css
+/* packages/neon — consumed by apps/pulse via @repo/neon */
+.bg-neon       { background: linear-gradient(135deg, var(--ps-neon-01) … var(--ps-neon-24)) }
+.text-neon     { background-clip: text; color: transparent; background: var(--gradient-neon) }
+.bg-neon-warm  { background-image: var(--gradient-neon-warm) }
+.bg-neon-cool  { background-image: var(--gradient-neon-cool) }
+```
+
+**2. `lib/template/classes/theme.css`** overrides Shadcn's CSS variables (`--background`, `--foreground`, `--primary`, `--border`, etc.) to map onto the neon palette, so every Shadcn primitive — Button, Card, Slider, Input — automatically picks up the retrowave color scheme without per-component overrides.
+
+**3. `lib/template/classes/neon.css`** (imported via `lib/template`) layers additional app-specific Tailwind utilities on top. The `.glassy-surface` class that gives the gallery and uploader cards their frosted-glass appearance lives here.
+
+The result: the entire UI, including Shadcn primitives, renders in the neon theme without a single inline style or arbitrary Tailwind value.
+
+---
+
+### Live Reasoning UI & Realtime Pipeline Visibility 🧠⚡
+
+When a track is uploaded, the `@uploader` slot transitions from dropzone to a **live reasoning feed** — a real-time log of every event the upload pipeline emits, rendered using the Vercel AI Elements `Reasoning` component.
+
+<p align="center">
+  <img src="docs/images/Captura_de_tela_de_2026-03-17_15-05-48.png" width="620" alt="Pulse reasoning UI — live pipeline event stream" />
+</p>
+
+The data flow:
+
+```
+Backstage (NATS wildcard subscriber)
+    │  track.> events → MongoDB projection
+    │  broadcasts pipeline.event over Socket.IO /pipeline namespace
+    ▼
+useReasoningSocket() hook (in @uploader slot)
+    │  connects to ws://localhost:4001/pipeline
+    │  listens for pipeline.event messages
+    │  accumulates messages into ordered list
+    ▼
+ReasoningPipeline component
+    │  passes accumulated content to <Reasoning isStreaming={…}>
+    │  wraps each message in <Shimmer> while streaming
+    ▼
+User sees live event log — fingerprinting → transcription → GPT-4o verdict
+```
+
+The `Reasoning` component (ported from Vercel AI Elements, adapted in `app/infra/shadcn/components/ai-elements/reasoning.tsx`) is a collapsible panel with a `<Shimmer>` animated header that pulses while events are arriving. It uses `streamdown` for markdown-aware streaming text rendering and auto-closes after an idle timeout (`NEXT_PUBLIC_REASONING_IDLE_TIMEOUT_MS`) once the pipeline goes quiet.
+
+Pipeline event messages are deliberately human-readable — they're written as narration, not log lines:
+
+```
+Upload received. Let's see what you've got.
+Checking file integrity... looks good.
+Audio fingerprint computed.
+Lyrics decoded. Mike Shinoda would approve.
+AI cognition engine analyzing the track.
+Track approved for the pipeline.
+Audio transcoding in progress.
+Track fully processed. Ready for playback.
+```
+
+If a track is rejected (post-2000 song detected, duplicate found, or metadata hacked), the reasoning feed surfaces the rejection reason directly in the UI — including a suitably sarcastic message when the AI catches someone trying to sneak in a Justin Bieber track.
+
+---
+
+### Responsive Layout & Mobile 📱
+
+Tailwind breakpoints combined with Jotai's fine-grained atoms make the mobile experience a layout concern, not a state concern. Nothing is re-fetched or re-initialized when the viewport changes.
+
+<p align="center">
+  <img src="docs/images/macbook.png" width="440" style="display:inline-block; margin-right: 16px" alt="Desktop — Gallery and Uploader slots" />&nbsp;&nbsp;&nbsp;<img src="docs/images/mobile.png" width="180" style="display:inline-block; vertical-align:top" alt="Mobile — collapsed volume and track metadata in dropdown" />
+</p>
+
+On desktop the player grid renders all four slots side by side. On mobile:
+
+- `@uploader` is hidden (`mobile-hidden` utility on its Card wrapper) — upload is a deliberate desktop-first action
+- `@now-playing/@volume-bar` collapses out of the playback bar
+- `@now-playing/@track-metadata` moves into the user-menu dropdown
+
+The volume atom and current-track atom stay exactly where they are — atoms don't care about viewport. The user-menu slot reads `volumeAtom` and `currentTrackAtom` directly and renders them in the dropdown only when the volume bar slot is hidden. No duplication, no prop tunneling.
+
+---
+
+### BFF Proxy Routes & HLS Delivery 🎵
+
+BFF routes in `app/api/` are thin by design — they exist to own the service URL configuration and `x-request-id` header, not to add business logic:
+
+- `api/authority/login` and `api/authority/signup` — validate bodies with Zod, forward to Authority, normalize errors
+- `api/slim-shady/profile` — read/update proxy to Slim Shady
+- `api/soundgarden/tracks` — multipart upload proxy; sets `isReasoningAtom = true` on success to trigger the slot swap
+- `api/transport/hls` — HLS manifest and segment delivery; resolves object storage URLs and proxies segment bytes to the browser
+
+**HLS + Media Session API.** The `app/lib/hls/` layer wraps hls.js with two hooks:
+
+`hls-loader.hook.ts` handles the hls.js instance lifecycle — attaching to the `<audio>` element, loading the manifest URL, and tearing down cleanly on unmount.
+
+`hls-media-session.hook.ts` wires the **Media Session API** so that OS-level media controls (lock screen widget, headphone buttons, AirPods double-tap, notification shade on Android) stay in sync with the player state. Track title, artist, album art, and transport actions (play, pause, previous, next) are all registered through `navigator.mediaSession` and updated whenever `currentTrackAtom` changes.
 
 ---
 
