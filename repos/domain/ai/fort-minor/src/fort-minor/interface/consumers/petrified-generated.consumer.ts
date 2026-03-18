@@ -1,7 +1,7 @@
 import type { NatsConnection } from 'nats'
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common'
 
-import { NatsQueueConsumerAdapter, NatsConnectionToken } from '@pack/event-bus'
+import { NatsQueueConsumerAdapter, NatsConnectionToken } from '@pack/nats-broker-messaging'
 import { optionalStringEnv } from '@env/lib'
 import { TranscribeTrackUseCase } from '@application/use-cases'
 import type { PetrifiedGeneratedEventMap } from '@fort-minor/domain/events/fort-minor-event.map'

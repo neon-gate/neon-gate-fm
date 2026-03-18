@@ -115,7 +115,7 @@ Packages are the architectural glue. They're not utilities — they're the share
 | Package | Exports | Used By |
 |---|---|---|
 | `@pack/kernel` | `UseCase`, `Entity`, `AggregateRoot`, `ValueObject`, `Event`, `EventBus`, `UniqueEntityId`, `EventMap` | All microservices |
-| `@pack/event-bus` | `NatsEventBusAdapter`, queue consumer, connection provider, drain service, no-op fallback | All event-driven services |
+| `@pack/nats-broker-messaging` | `NatsEventBusAdapter`, queue consumer, connection provider, drain service, no-op fallback | All event-driven services |
 | `@pack/cache` | `RedisLike` port, Redis adapter | Shinod AI, others |
 | `@pack/patterns` | `CircuitBreaker`, `CircuitBreakerState` | Authority, sync boundaries |
 | `@env/lib` | `requireStringEnv`, `requireNumberEnv`, `optionalStringEnv`, `optionalNumberEnv` | Service bootstrap |

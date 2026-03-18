@@ -14,7 +14,7 @@
     "@nestjs/core": "^11.1.13",
     "@nestjs/platform-express": "^11.1.13",
     "@env/lib": "workspace:*",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "nats": "^2.17.0",
     "reflect-metadata": "^0.2.2",

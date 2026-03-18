@@ -88,7 +88,7 @@ The current backend conventions are shaped by the repository guidelines and shar
 - entities extend `Entity` or `AggregateRoot`
 - value objects extend `ValueObject`
 - typed event maps extend `EventMap`
-- NATS wiring is implemented through `@pack/event-bus`
+- NATS wiring is implemented through `@pack/nats-broker-messaging`
 - service-local path aliases follow:
   - `@application/*`
   - `@domain/*`
@@ -126,7 +126,7 @@ Core domain vocabulary for backend services:
 
 This package is what makes service internals structurally consistent across domains.
 
-### `@pack/event-bus`
+### `@pack/nats-broker-messaging`
 
 Shared event-bus infrastructure on top of NATS:
 

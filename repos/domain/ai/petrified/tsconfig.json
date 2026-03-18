@@ -9,10 +9,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@petrified/application/*": ["./src/modules/petrified/application/*"],
-      "@petrified/domain/*": ["./src/modules/petrified/domain/*"],
-      "@petrified/infra/*": ["./src/modules/petrified/infra/*"],
-      "@petrified/interface/*": ["./src/modules/petrified/interface/*"]
+      "@application/*": ["src/petrified/application/*"],
+      "@domain/*": ["src/petrified/domain/*"],
+      "@infra/*": ["src/petrified/infra/*"],
+      "@interface/*": ["src/petrified/interface/*"]
     },
     "strict": true,
     "esModuleInterop": true,

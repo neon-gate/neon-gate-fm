@@ -15,7 +15,7 @@
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/platform-express": "^11.1.13",
     "@env/lib": "workspace:*",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "@pack/patterns": "workspace:*",
     "class-transformer": "^0.5.1",

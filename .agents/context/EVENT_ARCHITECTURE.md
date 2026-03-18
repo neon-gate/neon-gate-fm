@@ -204,18 +204,18 @@ The event system is built on shared packages. Kernel is the source of truth; eve
 | `@pack/kernel` | `EventMap` | Type alias `Record<string, EventPayload>`. Event maps extend this. |
 | `@pack/kernel` | `EventBus` | Abstract class: `emit(event, payload)` and `on(event, handler)`. Adapters implement this contract. |
 | `@pack/kernel` | `Event` | Abstract base for domain event value objects (used with `AggregateRoot` for event sourcing). Payload extends `EventPayload`. |
-| `@pack/event-bus` | `EventMap`, `EventBus` | Re-exports from kernel. |
-| `@pack/event-bus` | `EventHandler` | Handler type; payload generic extends `EventPayload`. |
-| `@pack/event-bus` | `NatsEventBusAdapter` | Concrete adapter. Implements `EventBus`. |
-| `@pack/event-bus` | `NatsQueueConsumerAdapter` | Concrete adapter for queue-group subscriptions. |
+| `@pack/nats-broker-messaging` | `EventMap`, `EventBus` | Re-exports from kernel. |
+| `@pack/nats-broker-messaging` | `EventHandler` | Handler type; payload generic extends `EventPayload`. |
+| `@pack/nats-broker-messaging` | `NatsEventBusAdapter` | Concrete adapter. Implements `EventBus`. |
+| `@pack/nats-broker-messaging` | `NatsQueueConsumerAdapter` | Concrete adapter for queue-group subscriptions. |
 
-**Flow:** Modules depend on `EventBus<EventMap>` (from `@pack/kernel`). Infrastructure wires `NatsEventBusAdapter` or `NatsQueueConsumerAdapter` (from `@pack/event-bus`) to satisfy that port.
+**Flow:** Modules depend on `EventBus<EventMap>` (from `@pack/kernel`). Infrastructure wires `NatsEventBusAdapter` or `NatsQueueConsumerAdapter` (from `@pack/nats-broker-messaging`) to satisfy that port.
 
 ---
 
 ## 8. Mapping Events
 
-Define event types as a map from event name to payload. Extend `EventMap` from `@pack/kernel` or `@pack/event-bus` (re-export). Use separate maps for inbound vs outbound if a module has distinct roles.
+Define event types as a map from event name to payload. Extend `EventMap` from `@pack/kernel` or `@pack/nats-broker-messaging` (re-export). Use separate maps for inbound vs outbound if a module has distinct roles.
 
 **Outbound events (this module emits):**
 

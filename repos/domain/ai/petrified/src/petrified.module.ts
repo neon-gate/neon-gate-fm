@@ -1,8 +1,8 @@
 import { Global, Module } from '@nestjs/common'
 
 import { NatsModule, RedisModule, MinioModule } from '@env/core'
-import { PetrifiedModule } from './modules/petrified/petrified.module'
-import { HealthController } from './interface/http/health.controller'
+import { PetrifiedModule } from './petrified/petrified.module'
+import { HealthController } from './petrified/interface/http/health.controller'
 
 @Global()
 @Module({

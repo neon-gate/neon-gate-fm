@@ -1,6 +1,6 @@
 import type { Provider } from '@nestjs/common'
 import type { NatsConnection } from 'nats'
-import { NatsEventBusAdapter, NatsConnectionToken } from '@pack/event-bus'
+import { NatsEventBusAdapter, NatsConnectionToken } from '@pack/nats-broker-messaging'
 
 import { TrackEventBusPort } from '@domain/ports'
 import type { TrackEventMap } from '@domain/events'

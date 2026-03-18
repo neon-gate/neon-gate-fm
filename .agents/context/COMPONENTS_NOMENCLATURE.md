@@ -112,7 +112,7 @@ They must not use musical references because they are infrastructure-level utili
 | Package        | Scope                     | Description                                                                                     |
 | -------------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
 | `@pack/kernel`    | All microservices, agents  | DDD primitives: Entity, ValueObject, EventBus, UseCase, AggregateRoot, EventMap. Framework-agnostic domain abstractions. |
-| `@pack/event-bus` | Microservices, Shinod AI  | NATS adapters for event-driven messaging: publish/subscribe and queue consumer patterns.       |
+| `@pack/nats-broker-messaging` | Microservices, Shinod AI  | NATS adapters for event-driven messaging: publish/subscribe and queue consumer patterns.       |
 | `@pack/cache`     | Microservices             | Redis cache adapter and `RedisLike` port for session and idempotency use cases.                 |
 | `@pack/patterns`  | Microservices (e.g. Authority) | Resilience patterns: CircuitBreaker, CircuitBreakerState, timeout handling.              |
 | `@pack/neon`      | Frontend (pulse app)      | Design system: PostCSS-built CSS, color tokens for UI theming.                                  |

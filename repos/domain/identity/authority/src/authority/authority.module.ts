@@ -14,7 +14,7 @@ import {
 } from '@application/use-cases'
 import { GoogleOAuthPort, SessionPort, UserPort } from '@domain/ports'
 import { requireStringEnv } from '@env/lib'
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/event-bus'
+import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
 
 import { DbConfigFlag } from '@infra/db'
 import {

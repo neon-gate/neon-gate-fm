@@ -1,7 +1,7 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common'
 import type { NatsConnection } from 'nats'
 import { BroadcastPipelineEventUseCase } from '../../application/use-cases/broadcast-pipeline-event.use-case'
-import { NatsConnectionToken } from '@pack/event-bus'
+import { NatsConnectionToken } from '@pack/nats-broker-messaging'
 import { PIPELINE_EVENT_MESSAGES } from './pipeline-event-messages.data'
 
 import { TrackEvent } from '@env/event-inventory'

@@ -21,11 +21,11 @@ Example:
 Infrastructure code is private to each microservice. A microservice must never import another microservice's `infra` layer (adapters, providers, config, clients, or wiring). Shared contracts and reusable primitives belong in workspace packages (for example `@pack/kernel`).
 
 ## Ports As Abstract Classes
-Ports are abstract classes, not TypeScript interfaces. Adapters are classes implementing those ports. Event-bus ports extend `EventBus` from `@pack/event-bus`; cache ports extend `CachePort` from `@pack/cache`.
+Ports are abstract classes, not TypeScript interfaces. Adapters are classes implementing those ports. Event-bus ports extend `EventBus` from `@pack/nats-broker-messaging`; cache ports extend `CachePort` from `@pack/cache`.
 
 Do:
 ```ts
-import { EventBus } from '@pack/event-bus'
+import { EventBus } from '@pack/nats-broker-messaging'
 import type { MyEventMap } from '@domain/events'
 export abstract class MyEventBusPort extends EventBus<MyEventMap> {}
 ```
@@ -112,7 +112,7 @@ The `@pack/kernel` package is **abstract-only**. It defines domain vocabulary an
 - No implementations: no `UniqueId`, `UniqueEntityId`, or other concrete Id classes. Use a separate package (or local value-objects) for Id implementations.
 - No UUID generation: callers provide `eventId` and `occurredOn` when constructing domain events. Use external packages (e.g. `crypto.randomUUID`) where needed.
 - No defaults: if meta (`eventId`, `occurredOn`) is required for a domain event, the caller must pass it explicitly.
-- No ports that belong elsewhere: `CachePort` lives in `@pack/cache`; `EventBus` lives in `@pack/event-bus`.
+- No ports that belong elsewhere: `CachePort` lives in `@pack/cache`; `EventBus` lives in `@pack/nats-broker-messaging`.
 
 ### Abstractions Use Abstract Classes
 Domain abstractions are abstract classes. Use interfaces or type aliases only for primitives (e.g. `IdPrimitive`, `DomainEventPrimitive`, `ObjectPrimitive`).
@@ -145,4 +145,4 @@ export interface EventMap {}
 |-------------|---------|
 | `Id`, `Entity`, `AggregateRoot`, `DomainEvent`, `EventPayload`, `EventMap`, `EventError`, `UseCase`, `ValueObject`, `UnitOfWork` | `@pack/kernel` |
 | `CachePort` | `@pack/cache` |
-| `EventBus` | `@pack/event-bus` |
+| `EventBus` | `@pack/nats-broker-messaging` |

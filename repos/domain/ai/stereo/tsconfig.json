@@ -9,10 +9,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@stereo/application/*": ["./src/modules/stereo/application/*"],
-      "@stereo/domain/*": ["./src/modules/stereo/domain/*"],
-      "@stereo/infra/*": ["./src/modules/stereo/infra/*"],
-      "@stereo/interface/*": ["./src/modules/stereo/interface/*"]
+      "@application/*": ["src/stereo/application/*"],
+      "@domain/*": ["src/stereo/domain/*"],
+      "@infra/*": ["src/stereo/infra/*"],
+      "@interface/*": ["src/stereo/interface/*"]
     },
     "strict": true,
     "esModuleInterop": true,

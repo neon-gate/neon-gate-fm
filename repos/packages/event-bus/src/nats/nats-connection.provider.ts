@@ -1,15 +1,21 @@
 import type { Provider } from '@nestjs/common'
 import { connect, type NatsConnection } from 'nats'
 
-import { EventBusConfigFlag } from './event-bus-config-flag.enum'
+import { NatsConfigFlag } from './nats-config.enum'
 
+/**
+ * NestJS DI token for shared NATS connection.
+ */
 export const NatsConnectionToken = Symbol('NATS_CONNECTION')
 
-/// Connects to NATS if NATS_URL is set; returns null for local no-op mode.
+/**
+ * Connects to NATS when `NATS_URL` exists.
+ * Returns `null` in local/no-op mode.
+ */
 export const natsConnectionProvider: Provider = {
   provide: NatsConnectionToken,
   useFactory: async (): Promise<NatsConnection | null> => {
-    const servers = process.env[EventBusConfigFlag.NatsUrl]
+    const servers = process.env[NatsConfigFlag.NatsUrl]
     if (!servers) return null
     return connect({ servers })
   }

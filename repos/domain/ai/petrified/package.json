@@ -14,7 +14,7 @@
     "@nestjs/common": "^11.1.13",
     "@nestjs/core": "^11.1.13",
     "@nestjs/platform-express": "^11.1.13",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "ioredis": "^5.6.1",
     "nats": "^2.17.0",

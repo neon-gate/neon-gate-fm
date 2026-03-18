@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@env/lib": "workspace:*",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@aws-sdk/client-s3": "^3.787.0",
     "ioredis": "^5.6.1",
     "mongoose": "^8.15.1"

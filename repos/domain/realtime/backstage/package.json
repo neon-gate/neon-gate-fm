@@ -16,7 +16,7 @@
     "@nestjs/platform-socket.io": "^11.1.13",
     "@nestjs/websockets": "^11.1.13",
     "@env/lib": "workspace:*",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "@pack/patterns": "workspace:*",
     "mongoose": "^9.2.1",

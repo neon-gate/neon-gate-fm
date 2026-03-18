@@ -1,4 +1,4 @@
-import { EventBus } from '@pack/event-bus'
+import { EventBus } from '@pack/nats-broker-messaging'
 
 import type { MockingbirdEventMap } from '@domain/events'
 

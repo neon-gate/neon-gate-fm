@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/event-bus'
+import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
 
 import {
   CompleteOnboardingUseCase,

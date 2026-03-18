@@ -3,7 +3,7 @@ import {
   NatsConnectionToken,
   natsConnectionProvider,
   NatsLifecycleService
-} from '@pack/event-bus'
+} from '@pack/nats-broker-messaging'
 
 /// Provides and exports a shared NATS connection with lifecycle management.
 @Module({

@@ -1,47 +1,51 @@
-import { type NatsConnection, StringCodec } from 'nats'
+import type { EventPrimitive } from '@pack/kernel'
+import type { NatsConnection } from 'nats'
 
-import type { EventHandler } from '../event-handler'
-import type { EventMap } from '../event-map'
+import { NatsConsumer } from '../nats/nats-consumer.adapter'
+import type { EventContract } from '../types/event-contract.type'
 
-/// Subscribes to NATS subjects using a queue group for competing-consumer
-/// load balancing. Multiple instances sharing the same `queue` name each
-/// receive at most one copy of each message.
-export class NatsQueueConsumerAdapter<Events extends EventMap> {
-  private readonly sc = StringCodec()
-  private readonly unsubscribers: Array<() => void> = []
+/**
+ * Queue-group consumer adapter with payload-first handler compatibility.
+ *
+ * This wrapper maintains previous callback signatures while internally using
+ * `NatsConsumer` with validated `EventPrimitive` envelopes.
+ */
+export class NatsQueueConsumerAdapter<Events extends EventContract> {
+  private readonly consumer: NatsConsumer<Events>
 
   constructor(
-    private readonly nc: NatsConnection,
-    private readonly queue: string
-  ) {}
-
-  /// Subscribe to `event` with queue-group semantics.
-  subscribe<EventName extends keyof Events>(
-    event: EventName,
-    handler: EventHandler<Events[EventName]>
-  ): () => void {
-    const sub = this.nc.subscribe(String(event), { queue: this.queue })
-
-    void (async () => {
-      for await (const msg of sub) {
-        try {
-          const decoded = JSON.parse(this.sc.decode(msg.data)) as Events[EventName]
-          await handler(decoded)
-        } catch {
-          // Message-level errors are handled by the caller's use case.
-          // The loop must not break on individual failures.
-        }
-      }
-    })()
-
-    const unsubscribe = () => sub.unsubscribe()
-    this.unsubscribers.push(unsubscribe)
-    return unsubscribe
+    connection: NatsConnection,
+    queue: string
+  ) {
+    this.consumer = new NatsConsumer<Events>(connection, queue)
   }
 
-  /// Cancel all active subscriptions managed by this adapter.
+  /**
+   * Subscribes to subject and passes only envelope payload to handler.
+   */
+  subscribe<EventName extends keyof Events & string>(
+    event: EventName,
+    handler: (payload: Events[EventName]) => void | Promise<void>
+  ): () => void {
+    return this.consumer.subscribe(event, async (envelope) => {
+      await handler(envelope.payload as Events[EventName])
+    })
+  }
+
+  /**
+   * Envelope-aware variant for callers that need metadata.
+   */
+  subscribeEnvelope<EventName extends keyof Events & string>(
+    event: EventName,
+    handler: (envelope: EventPrimitive<Events[EventName]>) => void | Promise<void>
+  ): () => void {
+    return this.consumer.subscribe(event, handler)
+  }
+
+  /**
+   * Cancels all active queue subscriptions.
+   */
   unsubscribeAll(): void {
-    for (const fn of this.unsubscribers) fn()
-    this.unsubscribers.length = 0
+    this.consumer.unsubscribeAll()
   }
 }

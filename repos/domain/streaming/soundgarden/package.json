@@ -15,7 +15,7 @@
     "@nestjs/platform-express": "^11.1.13",
     "@nestjs/schedule": "^5.0.1",
     "@env/lib": "workspace:*",
-    "@pack/event-bus": "workspace:*",
+    "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "@pack/patterns": "workspace:*",
     "multer": "^1.4.5-lts.1",
