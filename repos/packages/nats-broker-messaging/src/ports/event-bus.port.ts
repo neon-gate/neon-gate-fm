@@ -15,7 +15,7 @@ export abstract class EventBus<Events extends EventContract = EventContract> {
    */
   abstract emit<EventName extends keyof Events & string>(
     event: EventName,
-    payload: EventPrimitive<Events[EventName]>
+    payload: Events[EventName] | EventPrimitive<Events[EventName]>
   ): Promise<void>
 
   /**

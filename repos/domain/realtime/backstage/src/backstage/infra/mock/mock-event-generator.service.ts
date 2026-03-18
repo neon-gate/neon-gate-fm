@@ -4,7 +4,7 @@ import { BroadcastPipelineEventUseCase } from '../../application/use-cases/broad
 import { NatsConnectionToken } from '@pack/nats-broker-messaging'
 import { PIPELINE_EVENT_MESSAGES } from './pipeline-event-messages.data'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 const MOCK_EVENT_SEQUENCE = [
   TrackEvent.UploadReceived,
   TrackEvent.UploadValidated,

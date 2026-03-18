@@ -5,7 +5,7 @@ import {
   Injectable,
   NotFoundException
 } from '@nestjs/common'
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 import { UseCase } from '@pack/kernel'
 
@@ -87,7 +87,7 @@ export class UpdateUserProfileUseCase extends UseCase<
     for (const event of user.pullEvents()) {
       await this.events.emit(
         event.eventName as keyof typeof UserEvent,
-        event.toPrimitive()
+        event.toJSON()
       )
     }
   }

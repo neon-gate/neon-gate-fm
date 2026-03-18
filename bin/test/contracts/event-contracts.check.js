@@ -18,19 +18,19 @@ const soundgardenTrackMap = read(
   path.join(root, 'repos/domain/streaming/soundgarden/src/soundgarden/domain/events/track-event.map.ts')
 )
 const petrifiedTrackMap = read(
-  path.join(root, 'repos/domain/ai/shinod-ai/src/modules/petrified/domain/events/petrified-event.map.ts')
+  path.join(root, 'repos/domain/ai/petrified/src/petrified/domain/events/petrified-event.map.ts')
 )
 const petrifiedOutMap = read(
-  path.join(root, 'repos/domain/ai/shinod-ai/src/modules/petrified/domain/events/petrified-event.map.ts')
+  path.join(root, 'repos/domain/ai/petrified/src/petrified/domain/events/petrified-event.map.ts')
 )
 const fortMinorInMap = read(
-  path.join(root, 'repos/domain/ai/shinod-ai/src/modules/fort-minor/domain/events/fort-minor-event.map.ts')
+  path.join(root, 'repos/domain/ai/fort-minor/src/fort-minor/domain/events/fort-minor-event.map.ts')
 )
 const stereoInMap = read(
-  path.join(root, 'repos/domain/ai/shinod-ai/src/modules/stereo/domain/events/stereo-event.map.ts')
+  path.join(root, 'repos/domain/ai/stereo/src/stereo/domain/events/stereo-event.map.ts')
 )
 const stereoOutMap = read(
-  path.join(root, 'repos/domain/ai/shinod-ai/src/modules/stereo/domain/events/stereo-event.map.ts')
+  path.join(root, 'repos/domain/ai/stereo/src/stereo/domain/events/stereo-event.map.ts')
 )
 const mockingbirdMap = read(
   path.join(root, 'repos/domain/streaming/mockingbird/src/mockingbird/domain/events/mockingbird-event.map.ts')
@@ -46,8 +46,8 @@ const slimShadyMap = read(
 )
 
 // Soundgarden -> Petrified contract parity
-assertContains(soundgardenTrackMap, "'track.uploaded':", 'soundgarden track-event.map.ts')
-assertContains(petrifiedTrackMap, "'track.uploaded':", 'petrified event.map.ts')
+assertContains(soundgardenTrackMap, '[TrackEvent.Uploaded]:', 'soundgarden track-event.map.ts')
+assertContains(petrifiedTrackMap, '[TrackEvent.Uploaded]:', 'petrified event.map.ts')
 assertContains(soundgardenTrackMap, 'sourceStorage:', 'soundgarden track.uploaded contract')
 assertContains(petrifiedTrackMap, 'sourceStorage:', 'petrified inbound track.uploaded contract')
 assertContains(soundgardenTrackMap, 'petrifiedStorage:', 'soundgarden track.uploaded contract')
@@ -56,31 +56,31 @@ assertContains(soundgardenTrackMap, 'fortMinorStorage:', 'soundgarden track.uplo
 assertContains(petrifiedTrackMap, 'fortMinorStorage:', 'petrified inbound track.uploaded contract')
 
 // Petrified -> Fort Minor/Stereo contract parity
-assertContains(petrifiedOutMap, "'track.petrified.generated':", 'petrified outbound map')
-assertContains(fortMinorInMap, "'track.petrified.generated':", 'fort-minor inbound map')
-assertContains(stereoInMap, "'track.petrified.generated':", 'stereo inbound map')
+assertContains(petrifiedOutMap, '[TrackEvent.PetrifiedGenerated]:', 'petrified outbound map')
+assertContains(fortMinorInMap, '[TrackEvent.PetrifiedGenerated]:', 'fort-minor inbound map')
+assertContains(stereoInMap, '[TrackEvent.PetrifiedGenerated]:', 'stereo inbound map')
 assertContains(petrifiedOutMap, 'storage: { bucket: string; key: string }', 'petrified output')
 assertContains(fortMinorInMap, 'storage: { bucket: string; key: string }', 'fort-minor input')
 assertContains(stereoInMap, 'storage: { bucket: string; key: string }', 'stereo input')
 
 // Stereo -> Mockingbird approval contract parity
-assertContains(stereoOutMap, "'track.approved':", 'stereo outbound map')
-assertContains(mockingbirdMap, "'track.approved':", 'mockingbird inbound map')
+assertContains(stereoOutMap, '[TrackEvent.Approved]:', 'stereo outbound map')
+assertContains(mockingbirdMap, '[TrackEvent.Approved]:', 'mockingbird inbound map')
 assertContains(stereoOutMap, 'sourceStorage:', 'stereo approved payload')
 assertContains(mockingbirdMap, 'sourceStorage:', 'mockingbird approved payload')
 assertContains(stereoOutMap, 'objectKey: string', 'stereo approved payload')
 assertContains(mockingbirdMap, 'objectKey: string', 'mockingbird approved payload')
 
 // Mockingbird -> Hybrid Storage HLS contract parity
-assertContains(mockingbirdMap, "'track.hls.generated':", 'mockingbird outbound map')
-assertContains(hybridStorageMap, "'track.hls.generated':", 'hybrid-storage inbound map')
+assertContains(mockingbirdMap, '[TrackEvent.HlsGenerated]:', 'mockingbird outbound map')
+assertContains(hybridStorageMap, '[TrackEvent.HlsGenerated]:', 'hybrid-storage inbound map')
 assertContains(mockingbirdMap, 'masterPlaylist: string', 'mockingbird hls contract')
 assertContains(hybridStorageMap, 'masterPlaylist: string', 'hybrid-storage hls contract')
 
 // Authority -> Slim Shady identity contract parity
-assertContains(authorityMap, "'authority.user.signed_up':", 'authority outbound map')
-assertContains(slimShadyMap, "'authority.user.signed_up':", 'slim-shady inbound map')
-assertContains(authorityMap, "'user.profile.created':", 'authority event map')
-assertContains(slimShadyMap, "'user.profile.created':", 'slim-shady event map')
+assertContains(authorityMap, '[AuthorityEvent.UserSignedUp]:', 'authority outbound map')
+assertContains(slimShadyMap, '[AuthorityEvent.UserSignedUp]:', 'slim-shady inbound map')
+assertContains(authorityMap, '[UserEvent.ProfileCreated]:', 'authority event map')
+assertContains(slimShadyMap, '[UserEvent.ProfileCreated]:', 'slim-shady event map')
 
 console.log('OK event-contracts.check.js')

@@ -1,9 +1,9 @@
-import { Entity } from '@pack/kernel'
+import { DomainEntity as Entity } from '@pack/kernel'
 import { UniqueEntityId } from '@pack/patterns'
 
 import { PipelineEvent } from './pipeline-event.value-object'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export interface TrackPipelineProps {
   trackId: string
   status: 'processing' | 'ready' | 'failed'
@@ -90,7 +90,7 @@ export class TrackPipeline extends Entity<TrackPipelineProps> {
       trackId: this.props.trackId,
       status: this.props.status,
       currentStage: this.props.currentStage,
-      events: this.props.events.map((e) => e.toJSON()),
+      events: this.props.events.map((event: PipelineEvent) => event.toJSON()),
       createdAt: this.props.createdAt.toISOString(),
       updatedAt: this.props.updatedAt.toISOString()
     }

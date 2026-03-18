@@ -13,7 +13,7 @@ import {
   AuthorityTokenService,
   type SessionContext
 } from '@application/services/authority-token.service'
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 interface SignupInput {
   email: string
@@ -54,7 +54,7 @@ export class SignupUseCase extends UseCase<
 
     const hash = await bcrypt.hash(password.toString(), 10)
 
-    const now = new Date()
+    const signedUpAt = new Date()
     const user = User.signUp(
       {
         email: email.toString(),
@@ -63,10 +63,10 @@ export class SignupUseCase extends UseCase<
         providerUserId: null,
         name: input.name ?? null,
         profileId: null,
-        createdAt: now
+        createdAt: signedUpAt
       },
       undefined,
-      { eventId: randomUUID(), occurredOn: now }
+      { eventId: randomUUID(), occurredOn: signedUpAt }
     )
 
     await this.users.create(user)
@@ -77,11 +77,11 @@ export class SignupUseCase extends UseCase<
     for (const event of user.pullEvents()) {
       void this.events.emit(
         event.eventName as keyof typeof AuthorityEvent,
-        event.toPrimitive()
+        event.toJSON()
       )
     }
 
-    const now = new Date()
+    const loggedInAt = new Date()
     const loginEvent = new UserLoggedInEvent(
       user.idString,
       {
@@ -92,7 +92,7 @@ export class SignupUseCase extends UseCase<
         ipAddress: context.ipAddress ?? null,
         userAgent: context.userAgent ?? null
       },
-      { eventId: randomUUID(), occurredOn: now }
+      { eventId: randomUUID(), occurredOn: loggedInAt }
     )
 
     void this.events.emit(

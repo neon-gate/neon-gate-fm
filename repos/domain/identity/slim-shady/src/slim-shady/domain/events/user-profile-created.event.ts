@@ -1,6 +1,6 @@
 import { DomainEvent } from '@pack/kernel'
 
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 export interface UserProfileCreatedPayload {
   profileId: string
@@ -8,13 +8,13 @@ export interface UserProfileCreatedPayload {
   email: string
 }
 
-export class UserProfileCreatedEvent extends DomainEvent<Map<string, unknown>> {
+export class UserProfileCreatedEvent extends DomainEvent<UserProfileCreatedPayload> {
   constructor(
     aggregateId: string,
     props: UserProfileCreatedPayload,
     meta: { eventId: string; occurredOn: Date }
   ) {
-    super(aggregateId, new Map(Object.entries(props)), meta)
+    super(aggregateId, props, meta)
   }
 
   get eventName(): string {

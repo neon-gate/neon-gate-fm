@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { CircuitBreaker } from '@pack/patterns'
 
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment'
 import {
   StereoPort,
   type StereoContext,

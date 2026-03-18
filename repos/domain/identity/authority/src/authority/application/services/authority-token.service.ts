@@ -5,7 +5,7 @@ import { hash } from 'bcrypt'
 import { Session, User } from '@domain/entities'
 import { SessionPort } from '@domain/ports'
 import { AuthorityProvider } from '@domain/value-objects'
-import { requireStringEnv } from '@env/lib'
+import { requireStringEnv } from '@pack/environment'
 import { DbConfigFlag } from '@infra/db'
 
 export interface SessionContext {

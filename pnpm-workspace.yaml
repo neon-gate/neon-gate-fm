@@ -3,7 +3,6 @@ packages:
   - "repos/packages/*"
   - "repos/domain/**"
   - "repos/agents/*"
-  - "repos/environment/**"
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver

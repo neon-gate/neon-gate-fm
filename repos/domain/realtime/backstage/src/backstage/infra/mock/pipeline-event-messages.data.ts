@@ -1,4 +1,4 @@
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export const PIPELINE_EVENT_MESSAGES: Record<string, string> = {
   [TrackEvent.UploadReceived]:
     'Upload received! The track has arrived at the gates of the pipeline. Our tiny backstage gremlins are carefully unpacking the audio to see what musical secrets you’ve brought us today.',

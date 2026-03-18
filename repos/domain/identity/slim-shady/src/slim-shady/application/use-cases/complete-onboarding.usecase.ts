@@ -5,7 +5,7 @@ import { UseCase } from '@pack/kernel'
 
 import { SlimShadyEventBusPort, UserPort } from '@domain/ports'
 
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 interface CompleteOnboardingInput {
   profileId: string
@@ -47,7 +47,7 @@ export class CompleteOnboardingUseCase extends UseCase<
     for (const event of user.pullEvents()) {
       await this.events.emit(
         event.eventName as keyof typeof UserEvent,
-        event.toPrimitive()
+        event.toJSON()
       )
     }
   }

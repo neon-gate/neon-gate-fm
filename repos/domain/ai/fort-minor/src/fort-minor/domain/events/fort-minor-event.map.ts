@@ -1,7 +1,7 @@
 import type { EventMap } from '@pack/kernel'
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 
-export class PetrifiedGeneratedEventMap implements EventMap {
+export interface PetrifiedGeneratedEventMap extends EventMap {
   [TrackEvent.PetrifiedGenerated]: {
     trackId: string
     fingerprintHash: string

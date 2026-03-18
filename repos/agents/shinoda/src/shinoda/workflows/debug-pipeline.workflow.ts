@@ -5,7 +5,7 @@ import axios from 'axios'
 import { requireEnv } from '@shinoda/env'
 import { signalBus } from '@shinoda/signals/signal-bus'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 const EXPECTED_SEQUENCE: string[] = [
   TrackEvent.Uploaded,
   TrackEvent.PetrifiedGenerated,
@@ -27,11 +27,11 @@ const TERMINAL_EVENTS: string[] = [
 
 const STAGE_OWNERS: Record<string, string> = {
   [TrackEvent.Uploaded]: 'Soundgarden',
-  [TrackEvent.PetrifiedGenerated]: 'Petrified (Shinod AI)',
-  [TrackEvent.FortMinorStarted]: 'Fort Minor (Shinod AI)',
-  [TrackEvent.FortMinorCompleted]: 'Fort Minor (Shinod AI)',
-  [TrackEvent.StereoStarted]: 'Stereo (Shinod AI)',
-  [TrackEvent.Approved]: 'Stereo (Shinod AI)',
+  [TrackEvent.PetrifiedGenerated]: 'Petrified',
+  [TrackEvent.FortMinorStarted]: 'Fort Minor',
+  [TrackEvent.FortMinorCompleted]: 'Fort Minor',
+  [TrackEvent.StereoStarted]: 'Stereo',
+  [TrackEvent.Approved]: 'Stereo',
   [TrackEvent.HlsGenerated]: 'Mockingbird',
   [TrackEvent.HlsStored]: 'Hybrid Storage'
 }
@@ -40,7 +40,9 @@ const SERVICE_HEALTH_URLS: Record<string, string> = {
   Authority: requireEnv('AUTHORITY_URL'),
   'Slim Shady': requireEnv('SLIM_SHADY_URL'),
   Soundgarden: requireEnv('SOUNDGARDEN_URL'),
-  'Shinod AI': requireEnv('SHINOD_AI_URL'),
+  Petrified: requireEnv('PETRIFIED_URL'),
+  'Fort Minor': requireEnv('FORT_MINOR_URL'),
+  Stereo: requireEnv('STEREO_URL'),
   Mockingbird: requireEnv('MOCKINGBIRD_URL'),
   'Hybrid Storage': requireEnv('HYBRID_STORAGE_URL'),
   Backstage: requireEnv('BACKSTAGE_URL')

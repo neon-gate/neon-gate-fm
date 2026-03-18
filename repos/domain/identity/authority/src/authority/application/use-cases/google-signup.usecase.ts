@@ -12,7 +12,7 @@ import {
   AuthorityTokenService,
   type SessionContext
 } from '@application/services/authority-token.service'
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 interface GoogleSignupResult {
   accessToken: string
@@ -50,7 +50,7 @@ export class GoogleSignupUseCase extends UseCase<
       throw new ConflictException('Email already registered')
     }
 
-    const now = new Date()
+    const signedUpAt = new Date()
     const user = User.signUp(
       {
         email: profile.email,
@@ -59,10 +59,10 @@ export class GoogleSignupUseCase extends UseCase<
         providerUserId: profile.providerUserId,
         name: profile.name ?? null,
         profileId: null,
-        createdAt: now
+        createdAt: signedUpAt
       },
       undefined,
-      { eventId: randomUUID(), occurredOn: now }
+      { eventId: randomUUID(), occurredOn: signedUpAt }
     )
 
     await this.users.create(user)
@@ -73,11 +73,11 @@ export class GoogleSignupUseCase extends UseCase<
     for (const event of user.pullEvents()) {
       void this.events.emit(
         event.eventName as keyof typeof AuthorityEvent,
-        event.toPrimitive()
+        event.toJSON()
       )
     }
 
-    const now = new Date()
+    const loggedInAt = new Date()
     const loginEvent = new UserLoggedInEvent(
       user.idString,
       {
@@ -88,7 +88,7 @@ export class GoogleSignupUseCase extends UseCase<
         ipAddress: context.ipAddress ?? null,
         userAgent: context.userAgent ?? null
       },
-      { eventId: randomUUID(), occurredOn: now }
+      { eventId: randomUUID(), occurredOn: loggedInAt }
     )
 
     void this.events.emit(

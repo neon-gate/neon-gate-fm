@@ -20,13 +20,13 @@
     "node": ">=22.13.0"
   },
   "dependencies": {
-    "@env/event-inventory": "workspace:*",
     "@mastra/core": "^1.13.2",
     "@mastra/evals": "^1.1.2",
     "@mastra/libsql": "^1.7.0",
     "@mastra/loggers": "^1.0.2",
     "@mastra/memory": "^1.8.2",
     "@mastra/observability": "^1.5.0",
+    "@pack/event-inventory": "workspace:*",
     "axios": "^1.13.6",
     "socket.io-client": "^4.8.0",
     "zod": "^4.3.6"

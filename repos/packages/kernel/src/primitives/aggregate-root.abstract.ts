@@ -1,5 +1,6 @@
-import { DomainEntity, Id } from '@primitives'
-import type { EventPrimitive } from '@types'
+import { DomainEntity } from './domain-entity.abstract'
+import { DomainEvent } from './domain-event.abstract'
+import { Id } from './id.abstract'
 
 /**
  * Base class for aggregate roots that track domain events and expose them via pullEvents.
@@ -16,7 +17,7 @@ import type { EventPrimitive } from '@types'
  * }
  */
 export abstract class AggregateRoot<Props> extends DomainEntity<Props> {
-  private readonly pendingEvents: EventPrimitive<Props>[] = []
+  private readonly pendingEvents: DomainEvent<any>[] = []
 
   protected constructor(props: Props, id: Id) {
     super(props, id)
@@ -29,7 +30,7 @@ export abstract class AggregateRoot<Props> extends DomainEntity<Props> {
    * @example
    * this.record(new OrderShipped(this.id.value, { carrier: 'UPS' }))
    */
-  protected record(event: EventPrimitive<Props>): void {
+  protected record(event: DomainEvent<any>): void {
     this.pendingEvents.push(event)
   }
 
@@ -41,7 +42,7 @@ export abstract class AggregateRoot<Props> extends DomainEntity<Props> {
    * const events = aggregate.pullEvents()
    * await eventBus.publish(...events)
    */
-  pullEvents(): EventPrimitive<Props>[] {
+  pullEvents(): DomainEvent<any>[] {
     const events = [...this.pendingEvents]
     this.pendingEvents.length = 0
     return events

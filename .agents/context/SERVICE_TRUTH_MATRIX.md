@@ -1,74 +1,42 @@
 # Pulse Service Truth Matrix
 
-## Scope
+## Runtime Topology
 
-Current implementation truth captured from:
+### Shared Infrastructure
 
-- `docker-compose.yml`
-- `domain/*` services
+- `nats`
 
-This matrix is actively maintained during implementation and smoke validation.
+### Per-Service Infrastructure
 
----
-
-## Runtime Topology (Compose)
-
-## Infrastructure
-
-- `mongo` (authority/backstage/shared identity-realtime db host)
-- `mongo-shinod-ai` (dedicated ai mongo host)
-- `redis-shinoda` (ai operational cache/state)
-- `nats` (event plane with JetStream enabled)
-- `minio` + `minio-init` (object storage and bucket bootstrap)
-
-## Application Services
-
-- `authority` (`7000`)
-- `slim-shady` (`7400`)
-- `soundgarden` (`7100`)
-- `shinod-ai` (`7200`)
-- `mockingbird` (`7201 -> container 7200`)
-- `hybrid-storage` (`7300`)
-- `backstage` (`4001`)
-- `pulse` (`3000`)
-
----
+- `authority-mongo`
+- `slim-shady-mongo`
+- `backstage-mongo`
+- `stereo-mongo`
+- `petrified-redis`
+- `fort-minor-redis`
+- `soundgarden-minio`
+- `mockingbird-minio`
+- `hybrid-storage-minio`
+- `petrified-minio`
+- `fort-minor-minio`
 
 ## Service Matrix
 
-| Service | Transport | Persistence | Emits | Consumes |
+| Service | Transport | Owned Infra | Emits | Consumes |
 | --- | --- | --- | --- | --- |
-| Authority | HTTP + NATS | Mongo (`mongo`) | `authority.user.*`, `authority.token.refreshed` | `user.profile.created` |
-| Slim Shady | HTTP + NATS | Mongo (`mongo`) | `user.profile.*` | `authority.user.signed_up` |
-| Soundgarden | HTTP + NATS | local `/tmp/uploads` + MinIO | `track.upload.*`, `track.uploaded`, `track.upload.failed` | none |
-| Shinod AI (monolithic deployable) | HTTP health + NATS | Mongo (`mongo-shinod-ai`), Redis, MinIO refs | `track.petrified.*`, `track.duplicate.detected`, `track.fort-minor.*`, `track.stereo.*`, `track.approved/rejected` | `track.uploaded`, `track.petrified.generated`, `track.fort-minor.completed` |
-| Mockingbird | HTTP health + NATS | `/tmp/hls` + MinIO | `track.transcoding.*`, `track.hls.generated` | `track.approved` |
-| Hybrid Storage | HTTP health + NATS | `/tmp/hls` + MinIO | `track.hls.stored` | `track.hls.generated` |
-| Backstage | HTTP + Socket.IO + NATS | Mongo (`mongo`) | websocket `pipeline.event` | `track.>` |
-| Pulse (Next.js/BFF) | HTTP + Socket.IO client | Browser/Jotai | none | HTTP APIs + websocket stream |
+| authority | HTTP + NATS | `authority-mongo` | `authority.user.*`, `authority.token.refreshed` | `user.profile.created` |
+| slim-shady | HTTP + NATS | `slim-shady-mongo` | `user.profile.*` | `authority.user.signed_up` |
+| soundgarden | HTTP + NATS | `soundgarden-minio` | `track.upload.*`, `track.uploaded`, `track.upload.failed` | none |
+| petrified | HTTP health + NATS | `petrified-redis`, `petrified-minio` | `track.petrified.*`, `track.duplicate.detected` | `track.uploaded` |
+| fort-minor | HTTP health + NATS | `fort-minor-redis`, `fort-minor-minio` | `track.fort-minor.*` | `track.petrified.generated` |
+| stereo | HTTP health + NATS | `stereo-mongo` | `track.stereo.*`, `track.approved`, `track.rejected` | `track.petrified.generated`, `track.fort-minor.completed` |
+| mockingbird | HTTP health + NATS | `mockingbird-minio` | `track.transcoding.*`, `track.hls.generated` | `track.approved` |
+| hybrid-storage | HTTP health + NATS | `hybrid-storage-minio` | `track.hls.stored`, `track.hls.failed` | `track.hls.generated` |
+| backstage | HTTP + Socket.IO + NATS | `backstage-mongo` | websocket `pipeline.event` | `track.*` |
+| pulse | HTTP + Socket.IO client | none | none | service HTTP APIs + websocket stream |
 
----
+## Notes
 
-## Boundary/Dependency Notes
-
-- Identity boundary is mostly clean: Authority owns auth, Slim Shady owns profile.
-- Shinod AI currently shares infra internally across modules; split target is independent microservices.
-- Mockingbird and Hybrid Storage both mount `/tmp/hls`; this is a local compose convenience, not a domain ownership model.
-- Backstage uses wildcard event consumption and must stay projection-only.
-
----
-
-## Detected Contract Risks
-
-1. Shinod AI is still one deployable service despite stage-level contract separation.
-2. Storage naming drift (`tracks` vs `uploads`) still requires cleanup across env/config surfaces.
-3. Backstage mock subjects must stay clearly isolated from runtime subjects as the pipeline evolves.
-
----
-
-## Execution Notes (Current Phase)
-
-- `track.uploaded` canonical refs were hardened (`sourceStorage`, `petrifiedStorage`, `fortMinorStorage` required by contract).
-- `track.approved` consumer validation was hardened in Mockingbird with explicit contract-failure signaling.
-- Shared `environment/storage/minio/.env` coupling was removed from compose and DX scripts.
-- Smoke harness now includes authority flow scripts, websocket lifecycle ordering check, and contract checks.
+- `shinod-ai` is removed; the AI pipeline now deploys as `petrified`, `fort-minor`, and `stereo`.
+- No Mongo, Redis, or MinIO instance is shared across microservices.
+- Backstage remains projection-only and should not own workflow decisions.

@@ -1,10 +1,10 @@
-# AI Bounded Context (Shinod AI)
+# AI Bounded Context
 
 ## Overview
 
-Shinod AI is the AI cognition microservice within the Pulse music streaming platform. It is a single deployable NestJS service containing three internal modules that handle acoustic fingerprinting, transcription, and AI-based track approval.
+The AI bounded context is split into three microservices within the Pulse music streaming platform: Petrified, Fort Minor, and Stereo.
 
-Shinod AI does NOT transcode audio, persist HLS, serve playback, or own user profiles. Those responsibilities belong to Mockingbird, Hybrid Storage, and other services.
+The AI bounded context does NOT transcode audio, persist HLS, serve playback, or own user profiles. Those responsibilities belong to Mockingbird, Hybrid Storage, and other services.
 
 ## Modules
 

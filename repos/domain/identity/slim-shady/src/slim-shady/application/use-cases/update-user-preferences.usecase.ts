@@ -8,7 +8,7 @@ import {
   type AudioQualityPreference,
   type ThemePreference
 } from '@domain/entities'
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 interface UpdateUserPreferencesInput {
   profileId: string
@@ -58,7 +58,7 @@ export class UpdateUserPreferencesUseCase extends UseCase<
     for (const event of user.pullEvents()) {
       await this.events.emit(
         event.eventName as keyof typeof UserEvent,
-        event.toPrimitive()
+        event.toJSON()
       )
     }
   }

@@ -1,23 +1,9 @@
-import { ObjectPrimitive } from '@types'
-
 /**
- * Maps raw event payloads to domain event primitives.
+ * Subject-to-payload event contract used across services.
  *
- * @example
- * class OrderEventMap extends EventMap<'Order'> {
- *   mapEvents(events: ObjectPrimitive<'Order'>[]) {
- *     return events.map(e => ({ ...e, eventVersion: 1 }))
- *   }
- * }
+ * Historical service code treats `EventMap` as a plain indexable interface,
+ * so the kernel keeps that contract instead of forcing mapper classes.
  */
-export abstract class EventMap<EventDomain> {
-  /**
-   * Maps raw events to the expected primitive shape.
-   *
-   * @param events - Raw event payloads to map
-   * @returns Mapped event primitives
-   */
-  abstract mapEvents(
-    events: ObjectPrimitive<EventDomain>[]
-  ): ObjectPrimitive<EventDomain>[]
+export interface EventMap {
+  [eventName: string]: Record<string, unknown>
 }

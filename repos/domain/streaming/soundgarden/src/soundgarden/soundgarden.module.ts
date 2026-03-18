@@ -7,25 +7,23 @@ import {
   FileValidatorPort,
   ObjectStoragePort
 } from '@domain/ports'
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
 
 import { trackEventBusProvider } from '@infra/event-bus'
 import { FileStorageAdapter } from '@infra/file-storage.adapter'
 import { FileValidatorAdapter } from '@infra/file-validator.adapter'
+import { NatsModule } from '@infra/nats/nats.module'
 import { MinioStorageAdapter } from '@infra/object-storage/minio-storage.adapter'
 import { uploadConfigProviders } from '@infra/upload-config.provider'
 import { UploadCleanupService } from '@infra/cleanup/upload-cleanup.service'
 import { UploadController } from '@interface/http'
 
 @Module({
-  imports: [ScheduleModule.forRoot()],
+  imports: [ScheduleModule.forRoot(), NatsModule],
   controllers: [UploadController],
   providers: [
     UploadTrackUseCase,
     ...uploadConfigProviders,
-    natsConnectionProvider,
     trackEventBusProvider,
-    NatsLifecycleService,
     UploadCleanupService,
     {
       provide: FileValidatorPort,

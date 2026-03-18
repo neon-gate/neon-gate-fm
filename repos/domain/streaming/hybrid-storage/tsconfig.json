@@ -12,7 +12,12 @@
       "@application/*": ["./src/hybrid-storage/application/*"],
       "@domain/*": ["./src/hybrid-storage/domain/*"],
       "@infra/*": ["./src/hybrid-storage/infra/*"],
-      "@interface/*": ["./src/hybrid-storage/interface/*"]
+      "@interface/*": ["./src/hybrid-storage/interface/*"],
+      "@pack/environment": ["../../packages/environment/dist"],
+      "@pack/event-inventory": ["../../packages/event-inventory/dist"],
+      "@pack/kernel": ["../../packages/kernel/dist"],
+      "@pack/nats-broker-messaging": ["../../packages/nats-broker-messaging/dist"],
+      "@pack/patterns": ["../../packages/patterns/dist"]
     },
     "strict": true,
     "esModuleInterop": true,

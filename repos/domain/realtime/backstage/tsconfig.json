@@ -12,7 +12,12 @@
       "@application/*": ["./src/backstage/application/*"],
       "@domain/*": ["./src/backstage/domain/*"],
       "@infra/*": ["./src/backstage/infra/*"],
-      "@interface/*": ["./src/backstage/interface/*"]
+      "@interface/*": ["./src/backstage/interface/*"],
+      "@pack/environment": ["../../packages/environment/dist"],
+      "@pack/event-inventory": ["../../packages/event-inventory/dist"],
+      "@pack/kernel": ["../../packages/kernel/dist"],
+      "@pack/nats-broker-messaging": ["../../packages/nats-broker-messaging/dist"],
+      "@pack/patterns": ["../../packages/patterns/dist"]
     },
     "strict": true,
     "esModuleInterop": true,

@@ -9,7 +9,12 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@pack/kernel": ["../kernel/dist"],
+      "@pack/event-inventory": ["../event-inventory/dist"]
+    }
   },
   "include": ["src"]
 }

@@ -5,7 +5,7 @@ import * as path from 'path'
 import type { HLSPackage } from '@domain/entities/hls-package.entity'
 import { HybridStorageEventBusPort, StoragePort } from '@domain/ports'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 @Injectable()
 export class PersistHLSPackageUseCase {
   constructor(

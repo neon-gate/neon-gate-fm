@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
-
 import {
   CompleteOnboardingUseCase,
   CreateUserProfileUseCase,
@@ -17,18 +15,20 @@ import {
   UserSchemaDefinition,
   UserSchemaName
 } from '@infra/mongoose'
+import { NatsModule } from '@infra/nats/nats.module'
 import { slimShadyEventBusProvider } from '@infra/event-bus'
 import { UserSignedUpConsumer } from '@interface/consumers/user-signed-up.consumer'
-import { UserProfileController } from '@interface/http'
+import { HealthController, UserProfileController } from '@interface/http'
 
 @Module({
   imports: [
+    NatsModule,
     MongooseModule.forFeature([
       { name: UserSchemaName, schema: UserSchemaDefinition }
     ])
   ],
 
-  controllers: [UserProfileController],
+  controllers: [HealthController, UserProfileController],
 
   providers: [
     CreateUserProfileUseCase,
@@ -38,9 +38,7 @@ import { UserProfileController } from '@interface/http'
     UpdateUserPreferencesUseCase,
     CompleteOnboardingUseCase,
     UserSignedUpConsumer,
-    natsConnectionProvider,
     slimShadyEventBusProvider,
-    NatsLifecycleService,
     {
       provide: UserPort,
       useClass: MongooseUserAdapter

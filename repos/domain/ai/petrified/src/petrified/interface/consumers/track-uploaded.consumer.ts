@@ -3,11 +3,11 @@ import { NatsQueueConsumerAdapter } from '@pack/nats-broker-messaging'
 import type { NatsConnection } from 'nats'
 
 import { NatsConnectionToken } from '@pack/nats-broker-messaging'
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment'
 import { GenerateFingerprintUseCase } from 'src/petrified/application/use-cases/generate-fingerprint.use-case'
 import type { TrackUploadedEventMap } from 'src/petrified/domain/events/petrified-event.map'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 /// Subscribes to `track.uploaded` and delegates to GenerateFingerprintUseCase.
 @Injectable()
 export class TrackUploadedConsumer implements OnApplicationBootstrap {

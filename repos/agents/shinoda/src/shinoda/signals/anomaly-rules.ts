@@ -1,6 +1,6 @@
 import { signalBus } from './signal-bus'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 const EXPECTED_SEQUENCE: string[] = [
   TrackEvent.Uploaded,
   TrackEvent.PetrifiedGenerated,

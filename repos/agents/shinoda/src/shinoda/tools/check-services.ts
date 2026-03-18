@@ -27,8 +27,18 @@ const SERVICE_REGISTRY: ServiceEntry[] = [
     healthPath: '/health'
   },
   {
-    name: 'Shinod AI',
-    url: requireEnv('SHINOD_AI_URL'),
+    name: 'Petrified',
+    url: requireEnv('PETRIFIED_URL'),
+    healthPath: '/health'
+  },
+  {
+    name: 'Fort Minor',
+    url: requireEnv('FORT_MINOR_URL'),
+    healthPath: '/health'
+  },
+  {
+    name: 'Stereo',
+    url: requireEnv('STEREO_URL'),
     healthPath: '/health'
   },
   {

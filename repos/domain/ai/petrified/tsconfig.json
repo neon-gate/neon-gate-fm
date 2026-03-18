@@ -12,7 +12,12 @@
       "@application/*": ["src/petrified/application/*"],
       "@domain/*": ["src/petrified/domain/*"],
       "@infra/*": ["src/petrified/infra/*"],
-      "@interface/*": ["src/petrified/interface/*"]
+      "@interface/*": ["src/petrified/interface/*"],
+      "@pack/environment": ["../../packages/environment/dist"],
+      "@pack/event-inventory": ["../../packages/event-inventory/dist"],
+      "@pack/kernel": ["../../packages/kernel/dist"],
+      "@pack/nats-broker-messaging": ["../../packages/nats-broker-messaging/dist"],
+      "@pack/patterns": ["../../packages/patterns/dist"]
     },
     "strict": true,
     "esModuleInterop": true,

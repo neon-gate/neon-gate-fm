@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import type Redis from 'ioredis'
 
-import { REDIS_CLIENT } from '@env/core'
+import { REDIS_CLIENT } from '@infra/redis/redis.module'
 import { IdempotencyPort } from 'src/petrified/application/ports/idempotency.port'
 
 const IDEMPOTENCY_TTL_SECONDS = 60 * 60 * 24 * 30 // 30 days

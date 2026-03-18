@@ -2,11 +2,11 @@ import type { NatsConnection } from 'nats'
 import { Inject, Injectable, OnApplicationBootstrap } from '@nestjs/common'
 
 import { NatsQueueConsumerAdapter, NatsConnectionToken } from '@pack/nats-broker-messaging'
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment'
 import { TranscribeTrackUseCase } from '@application/use-cases'
-import type { PetrifiedGeneratedEventMap } from '@fort-minor/domain/events/fort-minor-event.map'
+import type { PetrifiedGeneratedEventMap } from '@domain/events/fort-minor-event.map'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 /// Subscribes to `track.petrified.generated` and triggers audio transcription.
 @Injectable()
 export class PetrifiedGeneratedConsumer implements OnApplicationBootstrap {

@@ -12,7 +12,12 @@
       "@application/*": ["src/stereo/application/*"],
       "@domain/*": ["src/stereo/domain/*"],
       "@infra/*": ["src/stereo/infra/*"],
-      "@interface/*": ["src/stereo/interface/*"]
+      "@interface/*": ["src/stereo/interface/*"],
+      "@pack/environment": ["../../packages/environment/dist"],
+      "@pack/event-inventory": ["../../packages/event-inventory/dist"],
+      "@pack/kernel": ["../../packages/kernel/dist"],
+      "@pack/nats-broker-messaging": ["../../packages/nats-broker-messaging/dist"],
+      "@pack/patterns": ["../../packages/patterns/dist"]
     },
     "strict": true,
     "esModuleInterop": true,

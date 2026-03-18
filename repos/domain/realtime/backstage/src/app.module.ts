@@ -1,17 +1,9 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
-
-import { requireStringEnv } from '@env/lib'
+import { MongodbModule } from './backstage/infra/persistence/mongodb.module'
 
 import { BackstageModule } from './backstage/backstage.module'
 
-const MONGO_URI = requireStringEnv('MONGO_URI')
-const MONGO_DB_NAME = requireStringEnv('MONGO_DB_NAME')
-
 @Module({
-  imports: [
-    MongooseModule.forRoot(MONGO_URI, { dbName: MONGO_DB_NAME }),
-    BackstageModule
-  ]
+  imports: [MongodbModule, BackstageModule]
 })
 export class AppModule {}

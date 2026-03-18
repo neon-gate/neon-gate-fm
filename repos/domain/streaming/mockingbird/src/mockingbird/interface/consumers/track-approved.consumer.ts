@@ -4,7 +4,7 @@ import { MockingbirdEventBusPort } from '@domain/ports'
 import { TranscodeTrackUseCase } from '@application/use-cases'
 import type { MockingbirdEventMap } from '@domain/events'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 @Injectable()
 export class TrackApprovedConsumer implements OnModuleInit {
   private unsubscribe: (() => void) | null = null
@@ -17,7 +17,8 @@ export class TrackApprovedConsumer implements OnModuleInit {
   onModuleInit(): void {
     this.unsubscribe = this.eventBus.on(
       TrackEvent.Approved,
-      async (payload: MockingbirdEventMap[TrackEvent.Approved]) => {
+      async (envelope) => {
+        const payload: MockingbirdEventMap[TrackEvent.Approved] = envelope.payload
         const trackId = payload.trackId
         console.log('[Mockingbird] Processing track.approved', {
           trackId,

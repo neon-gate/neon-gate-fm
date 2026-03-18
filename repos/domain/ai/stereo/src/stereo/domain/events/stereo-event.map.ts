@@ -1,6 +1,6 @@
 import type { EventMap } from '@pack/kernel'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 /// Events consumed by the stereo module (inbound).
 export interface StereoInboundEventMap extends EventMap {
   [TrackEvent.PetrifiedGenerated]: {

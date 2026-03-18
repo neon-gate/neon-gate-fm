@@ -12,7 +12,12 @@
       "@application/*": ["./src/fort-minor/application/*"],
       "@domain/*": ["./src/fort-minor/domain/*"],
       "@infra/*": ["./src/fort-minor/infra/*"],
-      "@interface/*": ["./src/fort-minor/interface/*"]
+      "@interface/*": ["./src/fort-minor/interface/*"],
+      "@pack/environment": ["../../packages/environment/dist"],
+      "@pack/event-inventory": ["../../packages/event-inventory/dist"],
+      "@pack/kernel": ["../../packages/kernel/dist"],
+      "@pack/nats-broker-messaging": ["../../packages/nats-broker-messaging/dist"],
+      "@pack/patterns": ["../../packages/patterns/dist"]
     },
     "strict": true,
     "esModuleInterop": true,

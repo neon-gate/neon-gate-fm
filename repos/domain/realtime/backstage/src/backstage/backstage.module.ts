@@ -11,8 +11,8 @@ import {
 } from '@application/use-cases'
 import { EventStreamPortToken } from '@application/ports/event-stream.port'
 import { PipelineRepositoryPort } from '@domain/repositories'
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
 import { MockEventGeneratorService } from '@infra/mock/mock-event-generator.service'
+import { NatsModule } from '@infra/nats/nats.module'
 import {
   MongoPipelineAdapter,
   TrackPipelineDocument,
@@ -25,6 +25,7 @@ import { PipelineGateway } from '@interface/gateways/pipeline.gateway'
 
 @Module({
   imports: [
+    NatsModule,
     MongooseModule.forFeature([
       {
         name: TrackPipelineDocument.name,
@@ -43,8 +44,6 @@ import { PipelineGateway } from '@interface/gateways/pipeline.gateway'
     RecordPipelineEventUseCase,
     MockEventGeneratorService,
     PipelineEventConsumer,
-    natsConnectionProvider,
-    NatsLifecycleService,
     {
       provide: EventStreamPortToken,
       useFactory: (gateway: PipelineGateway) =>

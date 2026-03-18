@@ -7,7 +7,11 @@
     "target": "ES2022",
     "strict": true,
     "experimentalDecorators": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@pack/kernel": ["../kernel/dist"]
+    }
   },
   "include": ["src"]
 }

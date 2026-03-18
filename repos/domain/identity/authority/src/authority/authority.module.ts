@@ -13,8 +13,7 @@ import {
   SignupUseCase
 } from '@application/use-cases'
 import { GoogleOAuthPort, SessionPort, UserPort } from '@domain/ports'
-import { requireStringEnv } from '@env/lib'
-import { natsConnectionProvider, NatsLifecycleService } from '@pack/nats-broker-messaging'
+import { requireStringEnv } from '@pack/environment'
 
 import { DbConfigFlag } from '@infra/db'
 import {
@@ -23,6 +22,7 @@ import {
   SessionSchemaDefinition,
   UserSchemaDefinition
 } from '@infra/mongoose'
+import { NatsModule } from '@infra/nats/nats.module'
 import { AccessTokenGuard, AuthorityController } from '@interface/http'
 import { AuthorityTokenService } from '@application/services/authority-token.service'
 import { authorityEventBusProvider } from '@infra/event-bus'
@@ -33,6 +33,7 @@ import { UserProfileCreatedConsumer } from '@interface/consumers/user-profile-cr
 @Module({
   imports: [
     ConfigModule,
+    NatsModule,
 
     MongooseModule.forFeature([
       { name: 'User', schema: UserSchemaDefinition },
@@ -62,9 +63,7 @@ import { UserProfileCreatedConsumer } from '@interface/consumers/user-profile-cr
     AccessTokenGuard,
     UserProfileCreatedConsumer,
     AuthorityTokenService,
-    natsConnectionProvider,
     authorityEventBusProvider,
-    NatsLifecycleService,
 
     {
       provide: UserPort,

@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 
-import { requireNumberEnv } from '@env/lib'
+import { requireNumberEnv } from '@pack/environment'
 import { AppModule } from './petrified.module'
 
 async function bootstrap() {

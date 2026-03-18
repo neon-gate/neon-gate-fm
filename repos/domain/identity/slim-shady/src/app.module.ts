@@ -1,18 +1,10 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 
-import { requireStringEnv } from '@env/lib'
-import { DbConfigFlag } from '@infra/db'
+import { MongodbModule } from '@infra/persistence/mongodb.module'
 
 import { SlimShadyModule } from './slim-shady/slim-shady.module'
 
 @Module({
-  imports: [
-    MongooseModule.forRoot(requireStringEnv(DbConfigFlag.MongoUri), {
-      dbName: requireStringEnv(DbConfigFlag.MongoDbName)
-    }),
-
-    SlimShadyModule
-  ]
+  imports: [MongodbModule, SlimShadyModule]
 })
 export class AppModule {}

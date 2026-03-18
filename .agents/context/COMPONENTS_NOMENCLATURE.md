@@ -112,7 +112,7 @@ They must not use musical references because they are infrastructure-level utili
 | Package        | Scope                     | Description                                                                                     |
 | -------------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
 | `@pack/kernel`    | All microservices, agents  | DDD primitives: Entity, ValueObject, EventBus, UseCase, AggregateRoot, EventMap. Framework-agnostic domain abstractions. |
-| `@pack/nats-broker-messaging` | Microservices, Shinod AI  | NATS adapters for event-driven messaging: publish/subscribe and queue consumer patterns.       |
+| `@pack/nats-broker-messaging` | Microservices, agents  | NATS adapters for event-driven messaging: publish/subscribe and queue consumer patterns.       |
 | `@pack/cache`     | Microservices             | Redis cache adapter and `RedisLike` port for session and idempotency use cases.                 |
 | `@pack/patterns`  | Microservices (e.g. Authority) | Resilience patterns: CircuitBreaker, CircuitBreakerState, timeout handling.              |
 | `@pack/neon-tokens`      | Frontend (pulse app)      | Design system: PostCSS-built CSS, color tokens for UI theming.                                  |
@@ -167,13 +167,15 @@ Each context groups microservices responsible for a specific domain capability.
 domain/
  ├── identity/
  │   ├── authority
- │   └── slim-shady (planned)
+ │   └── slim-shady
  ├── ai/
- │   └── shinod-ai
+ │   ├── petrified
+ │   ├── fort-minor
+ │   └── stereo
  ├── streaming/
  │   ├── soundgarden
  │   ├── mockingbird
- │   └── hybrid-storage (planned)
+ │   └── hybrid-storage
  └── realtime/
      └── backstage
 ```
@@ -183,12 +185,14 @@ domain/
 | Microservice        | Path                            | Responsibility                                                          | Platform Role                                        |
 | ------------------- | ------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
 | Authority           | domain/identity/authority       | Authentication, signup, login, OAuth, token/session management          | Identity and access control for the entire platform   |
-| Slim Shady (planned)| domain/identity/slim-shady      | TBD                                                                     | Planned identity microservice                         |
+| Slim Shady | domain/identity/slim-shady      | User-profile bounded context                                           | Identity profile ownership                            |
 | Soundgarden         | domain/streaming/soundgarden     | Accept uploads, validate files, generate Track IDs, emit ingestion events| Entry point of the ingestion pipeline                 |
-| Shinod AI           | domain/ai/shinod-ai             | AI cognition layer for fingerprinting, transcription, and reasoning    | Validates tracks before streaming                    |
+| Petrified           | domain/ai/petrified             | Fingerprinting and duplicate detection                                 | Starts the AI cognition flow                         |
+| Fort Minor          | domain/ai/fort-minor            | Audio transcription                                                    | Produces transcription artifacts                     |
+| Stereo              | domain/ai/stereo                | AI reasoning and approval                                              | Final approval or rejection decision                 |
 | Mockingbird         | domain/streaming/mockingbird     | Transcoding service converting uploaded audio into streaming formats    | Prepares tracks for delivery                          |
 | Backstage           | domain/realtime/backstage       | Event subscription, pipeline monitoring, lifecycle history              | Observability and monitoring                          |
-| Hybrid Storage (planned) | domain/streaming/hybrid-storage | Store uploaded and transcoded HLS playlist segments; deliver segments directly to players; expose URLs for HLS consumption | Hybrid store-and-deliver layer for streaming media |
+| Hybrid Storage | domain/streaming/hybrid-storage | Store transcoded HLS playlist segments and expose durable references | HLS persistence layer |
 
 ### Hybrid Storage (Planned)
 
@@ -203,36 +207,11 @@ Microservices and AI modules use music-inspired names. This section explains the
 | Name       | Reference | Why it fits |
 | ---------- | --------- | ----------- |
 | **Mockingbird** | Eminem song; bird that mimics sounds | Transcoding mimics and transforms audio into different formats (MP3, HLS segments). The service "re-sings" the original in new formats. |
-| **Slim Shady** | Eminem's alter ego | Planned identity microservice. References the artist's persona; naming TBD. |
+| **Slim Shady** | Eminem's alter ego | User-profile microservice; a distinct identity bounded context persona. |
 | **Soundgarden** | Band name; literal: garden of sounds | A place where you can deposit audio files—an ingestion garden for uploaded tracks. |
-| **Shinod AI** | Mike Shinoda (Linkin Park frontman) | Beyond vocals, Shinoda orchestrates LP's production. The AI microservice and agent orchestrate reasoning and coordination across the platform. |
-| **Petrified** | Fort Minor song | Shinod AI module for fingerprinting. Name references Mike Shinoda's Fort Minor project; module "freezes" audio identity for comparison. |
-| **Fort Minor** | Mike Shinoda's side project / outro album | Shinod AI module for transcription. References the artist's solo work; transcription extracts the "voice" from audio. |
-| **Stereo** | Fort Minor song | Shinod AI module for AI reasoning (approve/reject). References dual-channel thinking: combining fingerprint and transcription to decide. |
-
-**Note:** Petrified, Fort Minor, and Stereo are currently internal modules within Shinod AI. They may be split into separate microservices in the future.
-
----
-
-## Shinod AI
-
-```
-domain/ai/shinod-ai
-```
-
-Shinod AI is the AI cognition system responsible for validating uploaded tracks before they enter the streaming pipeline.
-
-It contains three internal modules, each referencing Mike Shinoda's Fort Minor project and song titles (Petrified, Fort Minor, Stereo). These may be split into separate microservices in the future.
-
-### AI Modules
-
-| Module   | Consumes                                  | Emits                                                                   | Responsibility                                                |
-| -------- | ------------------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Petrified | track.uploaded                             | track.petrified.generated, track.petrified.song.unknown, track.duplicate.detected, track.petrified.failed | Generate Chromaprint fingerprint and detect duplicates        |
-| Fort Minor | track.petrified.generated                  | track.fort-minor.started, track.fort-minor.completed, track.fort-minor.failed | Transcribe audio and produce structured transcription data    |
-| Stereo   | track.petrified.generated, track.fort-minor.completed | track.stereo.started, track.approved, track.rejected, track.stereo.failed | AI reasoning and final approval or rejection                  |
-
-### AI Processing Flow
+| **Petrified** | Fort Minor song | Fingerprinting microservice. Name references Mike Shinoda's Fort Minor project; the service "freezes" audio identity for comparison. |
+| **Fort Minor** | Mike Shinoda's side project / outro album | Transcription microservice. References the artist's solo work; transcription extracts the "voice" from audio. |
+| **Stereo** | Fort Minor song | AI reasoning microservice. References dual-channel thinking: combining fingerprint and transcription to decide. |
 
 The ingestion pipeline works as follows:
 

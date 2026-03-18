@@ -2,14 +2,14 @@ import { Inject, Injectable } from '@nestjs/common'
 
 import { UseCase } from '@pack/kernel'
 
-import { AudioStoragePort } from '@env/core'
+import { AudioStoragePort } from '@domain/ports/audio-storage.port'
 import { AudioHashPort } from 'src/petrified/application/ports/audio-hash.port'
 import { PetrifiedEventBusPort } from 'src/petrified/application/ports/petrified-event-bus.port'
 import {
   PetrifiedGeneratorPort,
   type FingerprintResult
 } from 'src/petrified/application/ports/petrified-generator.port'
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 import { IdempotencyPort } from 'src/petrified/application/ports/idempotency.port'
 
 export interface GenerateFingerprintInput {

@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { MongooseModule } from '@nestjs/mongoose'
 
-import { requireStringEnv } from '@env/lib'
-import { DbConfigFlag } from '@infra/db'
+import { MongodbModule } from '@infra/persistence/mongodb.module'
 
 import { AuthorityModule } from './authority/authority.module'
 
@@ -12,11 +10,7 @@ import { AuthorityModule } from './authority/authority.module'
     ConfigModule.forRoot({
       isGlobal: true
     }),
-
-    MongooseModule.forRoot(requireStringEnv(DbConfigFlag.MongoUri), {
-      dbName: requireStringEnv(DbConfigFlag.MongoDbName)
-    }),
-
+    MongodbModule,
     AuthorityModule
   ]
 })
