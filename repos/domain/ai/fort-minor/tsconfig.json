@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2022",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@fort-minor/application/*": ["./src/modules/fort-minor/application/*"],
+      "@fort-minor/domain/*": ["./src/modules/fort-minor/domain/*"],
+      "@fort-minor/infra/*": ["./src/modules/fort-minor/infra/*"],
+      "@fort-minor/interface/*": ["./src/modules/fort-minor/interface/*"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

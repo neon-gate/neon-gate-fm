@@ -1,0 +1,36 @@
+{
+  "name": "@env/core",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "dependencies": {
+    "@env/lib": "workspace:*",
+    "@pack/event-bus": "workspace:*",
+    "@aws-sdk/client-s3": "^3.787.0",
+    "ioredis": "^5.6.1",
+    "mongoose": "^8.15.1"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.1.13",
+    "@nestjs/core": "^11.1.13",
+    "@nestjs/mongoose": "^11.0.3"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20"
+  }
+}
