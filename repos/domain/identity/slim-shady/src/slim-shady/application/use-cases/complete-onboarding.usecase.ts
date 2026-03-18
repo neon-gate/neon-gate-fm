@@ -5,7 +5,7 @@ import { UseCase } from '@pack/kernel'
 
 import { SlimShadyEventBusPort, UserPort } from '@domain/ports'
 
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 interface CompleteOnboardingInput {
   profileId: string

@@ -1,7 +1,7 @@
 import { DomainEvent } from '@pack/kernel'
 import type { AuthorityProvider } from '@domain/value-objects'
 
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 export interface UserLoggedInPayload {
   userId: string

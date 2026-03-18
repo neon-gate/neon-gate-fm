@@ -20,6 +20,7 @@ This file is the source-of-truth for re-alignment planning across microservices.
 - lowercase dot-delimited subjects
 - pipeline events mostly follow `track.<stage>.<state>`
 - identity events follow `authority.user.*` and `user.profile.*`
+- all subjects are defined as enums in `@pack/event-inventory`
 
 ## Known Inconsistencies
 
@@ -63,7 +64,7 @@ Every workflow event should include:
 
 ## Streaming + AI Event Pipeline
 
-### End-to-End Intended Sequence
+### End-to-End Sequence
 
 1. Soundgarden emits upload lifecycle events
 2. `track.uploaded` starts AI flow in Petrified
@@ -71,7 +72,7 @@ Every workflow event should include:
 4. Fort Minor transcribes and emits completion
 5. Stereo waits for both signals, emits approved/rejected
 6. Approved tracks move to Mockingbird transcoding
-7. HLS persistence is expected after transcoding
+7. HLS persistence completes the pipeline
 
 ### Subjects by Stage
 
@@ -96,16 +97,35 @@ Every workflow event should include:
 | Transcode | `track.transcoding.started` | Mockingbird | Backstage |
 | Transcode | `track.transcoding.completed` | Mockingbird | Backstage |
 | Transcode | `track.transcoding.failed` | Mockingbird | Backstage |
-| HLS | `track.hls.generated` | Mockingbird, mock mode in Hybrid Storage | Hybrid Storage, Backstage |
+| HLS | `track.hls.generated` | Mockingbird | Hybrid Storage, Backstage |
 | HLS | `track.hls.stored` | Hybrid Storage | Backstage |
 
 ---
 
-## Critical Pipeline Gaps
+## Pipeline Flow Diagram
 
-## 1) Storage Key Drift
+```
+Soundgarden (track.uploaded)
+    │
+    ▼
+Petrified (track.petrified.generated)
+    │
+    ├──▶ Fort Minor (track.fort-minor.completed)
+    │
+    └──▶ Stereo (waits for both signals)
+              │
+         ┌────┴────┐
+         ▼         ▼
+    track.approved  track.rejected
+         │
+         ▼
+    Mockingbird (track.hls.generated)
+         │
+         ▼
+    Hybrid Storage (track.hls.stored) ── pipeline complete ✓
+```
 
-Bucket/key conventions are still transitional (`tracks` vs `uploads`), increasing risk of broken downstream artifact resolution.
+Backstage subscribes to `track.>` and observes the entire pipeline.
 
 ---
 
@@ -113,10 +133,11 @@ Bucket/key conventions are still transitional (`tracks` vs `uploads`), increasin
 
 | Stage | Artifact | Current State | Target Contract |
 | --- | --- | --- | --- |
-| Soundgarden upload | original audio object | mixed bucket naming | canonical upload bucket + key schema |
-| Petrified output | fingerprint/audio hash + refs | emitted with transitional refs | explicit normalized storage refs |
-| Mockingbird output | `128.mp3`, `320.mp3` variants | emitted, but key normalization drift possible | variant keys must equal durable object keys |
-| Hybrid Storage | HLS package | real runtime bridge exists, mock flow still exists | producer emits `track.hls.generated` with complete package contract |
+| Soundgarden upload | original audio object | `soundgarden-minio:uploads` | canonical upload bucket + key schema |
+| Petrified output | fingerprint/audio hash + refs | `petrified-minio:fingerprints` | explicit normalized storage refs |
+| Fort Minor output | transcription data | `fort-minor-minio:transcripts` | transcription + segment refs |
+| Mockingbird output | HLS segments + playlists | `mockingbird-minio:transcoded` | variant keys must equal durable object keys |
+| Hybrid Storage | HLS package persistence | `hybrid-storage-minio:transcoded` | producer emits `track.hls.generated` with complete package contract |
 
 ---
 
@@ -128,6 +149,16 @@ Backstage consumes `track.>` and projects events to:
 - Socket.IO `pipeline.event`
 
 Backstage is an observer/projection service and should not become workflow owner.
+
+---
+
+## Agent Health Monitoring
+
+Shinoda agent monitors all services via `GET /health` and provides:
+
+- **Health Pipeline**: parallel health checks → `SERVICE_UNHEALTHY` signals
+- **Debug Pipeline**: diagnose stuck tracks → `DIAGNOSIS_READY` signals
+- Optional MCP forwarding to external observability sinks
 
 ---
 

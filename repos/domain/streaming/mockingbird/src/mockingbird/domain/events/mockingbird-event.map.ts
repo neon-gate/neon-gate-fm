@@ -1,6 +1,6 @@
 import type { EventMap } from '@pack/kernel'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export interface MockingbirdEventMap extends EventMap {
   [TrackEvent.Approved]: {
     trackId: string

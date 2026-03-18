@@ -6,6 +6,10 @@ import { NatsConnectionToken, NoopEventBusAdapter } from '@pack/nats-broker-mess
 import type { FortMinorEventMap } from '@fort-minor/domain/events/fort-minor-event.map'
 import { FortMinorEventBusPort } from '@fort-minor/application/ports/fort-minor-event-bus.port'
 
+/**
+ * NestJS provider that wires `FortMinorEventBusPort` to the NATS transport.
+ * Falls back to a no-op adapter when no NATS connection is available.
+ */
 export const fortMinorEventBusProvider: Provider = {
   provide: FortMinorEventBusPort,
   useFactory: (connection: NatsConnection | null) => {

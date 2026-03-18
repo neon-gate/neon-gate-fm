@@ -3,12 +3,12 @@ import { NatsQueueConsumerAdapter } from '@pack/nats-broker-messaging'
 import type { NatsConnection } from 'nats'
 
 import { NatsConnectionToken } from '@pack/nats-broker-messaging'
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment-orchestration'
 import { AggregateFingerprintSignalUseCase } from 'src/stereo/application/use-cases/aggregate-fingerprint-signal.use-case'
 import { RunStereoUseCase } from 'src/stereo/application/use-cases/run-stereo.use-case'
 import type { StereoInboundEventMap } from 'src/stereo/domain/events/stereo-event.map'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 /// Subscribes to `track.petrified.generated`, stores the fingerprint signal,
 /// and checks if stereo can now start.
 @Injectable()

@@ -19,7 +19,7 @@ import {
 } from '@infra/mongoose'
 import { slimShadyEventBusProvider } from '@infra/event-bus'
 import { UserSignedUpConsumer } from '@interface/consumers/user-signed-up.consumer'
-import { UserProfileController } from '@interface/http'
+import { UserProfileController, HealthController } from '@interface/http'
 
 @Module({
   imports: [
@@ -28,7 +28,7 @@ import { UserProfileController } from '@interface/http'
     ])
   ],
 
-  controllers: [UserProfileController],
+  controllers: [UserProfileController, HealthController],
 
   providers: [
     CreateUserProfileUseCase,

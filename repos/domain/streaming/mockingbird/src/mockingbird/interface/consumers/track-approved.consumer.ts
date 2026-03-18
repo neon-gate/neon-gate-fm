@@ -4,7 +4,7 @@ import { MockingbirdEventBusPort } from '@domain/ports'
 import { TranscodeTrackUseCase } from '@application/use-cases'
 import type { MockingbirdEventMap } from '@domain/events'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 @Injectable()
 export class TrackApprovedConsumer implements OnModuleInit {
   private unsubscribe: (() => void) | null = null

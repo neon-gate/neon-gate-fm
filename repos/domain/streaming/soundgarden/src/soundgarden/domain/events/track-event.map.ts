@@ -1,6 +1,6 @@
 import type { EventMap } from '@pack/kernel'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export interface TrackEventMap extends EventMap {
   [TrackEvent.UploadReceived]: {
     trackId: string

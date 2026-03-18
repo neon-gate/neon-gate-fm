@@ -8,7 +8,7 @@ import { CircuitBreaker } from '@pack/patterns'
 
 import { GoogleOAuthPort, type GoogleProfile } from '@domain/ports'
 import { AuthorityProvider } from '@domain/value-objects'
-import { requireStringEnv } from '@env/lib'
+import { requireStringEnv } from '@pack/environment-orchestration'
 
 import { OAuthConfigFlag } from './oauth-config-flag.enum'
 

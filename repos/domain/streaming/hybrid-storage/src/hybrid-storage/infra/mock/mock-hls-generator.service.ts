@@ -4,7 +4,7 @@ import * as path from 'path'
 
 import { HybridStorageEventBusPort } from '@domain/ports'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 const MOCK_BITRATES = [128, 320]
 const MOCK_SEGMENT_COUNT = 3
 

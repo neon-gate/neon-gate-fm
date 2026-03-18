@@ -8,7 +8,7 @@ import {
   StoragePort,
   TranscoderPort
 } from '@domain/ports'
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 
 @Injectable()
 export class TranscodeTrackUseCase extends UseCase<

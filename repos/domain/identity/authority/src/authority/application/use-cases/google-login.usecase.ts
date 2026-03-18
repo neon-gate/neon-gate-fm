@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException
 } from '@nestjs/common'
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 import { UseCase } from '@pack/kernel'
 

@@ -21,6 +21,7 @@ Events are the primary mechanism for cross-module communication. This document d
 - [11. NATS Broker Flow](#11-nats-broker-flow)
 - [12. Optional UI Metadata](#12-optional-ui-metadata)
 - [13. Golden Rule](#13-golden-rule)
+- [14. Event Inventory](#14-event-inventory)
 
 ---
 
@@ -36,45 +37,37 @@ Events represent **facts that already happened**. They are emitted only when som
 
 **Examples:**
 
-- `entity.upload.received`
-- `entity.upload.validated`
-- `entity.storage.stored`
-- `entity.processing.completed`
-- `auth.user.signed_up`
+- `track.upload.received`
+- `track.upload.validated`
+- `track.petrified.generated`
+- `track.fort-minor.completed`
+- `authority.user.signed_up`
 
 ### Rules
 
-**Rule 1:** The final word must be past tense. Events describe something that has already occurred.
+**Rule 1:** The final word must be past tense.
 
 | Correct | Wrong |
 |---------|-------|
-| `entity.upload.received` | `entity.upload.receive` |
-| `entity.upload.validated` | `entity.validate` |
-| `entity.processing.completed` | `entity.processing.complete` |
-| `entity.processing.started` | `entity.processing.start` |
+| `track.upload.received` | `track.upload.receive` |
+| `track.upload.validated` | `track.validate` |
+| `track.fort-minor.completed` | `track.fort-minor.complete` |
 
-**Rule 2:** Never emit ambiguous final states.
-
-Avoid `entity.ready` because it does not describe what happened. Prefer `entity.stored` or `entity.processing.completed`.
+**Rule 2:** Never emit ambiguous final states. Avoid `track.ready` because it does not describe what happened. Prefer `track.hls.stored` or `track.fort-minor.completed`.
 
 **Rule 3:** Event structure should follow `process → state`.
 
-| Correct | Wrong |
-|---------|-------|
-| `entity.upload.received` | `entity.received.upload` |
-| `entity.upload.validated` | |
-| `entity.upload.stored` | |
-
 **Rule 4:** Use `failed` for errors (past tense).
 
-- `entity.upload.failed`
-- `entity.processing.failed`
-- `entity.storage.failed`
+- `track.upload.failed`
+- `track.petrified.failed`
+- `track.fort-minor.failed`
+- `track.stereo.failed`
 
 **Rule 5:** Use `started` / `completed` for long async tasks (both past participles).
 
-- `entity.processing.started`
-- `entity.processing.completed`
+- `track.fort-minor.started`
+- `track.fort-minor.completed`
 
 ---
 
@@ -93,39 +86,6 @@ Every module defines its own payloads, but these conventions improve consistency
 | `reason` | `string` | For decision events (approved/rejected). Explains the outcome. |
 | `storage` | `{ bucket: string; key: string }` | When the event references stored artifacts. |
 
-### Example Payloads
-
-**Success (completed):**
-
-```typescript
-{
-  entityId: string
-  completedAt: string  // ISO 8601
-  // ... domain-specific fields
-}
-```
-
-**Failure:**
-
-```typescript
-{
-  entityId: string
-  errorCode: string
-  message: string
-}
-```
-
-**Decision (approved/rejected):**
-
-```typescript
-{
-  entityId: string
-  decision: 'approved' | 'rejected'
-  reason: string
-  approvedAt?: string  // or rejectedAt
-}
-```
-
 ---
 
 ## 3. Event Envelope Structure
@@ -134,9 +94,9 @@ All events must follow the same base schema:
 
 ```json
 {
-  "event": "entity.processing.completed",
+  "event": "track.fort-minor.completed",
   "version": 1,
-  "producer": "producer-id",
+  "producer": "fort-minor",
   "timestamp": "2026-03-14T18:12:21Z",
   "correlationId": "pipeline-uuid",
   "data": {}
@@ -147,7 +107,7 @@ All events must follow the same base schema:
 |-------|-------------|
 | `event` | Event name (used as broker subject) |
 | `version` | Schema version |
-| `producer` | Producer identifier (opaque; can be module name, instance id, etc.) |
+| `producer` | Producer identifier (microservice name) |
 | `timestamp` | ISO timestamp |
 | `correlationId` | Pipeline or workflow tracing id |
 | `data` | Event payload |
@@ -158,151 +118,93 @@ All events must follow the same base schema:
 
 Every pipeline or workflow must have a `correlationId` (e.g. UUID). All events in that pipeline share this value so downstream consumers can reconstruct the flow.
 
-**Example flow:**
-
-```
-entity.upload.received
-entity.ingestion.completed
-entity.analysis.completed
-entity.approval.completed
-entity.processing.completed
-entity.storage.stored
-```
-
 ---
 
 ## 5. Domain Separation
 
 Event domains must match responsibility. Use prefixes to separate concerns:
 
-| Domain Prefix | Purpose |
-|---------------|---------|
-| `entity.*` | Entity lifecycle (upload, storage, processing) |
-| `auth.*` | Authentication and session lifecycle |
+| Domain Prefix | Purpose | Producers |
+|---------------|---------|-----------|
+| `authority.*` | Authentication and session lifecycle | Authority |
+| `user.*` | User profile lifecycle | Slim Shady |
+| `track.*` | Track pipeline (upload, AI, transcode, storage) | Soundgarden, Petrified, Fort Minor, Stereo, Mockingbird, Hybrid Storage |
 
 ---
 
 ## 6. Standard Event States
-
-To keep things consistent, these states are allowed:
 
 | Lifecycle | Process | Decisions |
 |-----------|---------|-----------|
 | `received` | `started` | `approved` |
 | `validated` | `completed` | `rejected` |
 | `stored` | `failed` | |
+| `generated` | | |
 
 ---
 
 ## 7. Architecture Context
 
-The event system is built on shared packages. Kernel is the source of truth; event-bus re-exports and implements.
+The event system is built on shared packages. Kernel is the source of truth; nats-broker-messaging implements the transport.
 
 | Package | Export | Role |
 |---------|--------|------|
-| `@pack/kernel` | `EventPayload` | Base constraint (`object`) for all payloads. Recommended: `entityId`, `occurredAt`. |
-| `@pack/kernel` | `EventMap` | Type alias `Record<string, EventPayload>`. Event maps extend this. |
-| `@pack/kernel` | `EventBus` | Abstract class: `emit(event, payload)` and `on(event, handler)`. Adapters implement this contract. |
-| `@pack/kernel` | `Event` | Abstract base for domain event value objects (used with `AggregateRoot` for event sourcing). Payload extends `EventPayload`. |
-| `@pack/nats-broker-messaging` | `EventMap`, `EventBus` | Re-exports from kernel. |
-| `@pack/nats-broker-messaging` | `EventHandler` | Handler type; payload generic extends `EventPayload`. |
-| `@pack/nats-broker-messaging` | `NatsEventBusAdapter` | Concrete adapter. Implements `EventBus`. |
-| `@pack/nats-broker-messaging` | `NatsQueueConsumerAdapter` | Concrete adapter for queue-group subscriptions. |
+| `@pack/kernel` | `EventPrimitive` | Base wire envelope for all payloads |
+| `@pack/kernel` | `EventBus` | Abstract class: `emit(event, payload)` and `on(event, handler)` |
+| `@pack/event-inventory` | `AuthorityEvent`, `UserEvent`, `TrackEvent` | Canonical event subject enums |
+| `@pack/nats-broker-messaging` | `NatsPublisher`, `NatsConsumer` | Typed publisher/consumer over NATS |
+| `@pack/nats-broker-messaging` | `NatsEventBusAdapter` | Legacy adapter implementing `EventBus` |
+| `@pack/nats-broker-messaging` | `NatsQueueConsumerAdapter` | Queue-group subscription adapter |
 
-**Flow:** Modules depend on `EventBus<EventMap>` (from `@pack/kernel`). Infrastructure wires `NatsEventBusAdapter` or `NatsQueueConsumerAdapter` (from `@pack/nats-broker-messaging`) to satisfy that port.
+**Flow:** Modules depend on `EventBus` (from `@pack/kernel`). Infrastructure wires `NatsEventBusAdapter` or uses `NatsPublisher`/`NatsConsumer` (from `@pack/nats-broker-messaging`) to satisfy that port.
 
 ---
 
 ## 8. Mapping Events
 
-Define event types as a map from event name to payload. Extend `EventMap` from `@pack/kernel` or `@pack/nats-broker-messaging` (re-export). Use separate maps for inbound vs outbound if a module has distinct roles.
-
-**Outbound events (this module emits):**
+Define event types as enums in `@pack/event-inventory`. Each microservice uses these enums for type-safe publishing and consuming.
 
 ```typescript
-import type { EventMap } from '@pack/kernel'
+import { TrackEvent } from '@pack/event-inventory'
 
-// EventMap is Record<string, EventPayload> — extend with concrete event names and payloads
+// Publishing
+await eventBus.emit(TrackEvent.FortMinorCompleted, payload)
 
-export interface OutboundEventMap extends EventMap {
-  'entity.processing.started': {
-    entityId: string
-    startedAt: string
-  }
-  'entity.processing.completed': {
-    entityId: string
-    completedAt: string
-  }
-  'entity.processing.failed': {
-    entityId: string
-    errorCode: string
-    message: string
-  }
-}
-```
-
-**Inbound events (this module consumes):**
-
-```typescript
-export interface InboundEventMap extends EventMap {
-  'entity.upload.completed': {
-    entityId: string
-    storage: { bucket: string; key: string }
-    completedAt: string
-  }
-  'entity.analysis.completed': {
-    entityId: string
-    result: unknown
-    completedAt: string
-  }
-}
+// Consuming
+@EventConsumer(TrackEvent.PetrifiedGenerated)
+async handle(data: ConsumeContext) { ... }
 ```
 
 ---
 
 ## 9. Dispatching Events
 
-Inject an `EventBus<OutboundEventMap>` (from `@pack/kernel`) and call `emit` with the event name and typed payload. Emit only after the fact has occurred.
+Inject an `EventBus` and call `emit` with the event name and typed payload. Emit only after the fact has occurred.
 
 ```typescript
-// After processing completes successfully
-await this.eventBus.emit('entity.processing.completed', {
-  entityId,
-  completedAt: new Date().toISOString()
-})
-
-// On failure
-await this.eventBus.emit('entity.processing.failed', {
-  entityId,
-  errorCode: 'PROCESSING_FAILED',
-  message: error instanceof Error ? error.message : String(error)
+await this.eventBus.emit(TrackEvent.Approved, {
+  trackId,
+  approvedAt: new Date().toISOString(),
+  reason: 'Passed AI reasoning validation'
 })
 ```
-
-**Pattern:** Emit fire-and-forget for non-critical paths; await when order or delivery matters.
 
 ---
 
 ## 10. Subscribing to Events
 
-Use a queue-consumer adapter so multiple instances share work (competing consumers). The broker subject equals the event name.
+Use a queue-consumer adapter so multiple instances share work (competing consumers).
 
 ```typescript
 const consumer = new NatsQueueConsumerAdapter<InboundEventMap>(
   connection,
-  queueGroupName  // e.g. "workers" — instances with same name share messages
+  queueGroupName
 )
 
-consumer.subscribe('entity.upload.completed', async (payload) => {
-  await this.handleUploadCompleted(payload)
-})
-
-consumer.subscribe('entity.analysis.completed', async (payload) => {
-  await this.handleAnalysisCompleted(payload)
+consumer.subscribe(TrackEvent.Uploaded, async (payload) => {
+  await this.handleTrackUploaded(payload)
 })
 ```
-
-**Pattern:** One subscription per event. Handler receives typed payload. Use queue groups for load balancing.
 
 ---
 
@@ -311,46 +213,32 @@ consumer.subscribe('entity.analysis.completed', async (payload) => {
 ```mermaid
 flowchart TB
   subgraph producers [Producers]
-    P1[Producer A]
-    P2[Producer B]
+    P1[Soundgarden]
+    P2[Petrified]
+    P3[Fort Minor]
+    P4[Stereo]
   end
   subgraph broker [NATS Broker]
-    S1["subject: entity.upload.received"]
-    S2["subject: entity.upload.completed"]
+    S1["track.uploaded"]
+    S2["track.petrified.generated"]
+    S3["track.fort-minor.completed"]
+    S4["track.approved"]
   end
-  subgraph consumers [Consumers - Queue Group]
-    C1[Consumer 1]
-    C2[Consumer 2]
+  subgraph consumers [Consumers - Queue Groups]
+    C1[Petrified Workers]
+    C2[Fort Minor Workers]
+    C3[Stereo Workers]
+    C4[Mockingbird]
   end
   P1 -->|publish| S1
   P2 -->|publish| S2
-  S1 -.->|at most one copy| C1
-  S1 -.->|at most one copy| C2
-```
-
-### Concepts
-
-| Concept | Description |
-|---------|-------------|
-| **Subject** | Event name. Producers publish to `subject`; consumers subscribe to `subject`. |
-| **Queue group** | Optional. Subscribers with the same queue name form a group; each message is delivered to at most one member. Used for load balancing. |
-| **Pub/Sub** | Without a queue group, all subscribers receive every message (fan-out). |
-
-### Flow
-
-1. Producer encodes payload as JSON, publishes to subject = event name.
-2. Broker delivers to subscribers. With queue group: round-robin among group members.
-3. Consumer decodes payload, invokes handler. Errors in handler do not affect other messages.
-
-```mermaid
-sequenceDiagram
-  participant Producer
-  participant NATS
-  participant Consumer1
-  participant Consumer2
-  Producer->>NATS: publish("entity.upload.completed", payload)
-  NATS->>Consumer1: deliver (if in queue group, only one receives)
-  Consumer1->>Consumer1: handler(payload)
+  P3 -->|publish| S3
+  P4 -->|publish| S4
+  S1 -.->|deliver| C1
+  S2 -.->|deliver| C2
+  S2 -.->|deliver| C3
+  S3 -.->|deliver| C3
+  S4 -.->|deliver| C4
 ```
 
 ---
@@ -361,18 +249,16 @@ Events may optionally include UI feedback for dashboards or pipelines:
 
 ```json
 {
-  "event": "entity.processing.started",
-  "producer": "producer-id",
+  "event": "track.fort-minor.started",
+  "producer": "fort-minor",
   "timestamp": "...",
   "data": {},
   "ui": {
-    "message": "Processing in progress...",
+    "message": "Transcription in progress...",
     "progress": 50
   }
 }
 ```
-
-The `ui` field is optional and consumer-specific. Producers that do not need it may omit it.
 
 ---
 
@@ -382,5 +268,15 @@ The `ui` field is optional and consumer-specific. Producers that do not need it 
 
 | Correct | Wrong |
 |---------|-------|
-| `entity.processing.completed` | `process.entity` |
-| `entity.storage.stored` | `store.entity` |
+| `track.fort-minor.completed` | `transcribe.track` |
+| `track.hls.stored` | `store.hls` |
+
+---
+
+## 14. Event Inventory
+
+All event subjects are defined as enums in `@pack/event-inventory`:
+
+- `AuthorityEvent`: `UserSignedUp`, `UserLoggedIn`, `TokenRefreshed`, `UserLoggedOut`
+- `UserEvent`: `ProfileCreated`, `ProfileUpdated`, `ProfileDeleted`
+- `TrackEvent`: `Uploaded`, `PetrifiedGenerated`, `PetrifiedFailed`, `DuplicateDetected`, `FortMinorStarted`, `FortMinorCompleted`, `FortMinorFailed`, `StereoStarted`, `Approved`, `Rejected`, `StereoFailed`, `HlsGenerated`, `HlsStored`

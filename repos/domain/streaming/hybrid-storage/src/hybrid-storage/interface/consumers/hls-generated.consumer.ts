@@ -4,7 +4,7 @@ import { HybridStorageEventBusPort } from '@domain/ports'
 import { HLSPackage } from '@domain/entities/hls-package.entity'
 import { PersistHLSPackageUseCase } from '@application/use-cases'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 @Injectable()
 export class HLSGeneratedConsumer implements OnModuleInit {
   private unsubscribe: (() => void) | null = null

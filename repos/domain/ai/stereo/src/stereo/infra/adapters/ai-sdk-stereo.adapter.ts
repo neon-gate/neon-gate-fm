@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 import { CircuitBreaker } from '@pack/patterns'
 
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment-orchestration'
 import {
   StereoPort,
   type StereoContext,
@@ -19,8 +19,10 @@ const StereoSchema = z.object({
 
 const STEREO_TIMEOUT_MS = 30_000
 
-/// Uses the Vercel AI SDK to reason about copyright and content policy.
-/// Instrumental tracks (empty transcription) are treated as original content.
+/**
+ * Uses the Vercel AI SDK to reason about copyright and content policy.
+ * Instrumental tracks (empty transcription) are treated as original content.
+ */
 @Injectable()
 export class AiSdkStereoAdapter extends StereoPort {
   private readonly circuitBreaker = new CircuitBreaker({

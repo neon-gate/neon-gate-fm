@@ -1,6 +1,6 @@
 import { DomainEvent } from '@pack/kernel'
 
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 export interface UserLoggedOutPayload {
   userId: string

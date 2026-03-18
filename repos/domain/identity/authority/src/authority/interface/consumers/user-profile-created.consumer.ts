@@ -3,7 +3,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { UserPort } from '@domain/ports'
 import { AuthorityEventBusPort } from '@domain/ports/authority-event-bus.port'
 
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 @Injectable()
 export class UserProfileCreatedConsumer implements OnModuleInit {

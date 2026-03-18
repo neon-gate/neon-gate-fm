@@ -7,7 +7,7 @@ import { StereoPort } from 'src/stereo/application/ports/stereo.port'
 import { StereoEventBusPort } from 'src/stereo/application/ports/stereo-event-bus.port'
 import { TrackStatePort } from 'src/stereo/application/ports/track-state.port'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export interface RunStereoInput {
   eventId: string
   trackId: string

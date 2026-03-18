@@ -6,6 +6,10 @@ import { NatsConnectionToken, NoopEventBusAdapter } from '@pack/nats-broker-mess
 import type { PetrifiedEventMap } from 'src/petrified/domain/events/petrified-event.map'
 import { PetrifiedEventBusPort } from 'src/petrified/application/ports/petrified-event-bus.port'
 
+/**
+ * NestJS provider that wires `PetrifiedEventBusPort` to the NATS transport.
+ * Falls back to a no-op adapter when no NATS connection is available.
+ */
 export const petrifiedEventBusProvider: Provider = {
   provide: PetrifiedEventBusPort,
   useFactory: (connection: NatsConnection | null) => {

@@ -1,6 +1,6 @@
 import { DomainEvent } from '@pack/kernel'
 
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 export interface UserProfileUpdatedPayload {
   profileId: string

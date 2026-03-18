@@ -1,6 +1,6 @@
 import type { EventMap } from '@pack/kernel'
 
-import { AuthorityEvent, UserEvent } from '@env/event-inventory'
+import { AuthorityEvent, UserEvent } from '@pack/event-inventory'
 
 export interface AuthorityEventMap extends EventMap {
   [AuthorityEvent.UserSignedUp]: {

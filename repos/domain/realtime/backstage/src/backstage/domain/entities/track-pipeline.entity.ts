@@ -3,7 +3,7 @@ import { UniqueEntityId } from '@pack/patterns'
 
 import { PipelineEvent } from './pipeline-event.value-object'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 export interface TrackPipelineProps {
   trackId: string
   status: 'processing' | 'ready' | 'failed'

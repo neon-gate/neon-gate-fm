@@ -9,7 +9,7 @@ import {
   type ThemePreference,
   User
 } from '@domain/entities'
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 import { SlimShadyEventBusPort, UserPort } from '@domain/ports'
 import { DisplayName } from '@domain/value-objects'
 

@@ -10,6 +10,60 @@ If you try to hack it, you'll still run through validation, AI reasoning, and tr
   <img src="/docs/images/readme-banner-lp.png" />
 </p>
 
+## 📖 README Glossary
+
+Quick links to every component's documentation, organized by layer.
+
+### 📦 Packages
+
+| Package | README |
+|---------|--------|
+| @pack/kernel | [repos/packages/kernel/README.md](repos/packages/kernel/README.md) |
+| @pack/event-inventory | [repos/packages/event-inventory/README.md](repos/packages/event-inventory/README.md) |
+| @pack/environment-orchestration | [repos/packages/environment-orchestration/README.md](repos/packages/environment-orchestration/README.md) |
+| @pack/nats-broker-messaging | [repos/packages/nats-broker-messaging/README.md](repos/packages/nats-broker-messaging/README.md) |
+| @pack/cache | [repos/packages/cache/README.md](repos/packages/cache/README.md) |
+| @pack/patterns | [repos/packages/patterns/README.md](repos/packages/patterns/README.md) |
+| @pack/neon-tokens | [repos/packages/neon-tokens/README.md](repos/packages/neon-tokens/README.md) |
+
+### 🔷 Microservices — Identity
+
+| Service | README |
+|---------|--------|
+| Authority | [repos/domain/identity/authority/README.md](repos/domain/identity/authority/README.md) |
+| Slim Shady | [repos/domain/identity/slim-shady/README.md](repos/domain/identity/slim-shady/README.md) |
+
+### 🔷 Microservices — AI
+
+| Service | README |
+|---------|--------|
+| Petrified | [repos/domain/ai/petrified/README.md](repos/domain/ai/petrified/README.md) |
+| Fort Minor | [repos/domain/ai/fort-minor/README.md](repos/domain/ai/fort-minor/README.md) |
+| Stereo | [repos/domain/ai/stereo/README.md](repos/domain/ai/stereo/README.md) |
+
+### 🔷 Microservices — Streaming
+
+| Service | README |
+|---------|--------|
+| Soundgarden | [repos/domain/streaming/soundgarden/README.md](repos/domain/streaming/soundgarden/README.md) |
+| Mockingbird | [repos/domain/streaming/mockingbird/README.md](repos/domain/streaming/mockingbird/README.md) |
+| Hybrid Storage | [repos/domain/streaming/hybrid-storage/README.md](repos/domain/streaming/hybrid-storage/README.md) |
+
+### 🔷 Microservices — Realtime
+
+| Service | README |
+|---------|--------|
+| Backstage | [repos/domain/realtime/backstage/README.md](repos/domain/realtime/backstage/README.md) |
+
+### 🖥️ Apps & 🤖 Agents
+
+| Component | README |
+|-----------|--------|
+| Pulse (frontend) | [repos/apps/pulse/README.md](repos/apps/pulse/README.md) |
+| Shinoda (agent) | [repos/agents/shinoda/README.md](repos/agents/shinoda/README.md) |
+
+---
+
  This repository combines a Next.js frontend, domain microservices, and internal platform packages to deliver resilient streaming, modular domain design, and a fast developer workflow.
 
 ---
@@ -25,7 +79,7 @@ pulse/
     │   └── pulse/               #     Next.js 16 player UI + BFF
     │
     ├── agents/                  # 🤖  AI orchestration agents
-    │   ├── shinoda/             #     Mastra-powered dev agent
+    │   ├── shinoda/             #     Mastra-powered operations agent
     │   └── .agents/             # 📋  Agent context, skills, and plans
     │       ├── context/
     │       ├── plans/
@@ -33,11 +87,12 @@ pulse/
     │
     ├── packages/                # 📦  Shared infrastructure libraries
     │   ├── kernel/              #     DDD primitives (Entity, UseCase, EventBus…)
-    │   ├── event-bus/           #     NATS adapter + queue consumer wiring
+    │   ├── event-inventory/     #     NATS event subject enums
+    │   ├── environment-orchestration/  # Env-var helpers + docker-compose.yml
+    │   ├── nats-broker-messaging/     # NATS transport layer
     │   ├── cache/               #     Redis cache abstraction
     │   ├── patterns/            #     Circuit breaker + resilience patterns
-    │   ├── environment/         #     Typed env-var helpers
-    │   └── neon/                #     Synthwave design tokens + Tailwind overrides
+    │   └── neon-tokens/         #     OKLCH neon design tokens
     │
     ├── domain/                  # 🔷  Bounded-context microservices
     │   ├── identity/
@@ -45,16 +100,16 @@ pulse/
     │   │   └── slim-shady/      #     User profiles + preferences
     │   ├── streaming/
     │   │   ├── soundgarden/     #     Upload ingestion edge
-    │   │   ├── mockingbird/     #     MP3 transcoder
-    │   │   └── hybrid-storage/  #     HLS segment store + delivery provider
+    │   │   ├── mockingbird/     #     HLS transcoder
+    │   │   └── hybrid-storage/  #     HLS segment store + delivery
     │   ├── ai/
-    │   │   └── shinod-ai/       #     Fingerprinting, transcription, reasoning
+    │   │   ├── petrified/       #     Audio fingerprinting + duplicate detection
+    │   │   ├── fort-minor/      #     AI transcription (Whisper)
+    │   │   └── stereo/          #     AI reasoning + approval/rejection
     │   └── realtime/
     │       └── backstage/       #     Pipeline projection + Socket.IO broadcast
     │
-    └── infrastructure/
-        └── docker/
-            └── docker-compose.yml  # 🐳  Full platform topology
+    └── .agents/                 # 📋  Root-level agent context & plans
 ```
 
 ### Workspace Naming Philosophy
@@ -114,12 +169,13 @@ Packages are the architectural glue. They're not utilities — they're the share
 
 | Package | Exports | Used By |
 |---|---|---|
-| `@pack/kernel` | `UseCase`, `Entity`, `AggregateRoot`, `ValueObject`, `Event`, `EventBus`, `UniqueEntityId`, `EventMap` | All microservices |
-| `@pack/nats-broker-messaging` | `NatsEventBusAdapter`, queue consumer, connection provider, drain service, no-op fallback | All event-driven services |
-| `@pack/cache` | `RedisLike` port, Redis adapter | Shinod AI, others |
-| `@pack/patterns` | `CircuitBreaker`, `CircuitBreakerState` | Authority, sync boundaries |
-| `@env/lib` | `requireStringEnv`, `requireNumberEnv`, `optionalStringEnv`, `optionalNumberEnv` | Service bootstrap |
-| `@pack/neon-tokens` | Synthwave/retrowave design token scale (28 neon color tokens), Tailwind token overrides, gradient utilities (`.bg-neon`, `.text-neon`, `.bg-neon-warm`, `.bg-neon-cool`), and the `.glassy-surface` frosted-glass utility | `repos/apps/pulse` |
+| `@pack/kernel` | `UseCase`, `DomainEntity`, `AggregateRoot`, `ValueObject`, `DomainEvent`, `EventBus`, `Id`, `EventMap` | All microservices |
+| `@pack/event-inventory` | `AuthorityEvent`, `UserEvent`, `TrackEvent` enums — canonical NATS subject names | All microservices, agent |
+| `@pack/environment-orchestration` | `requireStringEnv`, `requireNumberEnv`, `optionalStringEnv`, `optionalNumberEnv` | Service bootstrap |
+| `@pack/nats-broker-messaging` | `NatsPublisher`, `NatsConsumer`, `NatsEventBusAdapter`, NestJS integration, error hierarchy | All event-driven services |
+| `@pack/cache` | `CachePort`, `RedisCacheAdapter`, `RedisLike` port | Petrified, Fort Minor |
+| `@pack/patterns` | `CircuitBreaker`, `CircuitBreakerState`, `UniqueEntityId` | Authority, sync boundaries |
+| `@pack/neon-tokens` | 28 OKLCH neon color tokens, Tailwind overrides, gradient utilities (`.bg-neon`, `.text-neon`, `.bg-neon-warm`, `.bg-neon-cool`), `.glassy-surface` utility | `repos/apps/pulse` |
 
 ### Backend Guidelines
 
@@ -423,8 +479,8 @@ The full track lifecycle — from the moment a user drops a file to the moment i
                                │  track.uploaded
                                ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│                         SHINOD AI — PETRIFIED                       │
-│                   Acoustic fingerprinting module                    │
+│                            PETRIFIED                                │
+│                   Acoustic fingerprinting service                   │
 │                                                                     │
 │  Chromaprint fingerprint  →  audio hash  →  duplicate check         │
 │  track.petrified.generated  /  track.duplicate.detected             │
@@ -433,8 +489,8 @@ The full track lifecycle — from the moment a user drops a file to the moment i
                │  track.petrified.generated   │  track.petrified.generated
                ▼                              ▼
 ┌──────────────────────────┐   ┌──────────────────────────────────────┐
-│  SHINOD AI — FORT MINOR  │   │       SHINOD AI — STEREO             │
-│  Transcription module    │   │  Waits for both signals              │
+│       FORT MINOR         │   │            STEREO                     │
+│  Transcription service   │   │  Waits for both signals              │
 │                          │   │                                      │
 │  OpenAI Whisper (audio)  │   │  ┌─── fingerprint state             │
 │  + gpt-audio reasoning   │   │  └─── transcription state           │
@@ -514,17 +570,17 @@ The NATS subject **is** the event name string — `emit('track.uploaded', payloa
 | `track.upload.stored` | Soundgarden | Backstage |
 | `track.uploaded` | Soundgarden | Petrified, Backstage |
 | `track.upload.failed` | Soundgarden | Backstage |
-| `track.petrified.generated` | Petrified | Fort Minor, Stereo, Backstage |
-| `track.petrified.song.unknown` | Petrified | Backstage |
-| `track.duplicate.detected` | Petrified | Backstage |
-| `track.petrified.failed` | Petrified | Backstage |
-| `track.fort-minor.started` | Fort Minor | Backstage |
-| `track.fort-minor.completed` | Fort Minor | Stereo, Backstage |
-| `track.fort-minor.failed` | Fort Minor | Backstage |
-| `track.stereo.started` | Stereo | Backstage |
-| `track.approved` | Stereo | Mockingbird, Backstage |
-| `track.rejected` | Stereo | Backstage |
-| `track.stereo.failed` | Stereo | Backstage |
+| `track.petrified.generated` | Petrified (`7201`) | Fort Minor, Stereo, Backstage |
+| `track.petrified.song.unknown` | Petrified (`7201`) | Backstage |
+| `track.duplicate.detected` | Petrified (`7201`) | Backstage |
+| `track.petrified.failed` | Petrified (`7201`) | Backstage |
+| `track.fort-minor.started` | Fort Minor (`7202`) | Backstage |
+| `track.fort-minor.completed` | Fort Minor (`7202`) | Stereo, Backstage |
+| `track.fort-minor.failed` | Fort Minor (`7202`) | Backstage |
+| `track.stereo.started` | Stereo (`7203`) | Backstage |
+| `track.approved` | Stereo (`7203`) | Mockingbird, Backstage |
+| `track.rejected` | Stereo (`7203`) | Backstage |
+| `track.stereo.failed` | Stereo (`7203`) | Backstage |
 | `track.transcoding.started` | Mockingbird | Backstage |
 | `track.transcoding.completed` | Mockingbird | Backstage |
 | `track.transcoding.failed` | Mockingbird | Backstage |
@@ -535,24 +591,22 @@ The NATS subject **is** the event name string — `emit('track.uploaded', payloa
 
 ## AI Architecture 🧠
 
-### Shinod AI Service
+### AI Microservices
 
-`domain/ai/shinod-ai` is one deployable NestJS service containing three event-driven internal modules that mirror a mini-pipeline. Each module has distinct event contracts and a well-scoped responsibility.
-
-> **Tech debt:** Shinod AI is intentionally structured as a monolith with three internal modules rather than three separate microservices. This was a pragmatic MVP decision. The plan is to split Petrified, Fort Minor, and Stereo into independent deployable services as the platform matures.
+The AI cognition layer is split into **three independent microservices**, each with its own infrastructure, persistence, and deployment boundary:
 
 ```
-Shinod AI
-├── Petrified     → acoustic fingerprinting (Chromaprint / fpcalc)
-├── Fort Minor    → speech-to-text transcription (OpenAI Whisper)
-└── Stereo        → AI reasoning, approval/rejection (GPT-4o)
+domain/ai/
+├── petrified/       → acoustic fingerprinting (Chromaprint) — Redis + MinIO
+├── fort-minor/      → speech-to-text transcription (Whisper) — Redis + MinIO
+└── stereo/          → AI reasoning, approval/rejection (GPT-4o) — MongoDB
 ```
 
-**Petrified** runs on every upload. It generates a Chromaprint fingerprint and an audio hash, checks for duplicates via Redis, and emits the fingerprint payload that unblocks both Fort Minor and Stereo.
+**Petrified** (`port 7201`) runs on every upload. It generates a Chromaprint fingerprint and an audio hash, checks for duplicates via its own Redis (`petrified-redis`), and emits the fingerprint payload that unblocks both Fort Minor and Stereo.
 
-**Fort Minor** transcribes the audio. Using OpenAI's Whisper model (via the AI SDK), it extracts lyrics, detects language, and produces structured transcription segments. The platform is also wired to support **gpt-audio** in the reasoning path — GPT-4o with audio input — enabling direct audio-to-reasoning flows without a separate transcription stage.
+**Fort Minor** (`port 7202`) transcribes the audio. Using OpenAI's Whisper model (via the AI SDK), it extracts lyrics, detects language, and produces structured transcription segments. It has its own Redis (`fort-minor-redis`) for idempotency and MinIO (`fort-minor-minio`) for audio access.
 
-**Stereo** is the decision engine. It waits until both fingerprint state and transcription are present, then runs GPT-4o reasoning over the combined signals to emit `track.approved` or `track.rejected`. The pre-2000 product rule lives here — not as a hard-coded check but as a reasoning prompt, so the rule can be tuned, loosened, or entirely replaced without touching the pipeline plumbing.
+**Stereo** (`port 7203`) is the decision engine. It waits until both fingerprint state and transcription are present, then runs GPT-4o reasoning over the combined signals to emit `track.approved` or `track.rejected`. It persists state in its own MongoDB (`stereo-mongo`). The pre-2000 product rule lives here — not as a hard-coded check but as a reasoning prompt, so the rule can be tuned, loosened, or entirely replaced without touching the pipeline plumbing.
 
 ### Agent Shinoda (Agentic Development) 🤖
 
@@ -567,14 +621,18 @@ repos/agents/
         │   ├── tools/
         │   │   ├── analyse-pipeline   # Inspect pipeline state per trackId
         │   │   ├── inspect-events     # Query event history and detect gaps
-        │   │   └── check-services     # Health-check all platform services
+        │   │   └── check-services     # Health-check all 9 platform services
         │   ├── signals/
         │   │   ├── signal-bus.ts      # Typed EventEmitter singleton
         │   │   ├── anomaly-rules.ts   # Stuck track, gap, out-of-order detection
         │   │   └── monitor.ts         # Socket.IO + polling continuous monitor
-        │   └── workflows/
-        │       └── debug-pipeline     # Multi-step diagnostic workflow
-        ├── mastra/index.ts            # Mastra registration + signal subscribers
+        │   ├── workflows/
+        │   │   ├── debug-pipeline     # Multi-step diagnostic workflow
+        │   │   └── health-pipeline    # Parallel service health checks
+        │   └── infra/mcp/
+        │       ├── mcp-client.ts      # Generic MCP client factory
+        │       └── observability-sink # Signal bus → MCP server bridge
+        ├── mastra/index.ts            # Mastra registration + signal subscribers + MCP wiring
         └── index.ts
 ```
 
@@ -589,7 +647,7 @@ The agent is designed to answer questions like:
 - *"What events were emitted for trackId X?"*
 - *"Is the pipeline stalled after fingerprinting?"*
 
-**Read-only by default, not by design.** Shinoda currently observes and diagnoses — it never modifies platform state. This is a deliberate starting point, not a permanent constraint. The signal layer (`signal-bus.ts`, `anomaly-rules.ts`) is designed to be extended: signals like `TRACK_STUCK` and `SERVICE_UNHEALTHY` can be forwarded to concrete sinks — structured log pipelines, Datadog metrics, CloudWatch, OpenTelemetry collectors, Grafana/Prometheus — as operational needs grow.
+**Read-only by default, not by design.** Shinoda currently observes and diagnoses — it never modifies platform state. This is a deliberate starting point, not a permanent constraint. The signal layer (`signal-bus.ts`, `anomaly-rules.ts`) emits typed events like `TRACK_STUCK` and `SERVICE_UNHEALTHY`. The **health pipeline workflow** checks all 9 services in parallel and aggregates results. When `MCP_SERVER_URL` is configured, the **ObservabilitySink** automatically forwards all signals to an external MCP server for integration with OpenTelemetry collectors, bug trackers, alerting platforms, or any observability tooling.
 
 Shinoda is developer/operator-facing, not end-user-facing. It uses `openai/gpt-4o-mini` by default (cost-efficient for operational tooling) with a clear upgrade path to GPT-4o for deeper reasoning tasks.
 
@@ -599,25 +657,30 @@ Shinoda is developer/operator-facing, not end-user-facing. It uses `openai/gpt-4
 
 ### Services at a Glance
 
-| Service | Port | Persistence | Role |
-|---|---|---|---|
-| `authority` | `7000` | MongoDB (`mongo`) | Auth, JWT, OAuth, sessions |
-| `slim-shady` | `7400` | MongoDB (`mongo`) | User profiles |
-| `soundgarden` | `7100` | `/tmp/uploads` + MinIO | Upload ingestion |
-| `shinod-ai` | `7200` | MongoDB (`mongo-shinod-ai`), Redis, MinIO | AI pipeline |
-| `mockingbird` | `7201` | `/tmp/hls` + MinIO | Transcoding |
-| `hybrid-storage` | `7300` | `/tmp/hls` + MinIO | HLS persistence |
-| `backstage` | `4001` | MongoDB (`mongo`) | Pipeline observation + Socket.IO |
-| `pulse` | `3000` | Browser / Jotai | Frontend + BFF |
+| Service | Port | Persistence | Role | Health |
+|---|---|---|---|---|
+| `authority` | `7000` | MongoDB (`authority-mongo`) | Auth, JWT, OAuth, sessions | `/health` |
+| `slim-shady` | `7400` | MongoDB (`slim-shady-mongo`) | User profiles | `/health` |
+| `soundgarden` | `7100` | MinIO (`soundgarden-minio`) | Upload ingestion | `/health` |
+| `petrified` | `7201` | Redis (`petrified-redis`), MinIO (`petrified-minio`) | Audio fingerprinting | `/health` |
+| `fort-minor` | `7202` | Redis (`fort-minor-redis`), MinIO (`fort-minor-minio`) | AI transcription | `/health` |
+| `stereo` | `7203` | MongoDB (`stereo-mongo`) | AI reasoning | `/health` |
+| `mockingbird` | `7200` | MinIO (`mockingbird-minio`) | HLS transcoding | `/health` |
+| `hybrid-storage` | `7300` | MinIO (`hybrid-storage-minio`) | HLS persistence | `/health` |
+| `backstage` | `4001` | MongoDB (`backstage-mongo`) | Pipeline observation + Socket.IO | `/health` |
+| `pulse` | `3000` | Browser / Jotai | Frontend + BFF | — |
+| `shinoda` | `4111` | — | AI operations agent | — |
 
 ### Infrastructure Dependencies
 
-| Dependency | Role |
-|---|---|
-| **MongoDB** (`mongo`, `mongo-shinod-ai`) | Two isolated Mongo instances — one for identity/realtime, one for AI cognition |
-| **Redis** (`redis-shinoda`) | AI operational cache, idempotency, audio-hash deduplication |
-| **NATS** (JetStream enabled) | Async event plane across all microservices |
-| **MinIO** | Object storage: `uploads`, `fingerprints`, `transcripts`, `artifacts`, `transcoded` |
+Every microservice owns its infrastructure — no shared databases or caches. The only shared component is NATS.
+
+| Dependency | Instances | Role |
+|---|---|---|
+| **MongoDB** | `authority-mongo`, `slim-shady-mongo`, `stereo-mongo`, `backstage-mongo` | Per-service persistence |
+| **Redis** | `petrified-redis`, `fort-minor-redis` | Idempotency, audio hashes |
+| **NATS** (JetStream) | `nats` | Shared async event plane |
+| **MinIO** | `soundgarden-minio`, `petrified-minio`, `fort-minor-minio`, `mockingbird-minio`, `hybrid-storage-minio` | Per-service object storage |
 
 ---
 
@@ -629,7 +692,7 @@ Shinoda is developer/operator-facing, not end-user-facing. It uses `openai/gpt-4
 pnpm infra
 ```
 
-This single command spins up the **entire platform** — all infrastructure dependencies (MongoDB ×2, Redis, NATS, MinIO with pre-seeded buckets) and all application services — using the `docker-compose.yml` under `environment/docker/`. No manual service wiring required. MinIO buckets are bootstrapped automatically by `minio-init` on first run.
+This single command spins up the **entire platform** — all per-micro infrastructure (MongoDB ×4, Redis ×2, MinIO ×5, NATS) and all 11 application services — using the `docker-compose.yml` under `repos/packages/environment-orchestration/`. No manual service wiring required. MinIO buckets are bootstrapped automatically by init containers on first run.
 
 ### Reset and Bootstrap
 
@@ -659,7 +722,7 @@ Turbo treats shared packages as first-class build inputs. `@pack/kernel` must be
 
 There are no unit, integration, or end-to-end tests in this repository. This is intentional.
 
-The backend was built to validate a wired event-driven architecture from the ground up. The first concern was making sure each microservice could boot correctly, connect to its dependencies, and respond — hence **smoke tests** (health endpoint checks per service) as the primary safety net. Every service exposes a `/health` endpoint and Docker Compose health checks enforce boot order.
+The backend was built to validate a wired event-driven architecture from the ground up. Every microservice exposes a standard `GET /health` endpoint returning `{ status: 'ok' }`, and Docker Compose health checks enforce boot order. The **Shinoda agent** provides automated health monitoring — its health pipeline workflow checks all 9 services in parallel and emits `SERVICE_UNHEALTHY` signals for any failures. These signals can optionally be forwarded to external observability platforms via MCP.
 
 Adding unit or integration tests at this stage of a personal MVP would mean a substantially larger codebase — more code to write, more code to maintain, and more code to refactor as the architecture evolves. In a microservices system where domain logic crosses service boundaries via NATS events, integration tests also require the full infrastructure to be running, which duplicates what `pnpm infra` already provides.
 
@@ -706,11 +769,11 @@ pnpm infra
 
 That's it. This command:
 
-1. 🔶 Starts MongoDB ×2 (authority/realtime + shinod-ai)
-2. 🔴 Starts Redis (AI operational cache)
+1. 🔶 Starts MongoDB ×4 (authority, slim-shady, stereo, backstage)
+2. 🔴 Starts Redis ×2 (petrified, fort-minor)
 3. 🟢 Starts NATS with JetStream enabled
-4. 🪣 Starts MinIO and pre-creates all required buckets (`uploads`, `fingerprints`, `transcripts`, `artifacts`, `transcoded`)
-5. 🚀 Starts all eight application services with their health checks
+4. 🪣 Starts MinIO ×5 (soundgarden, petrified, fort-minor, mockingbird, hybrid-storage) and pre-creates buckets
+5. 🚀 Starts all 11 application services with their health checks
 
 Services are started in dependency order. Health checks ensure no service starts before its dependencies are ready.
 
@@ -739,16 +802,17 @@ This starts the Pulse Next.js app in dev mode with hot reloading. All backend se
 
 ### Service URLs (local)
 
-| Service | URL |
-|---|---|
-| Pulse (frontend) | http://localhost:3000 |
-| Authority | http://localhost:7000 |
-| Slim Shady | http://localhost:7400 |
-| Soundgarden | http://localhost:7100 |
-| Shinod AI | http://localhost:7200 |
-| Mockingbird | http://localhost:7201 |
-| Hybrid Storage | http://localhost:7300 |
-| Backstage (HTTP + WS) | http://localhost:4001 |
-| Shinoda Agent (Mastra) | http://localhost:4111 |
-| MinIO Console | http://localhost:9001 |
-| NATS Monitor | http://localhost:8222 |
+| Service | URL | Health |
+|---|---|---|
+| Pulse (frontend) | http://localhost:3000 | — |
+| Authority | http://localhost:7000 | `/health` |
+| Slim Shady | http://localhost:7400 | `/health` |
+| Soundgarden | http://localhost:7100 | `/health` |
+| Petrified | http://localhost:7201 | `/health` |
+| Fort Minor | http://localhost:7202 | `/health` |
+| Stereo | http://localhost:7203 | `/health` |
+| Mockingbird | http://localhost:7200 | `/health` |
+| Hybrid Storage | http://localhost:7300 | `/health` |
+| Backstage (HTTP + WS) | http://localhost:4001 | `/health` |
+| Shinoda Agent (Mastra) | http://localhost:4111 | — |
+| NATS Monitor | http://localhost:8222 | — |

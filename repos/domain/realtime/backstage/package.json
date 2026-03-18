@@ -8,14 +8,14 @@
     "build": "nest build && tsc-alias -p tsconfig.build.json"
   },
   "dependencies": {
-    "@env/event-inventory": "workspace:*",
+    "@pack/event-inventory": "workspace:*",
     "@nestjs/common": "^11.1.13",
     "@nestjs/core": "^11.1.13",
     "@nestjs/mongoose": "^11.0.4",
     "@nestjs/platform-express": "^11.1.13",
     "@nestjs/platform-socket.io": "^11.1.13",
     "@nestjs/websockets": "^11.1.13",
-    "@env/lib": "workspace:*",
+    "@pack/environment-orchestration": "workspace:*",
     "@pack/nats-broker-messaging": "workspace:*",
     "@pack/kernel": "workspace:*",
     "@pack/patterns": "workspace:*",

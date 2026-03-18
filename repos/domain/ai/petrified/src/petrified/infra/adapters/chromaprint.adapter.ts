@@ -16,7 +16,10 @@ interface FpcalcOutput {
   DURATION: number
 }
 
-/// Generates acoustic fingerprints using the `fpcalc` CLI (Chromaprint).
+/**
+ * Generates acoustic fingerprints using the `fpcalc` CLI (Chromaprint).
+ * Also computes a SHA-256 audio hash for duplicate detection.
+ */
 @Injectable()
 export class ChromaprintAdapter extends PetrifiedGeneratorPort {
   async generate(filePath: string): Promise<FingerprintResult> {

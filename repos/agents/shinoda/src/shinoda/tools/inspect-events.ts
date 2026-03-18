@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { requireEnv } from '@shinoda/env'
 
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 const EXPECTED_SEQUENCE: string[] = [
   TrackEvent.Uploaded,
   TrackEvent.PetrifiedGenerated,

@@ -8,7 +8,7 @@ import {
   type AudioQualityPreference,
   type ThemePreference
 } from '@domain/entities'
-import { UserEvent } from '@env/event-inventory'
+import { UserEvent } from '@pack/event-inventory'
 
 interface UpdateUserPreferencesInput {
   profileId: string

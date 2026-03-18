@@ -5,7 +5,7 @@ import * as fs from 'node:fs'
 
 import { CircuitBreaker } from '@pack/patterns'
 
-import { optionalStringEnv } from '@env/lib'
+import { optionalStringEnv } from '@pack/environment-orchestration'
 import {
   TranscriberPort,
   type TranscriptionOutput
@@ -13,8 +13,10 @@ import {
 
 const TRANSCRIPTION_TIMEOUT_MS = 60_000
 
-/// Transcribes audio using the Vercel AI SDK with OpenAI Whisper.
-/// Wraps the AI call in a circuit breaker to protect against provider outages.
+/**
+ * Transcribes audio using the Vercel AI SDK with OpenAI Whisper.
+ * Wraps the AI call in a circuit breaker to protect against provider outages.
+ */
 @Injectable()
 export class AiSdkTranscriberAdapter extends TranscriberPort {
   private readonly circuitBreaker = new CircuitBreaker({

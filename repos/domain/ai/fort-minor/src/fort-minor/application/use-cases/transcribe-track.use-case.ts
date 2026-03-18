@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 
 import { UseCase } from '@pack/kernel'
 
-import { AudioStoragePort } from '@env/core'
-import { TrackEvent } from '@env/event-inventory'
+import { AudioStoragePort } from '@domain/ports/audio-storage.port'
+import { TrackEvent } from '@pack/event-inventory'
 import {
   IdempotencyPort,
   FortMinorEventBusPort,

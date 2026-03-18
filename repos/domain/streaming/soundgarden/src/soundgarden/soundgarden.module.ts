@@ -15,11 +15,11 @@ import { FileValidatorAdapter } from '@infra/file-validator.adapter'
 import { MinioStorageAdapter } from '@infra/object-storage/minio-storage.adapter'
 import { uploadConfigProviders } from '@infra/upload-config.provider'
 import { UploadCleanupService } from '@infra/cleanup/upload-cleanup.service'
-import { UploadController } from '@interface/http'
+import { UploadController, HealthController } from '@interface/http'
 
 @Module({
   imports: [ScheduleModule.forRoot()],
-  controllers: [UploadController],
+  controllers: [UploadController, HealthController],
   providers: [
     UploadTrackUseCase,
     ...uploadConfigProviders,

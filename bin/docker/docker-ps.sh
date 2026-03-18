@@ -2,25 +2,41 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-COMPOSE_FILE="$ROOT_DIR/repos/environment/docker/docker-compose.yml"
+COMPOSE_FILE="$ROOT_DIR/repos/packages/environment-orchestration/docker-compose.yml"
 
 TARGET="${1:-all}"
 
 INFRA_SERVICES=(
-  mongo
-  mongo-shinod-ai
-  redis-shinoda
   nats
-  minio
-  minio-init
+  authority-mongo
+  slim-shady-mongo
+  backstage-mongo
+  stereo-mongo
+  petrified-redis
+  fort-minor-redis
+  soundgarden-minio
+  soundgarden-minio-init
+  petrified-minio
+  petrified-minio-init
+  fort-minor-minio
+  fort-minor-minio-init
+  mockingbird-minio
+  mockingbird-minio-init
+  hybrid-storage-minio
+  hybrid-storage-minio-init
 )
 APP_SERVICES=(
   authority
+  slim-shady
   soundgarden
   backstage
-  shinod-ai
+  petrified
+  fort-minor
+  stereo
   mockingbird
+  hybrid-storage
   pulse
+  shinoda
 )
 
 if docker compose version >/dev/null 2>&1; then

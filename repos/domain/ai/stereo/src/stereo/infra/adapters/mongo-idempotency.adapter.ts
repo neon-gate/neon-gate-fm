@@ -5,6 +5,11 @@ import type { Model } from 'mongoose'
 import { IdempotencyPort } from 'src/stereo/application/ports/idempotency.port'
 import { ProcessedEventDocument } from './processed-event.schema'
 
+/**
+ * MongoDB-backed idempotency guard for Stereo.
+ * Stores processed event IDs to prevent duplicate reasoning
+ * from redelivered NATS messages.
+ */
 @Injectable()
 export class MongoIdempotencyAdapter extends IdempotencyPort {
   constructor(

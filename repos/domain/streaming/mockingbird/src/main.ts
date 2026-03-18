@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 
-import { requireNumberEnv } from '@env/lib'
+import { requireNumberEnv } from '@pack/environment-orchestration'
 
 import { AppModule } from './app.module'
 

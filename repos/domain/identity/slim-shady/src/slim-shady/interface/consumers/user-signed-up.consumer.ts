@@ -3,7 +3,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common'
 import { CreateUserProfileUseCase } from '@application/use-cases'
 import { SlimShadyEventBusPort } from '@domain/ports'
 
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 @Injectable()
 export class UserSignedUpConsumer implements OnModuleInit {

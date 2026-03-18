@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-COMPOSE_FILE="$ROOT_DIR/repos/environment/docker/docker-compose.yml"
+COMPOSE_FILE="$ROOT_DIR/repos/packages/environment-orchestration/docker-compose.yml"
 
 BOOTSTRAP=0
 ARGS=()
@@ -16,19 +16,34 @@ done
 TARGET="${ARGS[0]:-all}"
 
 INFRA_SERVICES=(
-  mongo
-  mongo-shinod-ai
-  redis-shinoda
   nats
-  minio
-  minio-init
+  authority-mongo
+  slim-shady-mongo
+  backstage-mongo
+  stereo-mongo
+  petrified-redis
+  fort-minor-redis
+  soundgarden-minio
+  soundgarden-minio-init
+  petrified-minio
+  petrified-minio-init
+  fort-minor-minio
+  fort-minor-minio-init
+  mockingbird-minio
+  mockingbird-minio-init
+  hybrid-storage-minio
+  hybrid-storage-minio-init
 )
 APP_SERVICES=(
   authority
+  slim-shady
   soundgarden
   backstage
-  shinod-ai
+  petrified
+  fort-minor
+  stereo
   mockingbird
+  hybrid-storage
   pulse
   shinoda
 )
@@ -37,7 +52,9 @@ APP_ENV_FILES=(
   "$ROOT_DIR/repos/domain/identity/slim-shady/.env"
   "$ROOT_DIR/repos/domain/streaming/soundgarden/.env"
   "$ROOT_DIR/repos/domain/realtime/backstage/.env"
-  "$ROOT_DIR/repos/domain/ai/shinod-ai/.env"
+  "$ROOT_DIR/repos/domain/ai/petrified/.env"
+  "$ROOT_DIR/repos/domain/ai/fort-minor/.env"
+  "$ROOT_DIR/repos/domain/ai/stereo/.env"
   "$ROOT_DIR/repos/domain/streaming/mockingbird/.env"
   "$ROOT_DIR/repos/domain/streaming/hybrid-storage/.env"
   "$ROOT_DIR/repos/apps/pulse/.env"
@@ -75,7 +92,7 @@ fi
 
 # Remove orphaned containers that conflict with our container_name values.
 # Handles containers left from previous runs with different project context (e.g. before repos/ move).
-CONFLICT_NAMES=(minio minio-init mongo-authority mongo-shinod-ai redis-shinoda nats authority slim-shady soundgarden backstage shinod-ai mockingbird pulse hybrid-storage)
+CONFLICT_NAMES=(nats authority-mongo slim-shady-mongo backstage-mongo stereo-mongo petrified-redis fort-minor-redis soundgarden-minio soundgarden-minio-init petrified-minio petrified-minio-init fort-minor-minio fort-minor-minio-init mockingbird-minio mockingbird-minio-init hybrid-storage-minio hybrid-storage-minio-init authority slim-shady soundgarden backstage petrified fort-minor stereo mockingbird hybrid-storage pulse shinoda)
 for name in "${CONFLICT_NAMES[@]}"; do
   if docker ps -a -q -f "name=^${name}$" 2>/dev/null | grep -q .; then
     # Only remove if not part of our compose project (orphan)

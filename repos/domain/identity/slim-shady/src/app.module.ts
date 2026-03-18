@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { requireStringEnv } from '@env/lib'
+import { requireStringEnv } from '@pack/environment-orchestration'
 import { DbConfigFlag } from '@infra/db'
 
 import { SlimShadyModule } from './slim-shady/slim-shady.module'

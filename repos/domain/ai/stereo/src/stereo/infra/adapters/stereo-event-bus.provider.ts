@@ -6,6 +6,10 @@ import { NatsConnectionToken, NoopEventBusAdapter } from '@pack/nats-broker-mess
 import type { StereoEventMap } from 'src/stereo/domain/events/stereo-event.map'
 import { StereoEventBusPort } from 'src/stereo/application/ports/stereo-event-bus.port'
 
+/**
+ * NestJS provider that wires `StereoEventBusPort` to the NATS transport.
+ * Falls back to a no-op adapter when no NATS connection is available.
+ */
 export const stereoEventBusProvider: Provider = {
   provide: StereoEventBusPort,
   useFactory: (connection: NatsConnection | null) => {

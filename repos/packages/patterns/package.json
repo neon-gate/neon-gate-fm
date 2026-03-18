@@ -22,7 +22,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@env/event-inventory": "workspace:*",
+    "@pack/event-inventory": "workspace:*",
     "@pack/kernel": "workspace:*"
   }
 }

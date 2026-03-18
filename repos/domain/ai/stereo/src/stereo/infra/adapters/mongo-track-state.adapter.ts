@@ -8,6 +8,12 @@ import {
 } from 'src/stereo/application/ports/track-state.port'
 import { TrackProcessingStateDocument } from './track-processing-state.schema'
 
+/**
+ * MongoDB-backed adapter for track processing state aggregation.
+ * Stereo waits for both fingerprint and transcription signals before
+ * running AI reasoning. This adapter tracks which signals have arrived
+ * for each track and provides atomic upsert operations.
+ */
 @Injectable()
 export class MongoTrackStateAdapter extends TrackStatePort {
   constructor(

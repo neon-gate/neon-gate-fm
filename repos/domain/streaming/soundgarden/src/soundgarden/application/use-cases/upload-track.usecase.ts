@@ -8,7 +8,7 @@ import {
   ObjectStoragePort,
   TrackEventBusPort
 } from '@domain/ports'
-import { TrackEvent } from '@env/event-inventory'
+import { TrackEvent } from '@pack/event-inventory'
 import type {
   StoredFileInfo,
   UploadedStorageRefs,

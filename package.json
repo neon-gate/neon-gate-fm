@@ -16,12 +16,7 @@
     "docker:ps": "bash bin/docker/docker-ps.sh",
     "dx:cleanup": "bash bin/dx/tooling/cleanup.sh",
     "dx:reset": "pnpm dx:cleanup && pnpm docker:down && pnpm install && pnpm dx:env:template && pnpm docker:up && pnpm build",
-    "dx:env:template": "bash bin/dx/tooling/env-template.sh",
-    "dx:contracts": "bash bin/dx/test/contracts.sh",
-    "dx:smoke": "bash bin/dx/test/smoke.sh",
-    "dx:smoke:authority": "bash bin/test/smoke/authority/all.smoke.sh",
-    "dx:smoke:soundgarden": "bash bin/test/smoke/soundgarden/all.smoke.sh",
-    "dx:smoke:backstage": "bash bin/test/smoke/backstage/all.smoke.sh"
+    "dx:env:template": "bash bin/dx/tooling/env-template.sh"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,cjs,mjs,json,jsonc,css}": [

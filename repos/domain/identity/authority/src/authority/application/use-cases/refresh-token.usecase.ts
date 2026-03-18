@@ -10,13 +10,13 @@ import { AuthorityEventBusPort, SessionPort } from '@domain/ports'
 import { AuthorityProvider } from '@domain/value-objects'
 import { TokenRefreshedEvent } from '@domain/events'
 
-import { requireStringEnv } from '@env/lib'
+import { requireStringEnv } from '@pack/environment-orchestration'
 import { DbConfigFlag } from '@infra/db'
 import {
   AuthorityTokenService,
   type TokenPayload
 } from '@application/services/authority-token.service'
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 interface RefreshTokenResult {
   accessToken: string

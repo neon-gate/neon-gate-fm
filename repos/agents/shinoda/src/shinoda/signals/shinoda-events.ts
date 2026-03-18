@@ -1,3 +1,4 @@
+/** Payload emitted when a track pipeline is detected as stalled. */
 export interface TrackStuckPayload {
   trackId: string
   lastStage: string
@@ -6,6 +7,7 @@ export interface TrackStuckPayload {
   timestamp: string
 }
 
+/** Payload emitted when a service fails its health check. */
 export interface ServiceUnhealthyPayload {
   service: string
   url: string
@@ -13,6 +15,7 @@ export interface ServiceUnhealthyPayload {
   timestamp: string
 }
 
+/** Payload emitted when an anomaly is detected in the event pipeline. */
 export interface PipelineAnomalyPayload {
   trackId: string
   anomalyType: 'gap' | 'out_of_order' | 'duplicate_event' | 'timeout'
@@ -20,6 +23,7 @@ export interface PipelineAnomalyPayload {
   timestamp: string
 }
 
+/** Payload emitted when the debug pipeline completes a diagnosis. */
 export interface DiagnosisReadyPayload {
   trackId: string
   diagnosis: {
@@ -31,6 +35,7 @@ export interface DiagnosisReadyPayload {
   timestamp: string
 }
 
+/** Maps signal names to their typed payloads for the Shinoda signal bus. */
 export interface ShinodaEventMap {
   TRACK_STUCK: TrackStuckPayload
   SERVICE_UNHEALTHY: ServiceUnhealthyPayload

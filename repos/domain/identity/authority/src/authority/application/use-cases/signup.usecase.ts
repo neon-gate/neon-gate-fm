@@ -13,7 +13,7 @@ import {
   AuthorityTokenService,
   type SessionContext
 } from '@application/services/authority-token.service'
-import { AuthorityEvent } from '@env/event-inventory'
+import { AuthorityEvent } from '@pack/event-inventory'
 
 interface SignupInput {
   email: string

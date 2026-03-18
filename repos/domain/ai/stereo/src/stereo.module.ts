@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common'
 
-import { NatsModule, MongodbModule } from '@env/core'
+import { NatsModule } from './stereo/infra/nats/nats.module'
+import { MongodbModule } from './stereo/infra/persistence/mongodb.module'
 import { StereoModule } from './stereo/stereo.module'
 import { HealthController } from './stereo/interface/http/health.controller'
 

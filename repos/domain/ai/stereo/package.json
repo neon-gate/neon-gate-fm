@@ -9,9 +9,8 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",
-    "@env/core": "workspace:*",
-    "@env/event-inventory": "workspace:*",
-    "@env/lib": "workspace:*",
+    "@pack/event-inventory": "workspace:*",
+    "@pack/environment-orchestration": "workspace:*",
     "@nestjs/common": "^11.1.13",
     "@nestjs/core": "^11.1.13",
     "@nestjs/mongoose": "^11.0.3",

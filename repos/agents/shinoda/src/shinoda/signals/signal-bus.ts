@@ -1,6 +1,10 @@
 import { EventEmitter } from 'node:events'
 import type { ShinodaEventMap, ShinodaEventName } from './shinoda-events'
 
+/**
+ * Typed EventEmitter singleton for Shinoda operational signals.
+ * Provides type-safe emit/on/once/off for all `ShinodaEventMap` events.
+ */
 class ShinodaSignalBus extends EventEmitter {
   override emit<K extends ShinodaEventName>(
     event: K,
