@@ -1,5 +1,15 @@
-export { CircuitBreaker } from './circuit-breaker/circuit-breaker'
-export { CircuitBreakerState } from './circuit-breaker/circuit-breaker-state.enum'
-export { CircuitBreakerOpenError } from './circuit-breaker/circuit-breaker-open.error'
-export { CircuitBreakerTimeoutError } from './circuit-breaker/circuit-breaker-timeout.error'
-export type { CircuitBreakerOptions } from './circuit-breaker/circuit-breaker.types'
+/** =====================
+ * Factory
+ * ===================== */
+export { UniqueEntityId } from './factory/unique-entity-id'
+
+/** =====================
+ * Circuit Breaker
+ * ===================== */
+export {
+  CircuitBreaker,
+  CircuitBreakerState,
+  CircuitBreakerOpenError,
+  CircuitBreakerTimeoutError,
+  type CircuitBreakerOptions
+} from './circuit-breaker'

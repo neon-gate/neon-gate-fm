@@ -17,6 +17,7 @@
     "@env/lib": "workspace:*",
     "@pack/event-bus": "workspace:*",
     "@pack/kernel": "workspace:*",
+    "@pack/patterns": "workspace:*",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "mongoose": "^9.2.1",

@@ -121,6 +121,12 @@ Packages are the architectural glue. They're not utilities — they're the share
 | `@env/lib` | `requireStringEnv`, `requireNumberEnv`, `optionalStringEnv`, `optionalNumberEnv` | Service bootstrap |
 | `@pack/neon` | Synthwave/retrowave design token scale (28 neon color tokens), Tailwind token overrides, gradient utilities (`.bg-neon`, `.text-neon`, `.bg-neon-warm`, `.bg-neon-cool`), and the `.glassy-surface` frosted-glass utility | `repos/apps/pulse` |
 
+### Backend Guidelines
+
+`@pack/kernel` is the backend source of truth. Downstream services and packages must adapt to `kernel`; they must not redefine, shadow, or locally fork `kernel` abstractions.
+
+Do not modify `repos/packages/kernel` as part of feature work or package-local fixes unless the task is explicitly a kernel change. If a downstream package conflicts with `kernel`, fix the downstream package instead of patching `kernel`.
+
 ### Transport Model
 
 Pulse is deliberately **not** a purely async platform. Each transport layer has a purpose:

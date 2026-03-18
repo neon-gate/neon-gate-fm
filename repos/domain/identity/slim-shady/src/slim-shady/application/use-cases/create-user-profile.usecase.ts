@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { Inject, Injectable } from '@nestjs/common'
 
 import { UseCase } from '@pack/kernel'
-import { UniqueEntityId } from '@pack/id'
+import { UniqueEntityId } from '@pack/patterns'
 
 import {
   type AudioQualityPreference,

@@ -1,6 +1,5 @@
-import type { DomainEventPrimitive, EventMap } from '@pack/kernel'
-
 import type { EventBus } from '../event-bus.abstract'
+import type { EventMap } from '../event-map'
 import { type NatsConnection, StringCodec } from 'nats'
 
 export class NatsEventBusAdapter<Events extends EventMap>
@@ -12,7 +11,7 @@ export class NatsEventBusAdapter<Events extends EventMap>
 
   async emit<EventName extends keyof Events>(
     event: EventName,
-    payload: DomainEventPrimitive<Events[EventName]>
+    payload: Events[EventName]
   ): Promise<void> {
     const data = this.sc.encode(JSON.stringify(payload))
     this.nc.publish(String(event), data)
@@ -20,15 +19,13 @@ export class NatsEventBusAdapter<Events extends EventMap>
 
   on<EventName extends keyof Events>(
     event: EventName,
-    handler: (payload: DomainEventPrimitive<Events[EventName]>) => void | Promise<void>
+    handler: (payload: Events[EventName]) => void | Promise<void>
   ): () => void {
     const sub = this.nc.subscribe(String(event))
 
     void (async () => {
       for await (const msg of sub) {
-        const decoded = JSON.parse(
-          this.sc.decode(msg.data)
-        ) as DomainEventPrimitive<Events[EventName]>
+        const decoded = JSON.parse(this.sc.decode(msg.data)) as Events[EventName]
         await handler(decoded)
       }
     })()

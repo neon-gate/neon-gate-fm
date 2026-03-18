@@ -1,4 +1,4 @@
-// import { UniqueEntityId } from '@pack/id'
+import { UniqueEntityId } from '@pack/patterns'
 
 import { User } from '@domain/entities'
 import { AuthorityProvider } from '@domain/value-objects'

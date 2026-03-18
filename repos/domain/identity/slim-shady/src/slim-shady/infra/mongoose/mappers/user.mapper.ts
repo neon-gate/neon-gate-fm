@@ -1,4 +1,4 @@
-// import { UniqueEntityId } from '@pack/id'
+import { UniqueEntityId } from '@pack/patterns'
 
 import { User } from '@domain/entities'
 import { type UserDocument } from '@infra/mongoose'

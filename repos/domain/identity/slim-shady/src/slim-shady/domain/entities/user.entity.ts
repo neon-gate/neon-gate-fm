@@ -1,5 +1,5 @@
 import { AggregateRoot } from '@pack/kernel'
-// import { UniqueEntityId } from '@pack/id'
+import { UniqueEntityId } from '@pack/patterns'
 
 import { UserProfileCreatedEvent, UserProfileUpdatedEvent } from '@domain/events'
 

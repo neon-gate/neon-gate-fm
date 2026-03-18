@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": ".",
-    "baseUrl": ".",
+    "rootDir": "src",
+    "baseUrl": "src",
     "declaration": true,
     "module": "CommonJS",
     "target": "ES2022",
     "strict": true,
     "esModuleInterop": true,
     "paths": {
-      "@primitives": ["./src/primitives/index.ts"],
-      "@types": ["./src/types/index.ts"],
-      "@events": ["./src/events/index.ts"],
-      "@application": ["./src/application/index.ts"]
+      "@primitives": ["./primitives/index.ts"],
+      "@types": ["./types/index.ts"],
+      "@events": ["./events/index.ts"],
+      "@application": ["./application/index.ts"]
     }
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

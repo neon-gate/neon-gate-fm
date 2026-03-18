@@ -1,32 +1,42 @@
-import type { DomainEventPrimitive, EventMap } from '@pack/kernel'
-
 import type { EventBus } from './event-bus.abstract'
+import { EventBus as EventBusBase } from './event-bus.abstract'
+import type { EventMap } from './event-map'
 
 export function createEventBus<Events extends EventMap>(): EventBus<Events> {
-  type Envelope = DomainEventPrimitive<Events[keyof Events]>
-  const listeners = new Map<keyof Events, Set<(p: Envelope) => void | Promise<void>>>()
+  return new (class extends EventBusBase<Events> {
+    private readonly listeners = new Map<
+      keyof Events,
+      Set<(payload: Events[keyof Events]) => void | Promise<void>>
+    >()
 
-  return {
-    async emit(event, payload) {
-      const handlers = listeners.get(event)
+    async emit<EventName extends keyof Events>(
+      event: EventName,
+      payload: Events[EventName]
+    ): Promise<void> {
+      const handlers = this.listeners.get(event)
       if (!handlers) return
 
       for (const handler of handlers) {
         await handler(payload)
       }
-    },
+    }
 
-    on(event, handler) {
-      let handlers = listeners.get(event)
+    on<EventName extends keyof Events>(
+      event: EventName,
+      handler: (payload: Events[EventName]) => void | Promise<void>
+    ): () => void {
+      let handlers = this.listeners.get(event)
       if (!handlers) {
         handlers = new Set()
-        listeners.set(event, handlers)
+        this.listeners.set(event, handlers)
       }
-      handlers.add(handler as (p: Envelope) => void | Promise<void>)
+      handlers.add(handler as (payload: Events[keyof Events]) => void | Promise<void>)
 
       return () => {
-        listeners.get(event)?.delete(handler as (p: Envelope) => void | Promise<void>)
+        this.listeners
+          .get(event)
+          ?.delete(handler as (payload: Events[keyof Events]) => void | Promise<void>)
       }
     }
-  }
+  })()
 }

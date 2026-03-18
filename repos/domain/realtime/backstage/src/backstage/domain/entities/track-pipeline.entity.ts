@@ -1,5 +1,5 @@
 import { Entity } from '@pack/kernel'
-// import { UniqueEntityId } from '@pack/id'
+import { UniqueEntityId } from '@pack/patterns'
 
 import { PipelineEvent } from './pipeline-event.value-object'
 
