@@ -6,6 +6,8 @@
     "dev": "turbo run dev",
     "pulse": "pnpm --filter ./repos/apps/pulse dev",
     "shinoda": "pnpm --filter ./repos/agents/shinoda dev",
+    "chester": "pnpm --filter ./repos/agents/chester dev",
+    "emily": "pnpm --filter ./repos/agents/emily dev",
     "lint": "biome check .",
     "format": "biome format --write --vcs-use-ignore-file=true .",
     "prepare": "husky",
